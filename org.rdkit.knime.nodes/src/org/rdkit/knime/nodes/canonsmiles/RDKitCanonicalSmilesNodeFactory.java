@@ -51,6 +51,11 @@ package org.rdkit.knime.nodes.canonsmiles;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitCanonicalSmiles" Node.
@@ -58,7 +63,7 @@ import org.knime.core.node.NodeView;
  * @author Greg Landrum
  * @author Manuel Schwarze
  */
-public class RDKitCanonicalSmilesNodeFactory extends NodeFactory<RDKitCanonicalSmilesNodeModel> {
+public class RDKitCanonicalSmilesNodeFactory extends NodeFactory<RDKitCanonicalSmilesNodeModel> implements NodeDialogFactory{
 
 	/**
 	 * Creates a model for the RDKitCanonicalSmiles functionality
@@ -111,7 +116,12 @@ public class RDKitCanonicalSmilesNodeFactory extends NodeFactory<RDKitCanonicalS
 	 */
 	@Override
 	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitCanonicalSmilesNodeDialog();
+		return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKitCanonicalSmilesNodeDialog());
+	}
+	
+	@Override
+	public NodeDialog createNodeDialog() {
+		return new DefaultNodeDialog(SettingsType.MODEL, RDKitCanonicalSmilesNodeSettings.class);
 	}
 }
 
