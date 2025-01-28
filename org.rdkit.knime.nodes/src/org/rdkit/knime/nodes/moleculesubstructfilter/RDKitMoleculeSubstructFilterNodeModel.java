@@ -85,6 +85,7 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory.RowFailurePolicy;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
@@ -117,7 +118,12 @@ public class RDKitMoleculeSubstructFilterNodeModel extends AbstractRDKitNodeMode
 
 	/** Defines supported matching criteria. */
 	public enum MatchingCriteria {
-		All, Exact, AtLeast;
+		@Label("All")
+		All,
+		@Label("Exact")
+		Exact,
+		@Label("At Least")
+		AtLeast;
 
 		/**
 		 * {@inheritDoc}
@@ -131,7 +137,8 @@ public class RDKitMoleculeSubstructFilterNodeModel extends AbstractRDKitNodeMode
 			case Exact:
 				return "Exact";
 			case AtLeast:
-				return "At least";
+				return "AtLeast";
+				//return "At least";
 			}
 
 			return super.toString();
