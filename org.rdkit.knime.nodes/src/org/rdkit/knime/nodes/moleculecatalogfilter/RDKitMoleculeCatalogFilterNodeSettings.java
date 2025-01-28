@@ -25,7 +25,7 @@ import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
  * Settings for the RDKit Molecule Catalog Filter node using the webui
  * framework.
  * 
- * @author Marc Lehner
+ * @author Marc Lehner, KNIME GmbH, Zurich, Switzerland
  */
 public final class RDKitMoleculeCatalogFilterNodeSettings implements DefaultNodeSettings {
 	

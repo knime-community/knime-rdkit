@@ -9,7 +9,7 @@ import org.knime.core.webui.node.dialog.defaultdialog.widget.choices.ColumnChoic
 /**
  * Settings for the RDKit Murcko Scaffold node using the webui framework.
  * 
- * @author Marc Lehner
+ * @author Marc Lehner, KNIME GmbH, Zurich, Switzerland
  */
 public final class RDKitMurckoScaffoldNodeSettings implements DefaultNodeSettings {
 

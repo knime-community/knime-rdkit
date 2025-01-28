@@ -16,7 +16,7 @@ import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
 /**
  * Settings for the RDKit Open3DAlignment node using the webui framework.
  * 
- * @author Marc Lehner
+ * @author Marc Lehner, KNIME GmbH, Zurich, Switzerland
  */
 public final class RDKitOpen3DAlignmentNodeSettings implements DefaultNodeSettings {
 		
