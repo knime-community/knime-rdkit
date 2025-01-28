@@ -63,6 +63,8 @@ import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
 import org.knime.core.data.DataValue;
+import org.knime.core.data.def.IntCell;
+import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
@@ -839,4 +841,11 @@ public class Molecule2RDKitConverterNodeModel extends AbstractRDKitNodeModel {
 		}		
 	}
 	
+	static boolean isCompatible(final DataColumnSpec columnSpec) {
+        final DataType dataType = columnSpec != null ? columnSpec.getType() : null;
+        return dataType.isCompatible(SmilesValue.class) 
+        		|| dataType.isAdaptable(SmilesValue.class) 
+        		|| dataType.isCompatible(SdfValue.class) 
+        		|| dataType.isAdaptable(SdfValue.class);
+    }
 }

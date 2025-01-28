@@ -47,9 +47,15 @@
  */
 package org.rdkit.knime.nodes.molecule2rdkit;
 
+import org.knime.base.node.preproc.colconvert.numbertostring2.NumberToStringSettings;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "Molecule2RDKitConverter" Node.
@@ -57,14 +63,15 @@ import org.knime.core.node.NodeView;
  * @author Greg Landrum
  * @author Manuel Schwarze
  */
-public class Molecule2RDKitConverterNodeFactory extends NodeFactory<Molecule2RDKitConverterNodeModel> {
+@SuppressWarnings("restriction")
+public class Molecule2RDKitConverterNodeFactory extends NodeFactory<Molecule2RDKitConverterNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new Molecule2RDKitConverterNodeDialog();
+		return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new Molecule2RDKitConverterNodeDialog());
 	}
 
 	/**
@@ -112,5 +119,13 @@ public class Molecule2RDKitConverterNodeFactory extends NodeFactory<Molecule2RDK
 	protected boolean hasDialog() {
 		return true;
 	}
+	
+	/**
+     * @since 5.0
+     */
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, Molecule2RDKitConverterNodeSettings.class);
+    }
 
 }
