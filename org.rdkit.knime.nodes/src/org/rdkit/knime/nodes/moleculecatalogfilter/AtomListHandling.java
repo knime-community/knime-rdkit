@@ -48,14 +48,21 @@
  */
 package org.rdkit.knime.nodes.moleculecatalogfilter;
 
+import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesProvider;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.choices.IdAndText;
+
 /**
  * Defines the filter matching atom list handling handling types.
  * 
  * @author Manuel Schwarze
  */
 public enum AtomListHandling {
+	//@Label("Do not generate atom lists for matching filters")
 	None("Do not generate atom lists for matching filters"),
+	//@Label("Generate one combined atom list for all matching filters")
 	Combined("Generate one combined atom list for all matching filters"),
+	//@Label("Generate separate atom list columns for matching filters")
 	Separate("Generate separate atom list columns for matching filters");
 
 	//
@@ -71,5 +78,9 @@ public enum AtomListHandling {
 	@Override
 	public String toString() {
 		return (m_strDescription == null ? name() : m_strDescription);
+	}
+	
+	public IdAndText toIdAndText() {
+		return new IdAndText(name(), m_strDescription);
 	}
 }
