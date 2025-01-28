@@ -51,6 +51,13 @@ package org.rdkit.knime.nodes.kekulize;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.rdkit.knime.nodes.addcoordinates.RDKitAddCoordinatesNodeDialog;
+import org.rdkit.knime.nodes.addcoordinates.RDKitAddCoordinatesNodeSettings;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitKekulize" Node.
@@ -59,7 +66,7 @@ import org.knime.core.node.NodeView;
  * @author Manuel Schwarze
  */
 public class RDKitKekulizeNodeFactory 
-        extends NodeFactory<RDKitKekulizeNodeModel> {
+        extends NodeFactory<RDKitKekulizeNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitKekulize functionality
@@ -112,7 +119,13 @@ public class RDKitKekulizeNodeFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitKekulizeNodeDialog();
+    	return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKitKekulizeNodeDialog());
+    }
+    
+    @Override
+    public NodeDialog createNodeDialog() {
+        // Create the dialog using the DefaultNodeDialog with our new settings class.
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitKekulizeNodeSettings.class);
     }
 }
 
