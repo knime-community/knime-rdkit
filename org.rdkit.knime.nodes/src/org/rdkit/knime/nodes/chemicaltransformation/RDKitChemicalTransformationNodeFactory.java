@@ -51,6 +51,11 @@ package org.rdkit.knime.nodes.chemicaltransformation;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitChemicalTransformation" Node.
@@ -59,7 +64,7 @@ import org.knime.core.node.NodeView;
  * @author Manuel Schwarze
  */
 public class RDKitChemicalTransformationNodeFactory 
-        extends NodeFactory<RDKitChemicalTransformationNodeModel> {
+        extends NodeFactory<RDKitChemicalTransformationNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitChemicalTransformation functionality
@@ -112,7 +117,13 @@ public class RDKitChemicalTransformationNodeFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitChemicalTransformationNodeDialog();
+    	return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKitChemicalTransformationNodeDialog());
     }
+    
+    @Override
+    public NodeDialog createNodeDialog() {
+        // Create the dialog using the DefaultNodeDialog with our new settings class.
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitChemicalTransformationNodeSettings.class);
+    }    
 }
 
