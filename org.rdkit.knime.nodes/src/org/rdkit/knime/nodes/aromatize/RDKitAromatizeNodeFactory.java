@@ -51,6 +51,11 @@ package org.rdkit.knime.nodes.aromatize;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitKekulize" Node.
@@ -59,7 +64,7 @@ import org.knime.core.node.NodeView;
  * @author Manuel Schwarze
  */
 public class RDKitAromatizeNodeFactory 
-        extends NodeFactory<RDKitAromatizeNodeModel> {
+        extends NodeFactory<RDKitAromatizeNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitKekulize functionality
@@ -112,7 +117,13 @@ public class RDKitAromatizeNodeFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitAromatizeNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+    
+    
+    @Override
+	public NodeDialog createNodeDialog() {
+		return new DefaultNodeDialog(SettingsType.MODEL, RDKitAromatizeNodeSettings.class);
+	}
 }
 
