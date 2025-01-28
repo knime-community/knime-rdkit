@@ -51,6 +51,12 @@ package org.rdkit.knime.nodes.rdkit2molecule;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.rdkit.knime.nodes.molextractor.RDKitMoleculeExtractorNodeDialog;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKit2Molecule" Node.
@@ -58,7 +64,7 @@ import org.knime.core.node.NodeView;
  * @author Bernd Wiswedel
  * @author Manuel Schwarze
  */
-public class RDKit2MoleculeConverterNodeFactory extends NodeFactory<RDKit2MoleculeConverterNodeModel> {
+public class RDKit2MoleculeConverterNodeFactory extends NodeFactory<RDKit2MoleculeConverterNodeModel> implements NodeDialogFactory{
 
 	/**
 	 * Creates a model for the RDKit2Molecule functionality
@@ -110,8 +116,14 @@ public class RDKit2MoleculeConverterNodeFactory extends NodeFactory<RDKit2Molecu
 	 * {@inheritDoc}
 	 */
 	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKit2MoleculeConverterNodeDialog();
-	}
+    protected NodeDialogPane createNodeDialogPane() {
+		return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKit2MoleculeConverterNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        // Creates a default-UI dialog for this node
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKit2MoleculeConverterNodeSettings.class);
+    }
 }
 
