@@ -51,6 +51,11 @@ package org.rdkit.knime.nodes.open3dalignment;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitOpen3DAlignment" Node.
@@ -59,7 +64,7 @@ import org.knime.core.node.NodeView;
  * @author Manuel Schwarze
  */
 public class RDKitOpen3DAlignmentNodeFactory 
-        extends NodeFactory<RDKitOpen3DAlignmentNodeModel> {
+        extends NodeFactory<RDKitOpen3DAlignmentNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitOpen3DAlignment functionality
@@ -112,7 +117,13 @@ public class RDKitOpen3DAlignmentNodeFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitOpen3DAlignmentNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKitOpen3DAlignmentNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        // Create the dialog using the DefaultNodeDialog with our new settings class.
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitOpen3DAlignmentNodeSettings.class);
     }
 }
 
