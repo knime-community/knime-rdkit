@@ -49,12 +49,15 @@
 package org.rdkit.knime.nodes.mcs;
 
 import org.RDKit.BondComparator;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
 
 
 public enum BondComparison {
-
-	CompareAny("Compare Any", BondComparator.BondCompareAny), 
+	@Label("Compare Any")
+	CompareAny("Compare Any", BondComparator.BondCompareAny),
+	@Label("Compare Order")
 	CompareOrder("Compare Order", BondComparator.BondCompareOrder), 
+	@Label("Compare Exact Order")
 	CompareExactOrder("Compare Exact Order", BondComparator.BondCompareOrderExact);
 
 	//

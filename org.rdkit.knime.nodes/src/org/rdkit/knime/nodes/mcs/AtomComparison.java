@@ -49,6 +49,7 @@
 package org.rdkit.knime.nodes.mcs;
 
 import org.RDKit.AtomComparator;
+import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
 
 /**
  * This enumeration defines different atom comparators based on the RDKit atom comparators.
@@ -57,8 +58,11 @@ import org.RDKit.AtomComparator;
  */
 public enum AtomComparison {
 
-	CompareAny("Compare Any", AtomComparator.AtomCompareAny), 
-	CompareElements("Compare Elements", AtomComparator.AtomCompareElements), 
+	@Label("Compare Any")
+	CompareAny("Compare Any", AtomComparator.AtomCompareAny),
+	@Label("Compare Elements")
+	CompareElements("Compare Elements", AtomComparator.AtomCompareElements),
+	@Label("Compare Isotopes")
 	CompareIsotopes("Compare Isotopes", AtomComparator.AtomCompareIsotopes);
 
 	//
