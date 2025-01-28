@@ -50,13 +50,20 @@ package org.rdkit.knime.nodes.rdkit2inchi;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.rdkit.knime.nodes.molextractor.RDKitMoleculeExtractorNodeDialog;
+import org.rdkit.knime.nodes.molextractor.RDKitMoleculeExtractorNodeSettings;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitMolecule2InChI" Node.
  * 
  * @author Manuel Schwarze
  */
-public class RDKitMolecule2InChINodeFactory extends NodeFactory<RDKitMolecule2InChINodeModel> {
+public class RDKitMolecule2InChINodeFactory extends NodeFactory<RDKitMolecule2InChINodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the RDKitMolecule2InChI functionality
@@ -108,8 +115,14 @@ public class RDKitMolecule2InChINodeFactory extends NodeFactory<RDKitMolecule2In
 	 * {@inheritDoc}
 	 */
 	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitMolecule2InChINodeDialog();
-	}
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKitMolecule2InChINodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        // Create the dialog using the DefaultNodeDialog with our new settings class.
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitMolecule2InChINodeSettings.class);
+    }
 }
 
