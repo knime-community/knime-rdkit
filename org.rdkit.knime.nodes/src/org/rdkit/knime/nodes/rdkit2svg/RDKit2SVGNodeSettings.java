@@ -19,7 +19,9 @@ import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Effect;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Effect.EffectType;
 
 /**
- * Settings class for the RDKit2SVG Node, implementing DefaultNodeSettings.
+ * Settings for the RDKit2SVG node using the webui framework.
+ * 
+ * @author Marc Lehner, KNIME GmbH, Zurich, Switzerland
  */
 public final class RDKit2SVGNodeSettings implements DefaultNodeSettings {
 
