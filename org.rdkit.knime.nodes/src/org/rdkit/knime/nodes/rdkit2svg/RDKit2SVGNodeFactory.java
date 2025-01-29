@@ -51,6 +51,13 @@ package org.rdkit.knime.nodes.rdkit2svg;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.rdkit.knime.nodes.open3dalignment.RDKitOpen3DAlignmentNodeDialog;
+import org.rdkit.knime.nodes.open3dalignment.RDKitOpen3DAlignmentNodeSettings;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKit2SVG" Node.
@@ -59,7 +66,7 @@ import org.knime.core.node.NodeView;
  *
  * @author Manuel Schwarze
  */
-public class RDKit2SVGNodeFactory extends NodeFactory<RDKit2SVGNodeModel> {
+public class RDKit2SVGNodeFactory extends NodeFactory<RDKit2SVGNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the RDKit2SVG functionality
@@ -111,8 +118,13 @@ public class RDKit2SVGNodeFactory extends NodeFactory<RDKit2SVGNodeModel> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKit2SVGNodeDialog();
-	}
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKit2SVGNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKit2SVGNodeSettings.class);
+    }
 }
 
