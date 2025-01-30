@@ -51,6 +51,13 @@ package org.rdkit.knime.nodes.sdfdifferencechecker;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.rdkit.knime.nodes.open3dalignment.RDKitOpen3DAlignmentNodeDialog;
+import org.rdkit.knime.nodes.open3dalignment.RDKitOpen3DAlignmentNodeSettings;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitSDFDifferenceChecker" Node.
@@ -59,7 +66,7 @@ import org.knime.core.node.NodeView;
  * @author Manuel Schwarze
  */
 public class RDKitSDFDifferenceCheckerNodeFactory 
-        extends NodeFactory<RDKitSDFDifferenceCheckerNodeModel> {
+        extends NodeFactory<RDKitSDFDifferenceCheckerNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitSDFDifferenceChecker functionality
@@ -112,7 +119,13 @@ public class RDKitSDFDifferenceCheckerNodeFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitSDFDifferenceCheckerNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKitSDFDifferenceCheckerNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        // Create the dialog using the DefaultNodeDialog with our new settings class.
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitSDFDifferenceCheckerNodeSettings.class);
     }
 }
 
