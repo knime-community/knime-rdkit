@@ -60,7 +60,6 @@ import org.RDKit.RGroupLabels;
  * @author Manuel Schwarze
  */
 public enum Labels {
-
 	AutoDetect("Auto Detect", RGroupLabels.AutoDetect),
 	IsotopeLabels("Isotope Labels", RGroupLabels.IsotopeLabels),
 	AtomMapLabels("Atom Map Labels", RGroupLabels.AtomMapLabels), 

@@ -426,6 +426,7 @@ public class RDKitRGroupDecompositionNodeModel extends AbstractRDKitNodeModel {
 			}
 		}
 		else {
+			LOGGER.warn(m_modelCoreSmarts.getStringValue());
 			if (!evaluateCores(m_modelCoreSmarts.getStringValue())) {
 				throw new RuntimeException("No valid SMARTS found in cores parameter.");
 			}
@@ -794,12 +795,16 @@ public class RDKitRGroupDecompositionNodeModel extends AbstractRDKitNodeModel {
 		cleanupIntermediateResults();
 		
 		WarningConsolidator warnings = getWarningConsolidator();
-		String[] arrCores = m_modelCoreSmarts.getStringValue().trim().split("\n");
+		//String[] arrCores = m_modelCoreSmarts.getStringValue().trim().split("\n");
+		String[] arrCores = m_modelCoreSmarts.getJavaUnescapedStringValue().trim().split("\n");
 		List<ROMol> listCores = new ArrayList<>();
 		
 		for (String strSmarts : arrCores) {
+			
 			ROMol molCore = null;
 			String strErrorMsg = null;
+			
+			LOGGER.warn("Current SMARTS: " + strSmarts);
 			
 			if (!strSmarts.trim().isEmpty()) {
 				strSmarts = strSmarts.trim();
