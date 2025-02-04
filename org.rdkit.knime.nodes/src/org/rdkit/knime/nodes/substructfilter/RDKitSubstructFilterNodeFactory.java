@@ -51,6 +51,13 @@ package org.rdkit.knime.nodes.substructfilter;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.rdkit.knime.nodes.open3dalignment.RDKitOpen3DAlignmentNodeDialog;
+import org.rdkit.knime.nodes.open3dalignment.RDKitOpen3DAlignmentNodeSettings;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitSubstructFilter" Node.
@@ -58,7 +65,7 @@ import org.knime.core.node.NodeView;
  * @author Greg Landrum
  * @author Manuel Schwarze
  */
-public class RDKitSubstructFilterNodeFactory extends NodeFactory<RDKitSubstructFilterNodeModel> {
+public class RDKitSubstructFilterNodeFactory extends NodeFactory<RDKitSubstructFilterNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the RDKitSubstructureFilter functionality
@@ -110,8 +117,14 @@ public class RDKitSubstructFilterNodeFactory extends NodeFactory<RDKitSubstructF
 	 * {@inheritDoc}
 	 */
 	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitSubstructFilterNodeDialog();
-	}
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog((NodeDialog) new RDKitSubstructFilterNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        // Create the dialog using the DefaultNodeDialog with our new settings class.
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitSubstructFilterNodeSettings.class);
+    }
 }
 
