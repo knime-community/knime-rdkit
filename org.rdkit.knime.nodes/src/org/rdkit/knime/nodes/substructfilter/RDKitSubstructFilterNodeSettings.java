@@ -19,9 +19,7 @@ import org.knime.core.node.InvalidSettingsException;
 /**
  * New settings for the RDKit Substructure Filter node using the Web UI approach.
  * 
- * Follows the general structure of the old node dialog but uses the modern
- * DefaultNodeSettings. Each field corresponds to one user-facing option.
- * @author AI Node Migration, KNIME GmbH, Zurich, Switzerland
+ * @author Marc Lehner, KNIME GmbH, Zurich, Switzerland
  */
 public final class RDKitSubstructFilterNodeSettings implements DefaultNodeSettings {
 
