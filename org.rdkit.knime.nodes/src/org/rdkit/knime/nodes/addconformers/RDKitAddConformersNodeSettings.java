@@ -11,14 +11,18 @@ import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings.Defaul
 import org.knime.core.webui.node.dialog.defaultdialog.layout.After;
 import org.knime.core.webui.node.dialog.defaultdialog.layout.Layout;
 import org.knime.core.webui.node.dialog.defaultdialog.layout.Section;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.settingsmodel.SettingsModelColumnNamePersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.SettingsModelColumnNamePersistor;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesProvider;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
 import org.rdkit.knime.types.RDKitMolValue;
 import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
+/*
+ * import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.settingsmodel.SettingsModelColumnNamePersistor;
+ */
 
 /**
  * Settings for the RDKit AddConformers node using the webui framework.
@@ -53,7 +57,7 @@ public final class RDKitAddConformersNodeSettings implements DefaultNodeSettings
     @Layout(InputSection.class)
     String m_inputMolColumn;
 
-    @Persist(configKey = "input_ref_column", customPersistor = SettingsModelColumnNamePersistor.class)
+    @Persistor(value = SettingsModelColumnNamePersistor.class)
     @Widget(title = "Reference column",
             description = "Select a reference column (String or Double). The row ID can also be chosen.")
     @ChoicesWidget(choices = ReferenceColumns.class, showRowKeysColumn = true)

@@ -8,8 +8,10 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.SettingsModelColumnNamePersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.EnumSettingsModelStringPersistor;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesProvider;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
@@ -64,27 +66,32 @@ public class Molecule2RDKitConverterNodeSettings implements DefaultNodeSettings 
     /**
      * FieldNodeSettingsPersistor for ParseErrorPolicy which was originally stored as a string.
      */
-    private static final class ParseErrorPolicyPersistor implements FieldNodeSettingsPersistor<ParseErrorPolicy> {
-        @Override
-        public ParseErrorPolicy load(NodeSettingsRO settings) throws InvalidSettingsException {
-            String val = settings.getString("separate_fails");
-            if (val != null && val.equalsIgnoreCase("SPLIT_ROWS")) {
-                return ParseErrorPolicy.SPLIT_ROWS;
-            } else {
-                return ParseErrorPolicy.MISS_VAL;
-            }
-        }
-
-        @Override
-        public void save(ParseErrorPolicy obj, NodeSettingsWO settings) {
-            settings.addString("separate_fails", obj.name());
-        }
-
-        @Override
-        public String[] getConfigKeys() {
-            return new String[]{"separate_fails"};
-        }
-    }
+//    private static final class ParseErrorPolicyPersistor implements FieldNodeSettingsPersistor<ParseErrorPolicy> {
+//        @Override
+//        public ParseErrorPolicy load(NodeSettingsRO settings) throws InvalidSettingsException {
+//            String val = settings.getString("separate_fails");
+//            if (val != null && val.equalsIgnoreCase("SPLIT_ROWS")) {
+//                return ParseErrorPolicy.SPLIT_ROWS;
+//            } else {
+//                return ParseErrorPolicy.MISS_VAL;
+//            }
+//        }
+//
+//        @Override
+//        public void save(ParseErrorPolicy obj, NodeSettingsWO settings) {
+//            settings.addString("separate_fails", obj.name());
+//        }
+//
+//        @Override
+//        public String[] getConfigKeys() {
+//            return new String[]{"separate_fails"};
+//        }
+//    }
+	static final class ParseErrorPolicyPersistor extends EnumSettingsModelStringPersistor<ParseErrorPolicy> {
+		public ParseErrorPolicyPersistor() {
+			super("separate_fails", ParseErrorPolicy.class);
+		}
+	}
 
     /**
      * Enum representing replace or append policy (based on original logic).

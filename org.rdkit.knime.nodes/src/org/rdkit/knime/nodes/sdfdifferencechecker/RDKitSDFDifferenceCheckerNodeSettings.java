@@ -14,7 +14,7 @@ import org.knime.core.webui.node.dialog.defaultdialog.widget.ColumnChoicesProvid
 import org.knime.core.webui.node.dialog.defaultdialog.widget.NumberInputWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.choices.ColumnChoicesProviderUtil.AllColumnChoicesProvider;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
 
 /**
  * Settings for the RDKit2MoleculeConverter node, using the new DefaultNodeSettings approach.

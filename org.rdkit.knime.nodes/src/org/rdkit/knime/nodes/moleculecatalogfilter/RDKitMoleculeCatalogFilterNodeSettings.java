@@ -10,8 +10,11 @@ import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings.Defaul
 import org.knime.core.webui.node.dialog.defaultdialog.layout.After;
 import org.knime.core.webui.node.dialog.defaultdialog.layout.Layout;
 import org.knime.core.webui.node.dialog.defaultdialog.layout.Section;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.EnumSettingsModelStringPersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.SettingsModelColumnNamePersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.NodeSettingsPersistor;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesProvider;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.TextInputWidget;
@@ -56,7 +59,7 @@ public final class RDKitMoleculeCatalogFilterNodeSettings implements DefaultNode
 		ALL,
 	}
 	
-	static final class FilterCatalogArrayPersistor implements FieldNodeSettingsPersistor<String[]> {
+	static final class FilterCatalogArrayPersistor implements NodeSettingsPersistor<String[]> {
         private static final String KEY = "catalogs";
 
         @Override
@@ -69,11 +72,21 @@ public final class RDKitMoleculeCatalogFilterNodeSettings implements DefaultNode
             settings.addStringArray(KEY, obj);
         }
 
-        @Override
-        public String[] getConfigKeys() {
-            return new String[]{KEY};
-        }
+		@Override
+		public String[][] getConfigPaths() {
+			return new String[][] {{KEY}};
+		}
     }
+//	static final class FilterCatalogArrayPersistor extends EnumSettingsModelStringPersistor<FilterCatalogEnum> {
+//		private static final String KEY = "catalogs";
+//		public FilterCatalogArrayPersistor() {
+//			super(KEY, FilterCatalogEnum.class);
+//		}
+//	}
+	/*
+	 * Node: root:4 
+ Message:Can not set org.rdkit.knime.nodes.moleculecatalogfilter.RDKitMoleculeCatalogFilterNodeSettings$FilterCatalogEnum field org.rdkit.knime.nodes.moleculecatalogfilter.RDKitMoleculeCatalogFilterNodeSettings.m_catalogs to [Ljava.lang.String;
+	 */
 	
 	
 	
@@ -103,7 +116,7 @@ public final class RDKitMoleculeCatalogFilterNodeSettings implements DefaultNode
     @Layout(InputSection.class)
     String m_inputColumn;
 
-    @Persist(configKey = "catalogs", customPersistor = FilterCatalogArrayPersistor.class)
+    @Persistor(value = FilterCatalogArrayPersistor.class)
     @Widget(
         title = "Filter Catalogs",
         description = "Select the filter catalogs to apply. Multiple catalogs can be selected."

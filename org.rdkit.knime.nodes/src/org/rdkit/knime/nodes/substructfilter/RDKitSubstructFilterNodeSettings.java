@@ -12,8 +12,10 @@ import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ValueSwitchWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.TextInputWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.PredicateProvider;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.EnumSettingsModelStringPersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.SettingsModelColumnNamePersistor;
 import org.knime.core.node.InvalidSettingsException;
 
 /**
@@ -50,30 +52,12 @@ public final class RDKitSubstructFilterNodeSettings implements DefaultNodeSettin
     /**
      * A simple persistor for the MatchHandling enumeration.
      */
-    static final class MatchHandlingPersistor implements FieldNodeSettingsPersistor<MatchHandling> {
-
+    static final class MatchHandlingPersistor extends EnumSettingsModelStringPersistor<MatchHandling> {
         private static final String KEY = "match_handling";
-
-        @Override
-        public MatchHandling load(final NodeSettingsRO settings) throws InvalidSettingsException {
-            String storedVal = settings.getString(KEY);
-            for (MatchHandling mh : MatchHandling.values()) {
-                if (mh.name().equals(storedVal)) {
-                    return mh;
-                }
-            }
-            throw new InvalidSettingsException("Unknown match handling option: " + storedVal);
-        }
-
-        @Override
-        public void save(final MatchHandling obj, final NodeSettingsWO settings) {
-            settings.addString(KEY, obj.name());
-        }
-
-        @Override
-        public String[] getConfigKeys() {
-            return new String[]{KEY};
-        }
+        
+		MatchHandlingPersistor() {
+			super(KEY, MatchHandling.class);
+		}
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -120,7 +104,7 @@ public final class RDKitSubstructFilterNodeSettings implements DefaultNodeSettin
     boolean m_useChirality;
 
     // Enum for match handling
-    @Persist(customPersistor = MatchHandlingPersistor.class)
+    @Persistor(value = MatchHandlingPersistor.class)
     @Widget(title = "Match handling",
         description = "Defines how match details (atom lists) should be handled for matched substructures.")
     @Layout(MatchHandlingSection.class)

@@ -1,47 +1,13 @@
 package org.rdkit.knime.nodes.descriptorcalculation;
 
-import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldBasedNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.EnumSettingsModelStringPersistor;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesProvider;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.SortListWidget; 
 import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
-import org.rdkit.knime.types.RDKitMolValue;
-import org.knime.core.data.DataTableSpec;
-import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings.DefaultNodeSettingsContext;
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataTableSpec;
-import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.util.filter.NameFilterConfiguration.EnforceOption;
-import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
-import org.knime.core.webui.node.dialog.defaultdialog.layout.Layout;
-import org.knime.core.webui.node.dialog.defaultdialog.layout.Section;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.EnumFieldPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.NodeSettingsPersistorWithConfigKey;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
-import org.knime.core.webui.node.dialog.defaultdialog.setting.columnfilter.ColumnFilter;
-import org.knime.core.webui.node.dialog.defaultdialog.setting.columnfilter.LegacyColumnFilterPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.setting.selection.SelectionCheckboxesToSelectionModePersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.setting.columnselection.StringToColumnSelectionPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.ColumnChoicesProvider;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.ValueSwitchWidget;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Effect;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Effect.EffectType;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Predicate;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.PredicateProvider;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Reference;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.ValueReference;
-
+import org.knime.core.webui.node.dialog.defaultdialog.setting.selection.SelectionCheckboxesToSelectionModeMigration;
 import java.util.Arrays;
 import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
 
@@ -60,31 +26,31 @@ public final class DescriptorCalculationNodeSettings implements DefaultNodeSetti
 		}
 	}
 	
-	static final class DescriptorPersistor extends SelectionCheckboxesToSelectionModePersistor {
+	static final class DescriptorPersistor extends SelectionCheckboxesToSelectionModeMigration {
 		protected Descriptor fromString(final String s) {
 			return Descriptor.valueOf(s);
 		}
 		
 	}
 	
-	static final class DescriptorArrayPersistor implements FieldNodeSettingsPersistor<String[]> {
-        private static final String KEY = "selectedDescriptors";
-
-        @Override
-        public String[] load(final NodeSettingsRO settings) throws InvalidSettingsException {
-            return settings.getStringArray(KEY);
-        }
-
-        @Override
-        public void save(final String[] obj, final NodeSettingsWO settings) {
-            settings.addStringArray(KEY, obj);
-        }
-
-        @Override
-        public String[] getConfigKeys() {
-            return new String[]{KEY};
-        }
-    }
+//	static final class DescriptorArrayPersistor implements FieldNodeSettingsPersistor<String[]> {
+//        private static final String KEY = "selectedDescriptors";
+//
+//        @Override
+//        public String[] load(final NodeSettingsRO settings) throws InvalidSettingsException {
+//            return settings.getStringArray(KEY);
+//        }
+//
+//        @Override
+//        public void save(final String[] obj, final NodeSettingsWO settings) {
+//            settings.addStringArray(KEY, obj);
+//        }
+//
+//        @Override
+//        public String[] getConfigKeys() {
+//            return new String[]{KEY};
+//        }
+//    }
     
 
     @Persist(configKey = "input_column")
@@ -97,7 +63,7 @@ public final class DescriptorCalculationNodeSettings implements DefaultNodeSetti
     String m_inputColumn = "";
 
     
-    @Persist(configKey = "selectedDescriptors", customPersistor = DescriptorArrayPersistor.class)
+    @Persistor(value = EnumSettingsModelStringPersistor.class)
     @Widget(
         title = "Selected Descriptors",
         description = "The descriptors you wish to calculate."

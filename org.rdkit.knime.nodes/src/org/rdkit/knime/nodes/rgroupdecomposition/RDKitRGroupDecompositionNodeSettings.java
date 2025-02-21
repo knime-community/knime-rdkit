@@ -29,8 +29,10 @@ import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.PredicatePr
 import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Effect.EffectType;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.updates.PredicateProvider.PredicateInitializer;
 import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.EnumSettingsModelStringPersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.SettingsModelColumnNamePersistor;
 
 /**
  * Settings for the RDKit R-Group Decomposition node using the webui framework.
@@ -72,23 +74,12 @@ public final class RDKitRGroupDecompositionNodeSettings implements DefaultNodeSe
 		}		
 	}
 	
-	static final class LabelsPersistor implements FieldNodeSettingsPersistor<String[]> {
+	static final class LabelsPersistor extends EnumSettingsModelStringPersistor<LabelSettingsEnum> {
 		private static final String KEY = "labels";
+		protected LabelsPersistor(String configKey, Class<LabelSettingsEnum> enumClass) {
+			super(configKey, enumClass);
+		}
 		
-		@Override
-        public String[] load(final NodeSettingsRO settings) throws InvalidSettingsException {
-            return settings.getStringArray(KEY);
-        }
-
-        @Override
-        public void save(final String[] obj, final NodeSettingsWO settings) {
-            settings.addStringArray(KEY, obj);
-        }
-
-        @Override
-        public String[] getConfigKeys() {
-            return new String[]{KEY};
-        }
 	}
 	
 	static final class LabelsChoices implements ChoicesProvider {
@@ -99,23 +90,12 @@ public final class RDKitRGroupDecompositionNodeSettings implements DefaultNodeSe
 	}
 	
 	
-	static final class LabelingPersistor implements FieldNodeSettingsPersistor<String[]> {
-		private static final String KEY = "labeling";
-		
-		@Override
-        public String[] load(final NodeSettingsRO settings) throws InvalidSettingsException {
-            return settings.getStringArray(KEY);
-        }
+	static final class LabelingPersistor extends EnumSettingsModelStringPersistor<LabelingSettingsEnum> {
+        private static final String KEY = "labeling";
 
-        @Override
-        public void save(final String[] obj, final NodeSettingsWO settings) {
-            settings.addStringArray(KEY, obj);
-        }
-
-        @Override
-        public String[] getConfigKeys() {
-            return new String[]{KEY};
-        }
+		protected LabelingPersistor(String configKey, Class<LabelingSettingsEnum> enumClass) {
+			super(configKey, enumClass);
+		}
 	}
 	
 	static final class LabelingChoices implements ChoicesProvider {
@@ -298,7 +278,7 @@ public final class RDKitRGroupDecompositionNodeSettings implements DefaultNodeSe
     // Fields in Advanced R-Group Section
     ///////////////////////////////////////////////////////////////////////////
 
-    @Persist(configKey = "labels", customPersistor = LabelsPersistor.class)
+    @Persistor(value = LabelsPersistor.class)
     @Widget(title = "R-Group labels",
         description = "Configures the labeling style for the R-group decomposition. "
                     + "Multiple label types can be enabled or disabled.",
@@ -314,7 +294,7 @@ public final class RDKitRGroupDecompositionNodeSettings implements DefaultNodeSe
     @Layout(AdvancedSection.class)
     Matching m_matchingStrategy;
 
-    @Persist(configKey = "labeling", customPersistor = LabelingPersistor.class)
+    @Persistor(value = LabelingPersistor.class)
     @Widget(title = "Additional labeling options",
         description = "Specifies special labeling for the R-groups in the output, e.g., whether to use atom maps, "
                     + "MDL R-group notation, etc.",

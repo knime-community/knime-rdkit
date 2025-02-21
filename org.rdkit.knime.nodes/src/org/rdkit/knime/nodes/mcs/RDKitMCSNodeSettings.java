@@ -6,8 +6,10 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.FieldNodeSettingsPersistor;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.field.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.SettingsModelColumnNamePersistor;
+import org.knime.core.webui.node.dialog.defaultdialog.persistence.persistors.settingsmodel.EnumSettingsModelStringPersistor;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.ChoicesWidget;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.Label;
 import org.knime.core.webui.node.dialog.defaultdialog.widget.Widget;
@@ -20,7 +22,12 @@ import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
  */
 public final class RDKitMCSNodeSettings implements DefaultNodeSettings {
 	
-	private static final class AtomComparisonPersistor implements FieldNodeSettingsPersistor<AtomComparison> {
+	private static final class AtomComparisonPersistor extends EnumSettingsModelStringPersistor<AtomComparison> {
+		static String CONFIG_KEY = "atomComparison";
+		protected AtomComparisonPersistor(String configKey, Class<AtomComparison> enumClass) {
+			super(CONFIG_KEY, AtomComparison.class);
+		}
+
 		@Override
 		public AtomComparison load(NodeSettingsRO settings) throws InvalidSettingsException {
 			String val = settings.getString("atomComparison");
@@ -37,33 +44,33 @@ public final class RDKitMCSNodeSettings implements DefaultNodeSettings {
 		public void save(AtomComparison obj, NodeSettingsWO settings) {
 			settings.addString("atomComparison", obj.toString());
 		}
-
-		@Override
-		public String[] getConfigKeys() {
-			return new String[] { "atomComparison" };
-		}
 	}
 	
-	private static final class BondComparisonPersistor implements FieldNodeSettingsPersistor<BondComparison> {
-		@Override
-		public BondComparison load(NodeSettingsRO settings) throws InvalidSettingsException {
-			String val = settings.getString("bondComparison");
-			if (val != null && val.equalsIgnoreCase("Compare Order")) {
-				return BondComparison.CompareOrder;
-			} else {
-				return BondComparison.CompareAny;
-			}
+	private static final class BondComparisonPersistor extends EnumSettingsModelStringPersistor<BondComparison> {
+		static String CONFIG_KEY = "bondComparison";
+		protected BondComparisonPersistor(String configKey, Class<BondComparison> enumClass) {
+			super(CONFIG_KEY, BondComparison.class);
 		}
-		
-		@Override
-		public void save(BondComparison obj, NodeSettingsWO settings) {
-			settings.addString("bondComparison", obj.toString());
-		}
-		
-		@Override
-		public String[] getConfigKeys() {
-			return new String[] { "bondComparison" };
-		}
+
+//		@Override
+//		public BondComparison load(NodeSettingsRO settings) throws InvalidSettingsException {
+//			String val = settings.getString("bondComparison");
+//			if (val != null && val.equalsIgnoreCase("Compare Order")) {
+//				return BondComparison.CompareOrder;
+//			} else {
+//				return BondComparison.CompareAny;
+//			}
+//		}
+//		
+//		@Override
+//		public void save(BondComparison obj, NodeSettingsWO settings) {
+//			settings.addString("bondComparison", obj.toString());
+//		}
+//		
+//		@Override
+//		public String[] getConfigKeys() {
+//			return new String[] { "bondComparison" };
+//		}
 	}
 
 		
@@ -89,11 +96,11 @@ public final class RDKitMCSNodeSettings implements DefaultNodeSettings {
     @Widget(title = "Match Valences", description = "If checked, atom valences will be considered during matching.")
     boolean m_matchValences;
 
-    @Persist(configKey = "atomComparison", customPersistor = AtomComparisonPersistor.class)
+    @Persistor(value = AtomComparisonPersistor.class)
     @Widget(title = "Atom Compare", description = "The method used to compare atoms during the MCS calculation.")
     AtomComparison m_atomCompare;
 
-    @Persist(configKey = "bondComparison", customPersistor = BondComparisonPersistor.class)
+    @Persistor(value = BondComparisonPersistor.class)
     @Widget(title = "Bond Compare", description = "The method used to compare bonds during the MCS calculation.")
     BondComparison m_bondCompare;
     
