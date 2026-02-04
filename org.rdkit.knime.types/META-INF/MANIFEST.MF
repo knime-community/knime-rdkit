@@ -31,4 +31,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.rdkit.knime.types;singleton:=true
 Automatic-Module-Name: org.rdkit.knime.types
 Eclipse-RegisterBuddy: org.knime.base
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
