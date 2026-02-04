@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
@@ -8,5 +8,11 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-deprecated"/>
+	<classpathentry kind="lib" path="lib/automaton-1.12-4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.17.0.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-api-2.20.0.jar"/>
+	<classpathentry kind="lib" path="lib/opsin-core-2.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/stax2-api-4.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/woodstox-core-6.5.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
