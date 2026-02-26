@@ -13,7 +13,7 @@
 	<properties>
 		<revision>5.2.1</revision>
 		<changelist>-SNAPSHOT</changelist>
-		<knime.version>5.10</knime.version>
+		<knime.version>nightly</knime.version>
 		<tycho.version>4.0.13</tycho.version>
 		<tycho.extras.version>${tycho.version}</tycho.extras.version>
 		<qualifier.prefix>v</qualifier.prefix>
