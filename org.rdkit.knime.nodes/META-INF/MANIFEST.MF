@@ -68,3 +68,5 @@ Bundle-ClassPath: .,
  lib/opsin-core-2.8.0.jar,
  lib/stax2-api-4.2.1.jar,
  lib/woodstox-core-6.5.1.jar
+Import-Package: org.knime.node.parameters,
+ org.knime.node.parameters.widget.choices
