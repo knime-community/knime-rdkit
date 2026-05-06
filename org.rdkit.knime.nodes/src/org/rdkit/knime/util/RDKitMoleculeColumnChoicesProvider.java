@@ -17,7 +17,7 @@ public class RDKitMoleculeColumnChoicesProvider implements ColumnChoicesProvider
     
     // Default RDKit types used if none are provided
     @SuppressWarnings("unchecked")
-	private static final Class<? extends DataValue>[] DEFAULT_CLASSES = new Class[] { 
+	public static final Class<? extends DataValue>[] DEFAULT_CLASSES = new Class[] { 
         RDKitMolValue.class, 
         SmartsValue.class, 
         SmilesValue.class 
