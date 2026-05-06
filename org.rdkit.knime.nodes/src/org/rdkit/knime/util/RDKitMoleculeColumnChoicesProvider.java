@@ -42,9 +42,13 @@ public class RDKitMoleculeColumnChoicesProvider implements ColumnChoicesProvider
     }
 
     // 3- Constructor with custom index and specific value classes
+    @SuppressWarnings("unchecked")
     public RDKitMoleculeColumnChoicesProvider(int inputTableIndex, Class<? extends DataValue>[] valueClasses) {
         this.inputTableIndex = inputTableIndex;
-        this.valueClasses = valueClasses;
+        var combined = new Class[valueClasses.length + DEFAULT_CLASSES.length];
+        System.arraycopy(valueClasses, 0, combined, 0, valueClasses.length);
+        System.arraycopy(DEFAULT_CLASSES, 0, combined, valueClasses.length, DEFAULT_CLASSES.length);
+        this.valueClasses = combined;
     }
 
     @SuppressWarnings("unused")
