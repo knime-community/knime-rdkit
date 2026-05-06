@@ -8,5 +8,11 @@ Bundle-Vendor: Novartis
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Fragment-Host: org.rdkit.knime.nodes;bundle-version="5.2.1"
 Require-Bundle: org.knime.testing;bundle-version="[5.3.0,6.0.0)",
- org.knime.chem.base;bundle-version="[5.3.0,6.0.0)"
+ org.knime.chem.base;bundle-version="[5.3.0,6.0.0)",
+ junit-jupiter-api;bundle-version="[5.0.0,6.0.0)",
+ junit-platform-suite-api;bundle-version="[1.9.2,2.0.0)",
+ junit-jupiter-params;bundle-version="[5.9.2,6.0.0)",
+ org.knime.core.ui.testing;bundle-version="[6.0.0,7.0.0)",
+ assertj-core;bundle-version="[3.22.0,4.0.0)",
+ slf4j.api;bundle-version="[2.0.12,3.0.0)"
 Bundle-ClassPath: rdkit-testing.jar
