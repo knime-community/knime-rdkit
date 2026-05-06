@@ -12,8 +12,8 @@ import org.knime.node.parameters.widget.choices.ColumnChoicesProvider;
 import org.rdkit.knime.types.RDKitMolValue;
 
 public class RDKitMoleculeColumnChoicesProvider implements ColumnChoicesProvider {
-    private int inputTableIndex = 0;
-    private final Class<? extends DataValue>[] valueClasses;
+    private int m_inputTableIndex = 0;
+    private final Class<? extends DataValue>[] m_valueClasses;
     
     // Default RDKit types used if none are provided
     @SuppressWarnings("unchecked")
@@ -26,7 +26,7 @@ public class RDKitMoleculeColumnChoicesProvider implements ColumnChoicesProvider
     @Override
     public List<DataColumnSpec> columnChoices(final NodeParametersInput context) {
         return context
-                .getInTableSpec(inputTableIndex).map(spec -> spec.stream()
+                .getInTableSpec(m_inputTableIndex).map(spec -> spec.stream()
                         .filter(this::isColumnCompatible).toList())
                 .orElse(List.of());
     }
@@ -44,17 +44,17 @@ public class RDKitMoleculeColumnChoicesProvider implements ColumnChoicesProvider
     // 3- Constructor with custom index and specific value classes
     @SuppressWarnings("unchecked")
     public RDKitMoleculeColumnChoicesProvider(int inputTableIndex, Class<? extends DataValue>[] valueClasses) {
-        this.inputTableIndex = inputTableIndex;
+        this.m_inputTableIndex = inputTableIndex;
         var combined = new Class[valueClasses.length + DEFAULT_CLASSES.length];
         System.arraycopy(valueClasses, 0, combined, 0, valueClasses.length);
         System.arraycopy(DEFAULT_CLASSES, 0, combined, valueClasses.length, DEFAULT_CLASSES.length);
-        this.valueClasses = combined;
+        this.m_valueClasses = combined;
     }
 
     @SuppressWarnings("unused")
 	private boolean isColumnCompatible(DataColumnSpec colSpec) {
         DataType colType = colSpec.getType();
-        for (Class<? extends DataValue> clazz : valueClasses) {
+        for (Class<? extends DataValue> clazz : m_valueClasses) {
             if (colType.isCompatible(clazz) || colType.isAdaptable(clazz)) {
                 return true;
             }
