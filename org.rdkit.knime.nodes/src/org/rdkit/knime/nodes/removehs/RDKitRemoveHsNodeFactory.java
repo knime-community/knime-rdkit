@@ -51,15 +51,27 @@ package org.rdkit.knime.nodes.removehs;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitRemoveHs" Node.
  * Removes hydrogens from an RDKit Molecule.
  *
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitRemoveHsNodeFactory 
-        extends NodeFactory<RDKitRemoveHsNodeModel> {
+        extends NodeFactory<RDKitRemoveHsNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitRemoveHs functionality
@@ -110,9 +122,52 @@ public class RDKitRemoveHsNodeFactory
     /**
      * {@inheritDoc}
      */
+    private static final String NODE_NAME = "RDKit Remove Hs";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Removes hydrogens from an RDKit molecule.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Removes hydrogens from an RDKit molecule.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit molecules", """
+                Input table with RDKit molecules.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Output table with RDKit molecules with removed Hs", """
+                Output table with RDKit molecules with removed Hs.
+                """)
+    );
+
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitRemoveHsNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitRemoveHsNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitRemoveHsNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
