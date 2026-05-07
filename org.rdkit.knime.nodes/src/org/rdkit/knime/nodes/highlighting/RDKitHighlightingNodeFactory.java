@@ -51,6 +51,16 @@ package org.rdkit.knime.nodes.highlighting;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitHighlighting" Node.
@@ -58,9 +68,43 @@ import org.knime.core.node.NodeView;
  * A molecule column as well as a column with a list of the atoms/bonds to be highlighted needs to be provided.
  *
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitHighlightingNodeFactory extends NodeFactory<RDKitHighlightingNodeModel> {
+public class RDKitHighlightingNodeFactory extends NodeFactory<RDKitHighlightingNodeModel> 
+	implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit Molecule Highlighting";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Creates an SVG column showing a molecule with highlighted atoms and bonds based on information in
+            the input table.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            Creates an SVG column showing a molecule with highlighted atoms and bonds based on information in
+            the input table. A molecule column as well as column(s) with a list of the atom and/or bond indexes
+            to be highlighted needs to be provided. The node lets the user define colors to be applied for the
+            highlighting. If highlighting definitions overlap (e.g. atom indexes in definition 1 is 1,2,3 and in
+            definition 2 is 3,4,5) the highlighting of the first definition will be applied (e.g to atom 3) with
+            the color it defined.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Table with RDKit molecules and atom/bond list(s)", """
+                Table with an RDKit molecules and list(s) of atoms and/or bonds to be highlighted.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Highlighted molecules", """
+                The input table with an additional column that shows the highlighted atoms and bonds in an SVG molecule
+                graphic.
+                """)
+    );
+	
 	/**
 	 * Creates a model for the RDKitHighlightingAtoms functionality
 	 * of the RDKit library. The model is derived from the
@@ -107,12 +151,33 @@ public class RDKitHighlightingNodeFactory extends NodeFactory<RDKitHighlightingN
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitHighlightingNodeDialog();
-	}
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitHighlightingNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitHighlightingNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
