@@ -52,13 +52,28 @@ import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
 import org.rdkit.knime.nodes.RDKitInteractiveView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import org.knime.node.impl.description.ViewDescription;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitSmilesHeaders" Node.
  * 
  * @author Manuel Schwarze
+ 
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ 
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitSmilesHeadersNodeFactory extends NodeFactory<RDKitSmilesHeadersNodeModel> {
+public class RDKitSmilesHeadersNodeFactory extends NodeFactory<RDKitSmilesHeadersNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the RDKitSmilesHeaders functionality
@@ -106,12 +121,85 @@ public class RDKitSmilesHeadersNodeFactory extends NodeFactory<RDKitSmilesHeader
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitSmilesHeadersNodeDialog();
-	}
+    private static final String NODE_NAME = "RDKit SMILES Headers";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Sets, changes and retrieves SMILES structures of RDKit table header properties, which can be made
+                visible using the RDKit Interactive View.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Sets, changes and/or retrieves SMILES structures of RDKit table header properties, which can be made
+                visible using the RDKit Interactive View. <br /><br /> Beside the column title a KNIME column can
+                have properties assigned. Use this node to manipulate the property that controls the SMILES value
+                used by the RDKit Interactive View to render a molecule in the column header. This node will not
+                change any of the column titles / names. <br /><br /> This node takes a Data Table as first input -
+                the data of the table remains unchanged, only the column properties get affected by the change. You
+                may either use existing column titles of the Data Table as SMILES properties (if they are valid
+                SMILES), or read SMILES values from a SMILES Definition Table that is connected to the second input
+                port. <br /><br /> If a SMILES Definition Table is connected it needs to contain at least two
+                columns: One defines a SMILES value and the other the name of the target column that should receive
+                the SMILES value in the header property. The node will now walk through all columns of the Data
+                Table and checks, if a SMILES value is available in the SMILES Definition Table for that column. If
+                the name of the column is found in the SMILES Definition Table it will set the associated SMILES
+                value as a column property, and the SMILES will show up in subsequent RDKit Interactive Views. If
+                there is no SMILES value but an empty cell defined for that column, the SMILES property gets removed
+                instead. <br /><br /> The Data Table is available with the manipulated column properties on the
+                first output port. The second output table contains information about all columns that have SMILES
+                values as properties attached. It can be used to manipulate these structure (e.g. canonicalizing
+                them) and to reassign them afterwards again to make these changes visible in the column headers. <br
+                /><br /> Optionally, it is possible to remove all SMILES information from the column properties
+                before applying any new SMILES values to them.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Data table", """
+                Data Table whose header properties (not titles) shall be manipulated.
+                """),
+            fixedPort("SMILES definition table", """
+                Defines target column names of the Data Table and SMILES values to be set as column header properties.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Result data table", """
+                Same table as input data table, but with potentially changed column header properties.
+                """),
+            fixedPort("Result SMILES definition table", """
+                Table with all column header SMILES properties in Result Data Table.
+                """)
+    );
+    private static final List<ViewDescription> VIEWS = List.of(
+            new ViewDescription("Interactive table view", """
+                Displays the data in a table view. Has the capability to show chemical structures in the headers of the
+                substructure count columns.
+                """)
+    );
+
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitSmilesHeadersNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitSmilesHeadersNodeParameters.class, //
+            VIEWS, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 

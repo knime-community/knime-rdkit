@@ -1,0 +1,166 @@
+{
+  "data" : {
+    "model" : {
+      "useColumnTitles" : true,
+      "completeReset" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "completeReset" : {
+            "type" : "boolean",
+            "title" : "Remove existing SMILES values in all headers first",
+            "description" : "Flag this option to remove all existing SMILES values from the properties of all(!) header columns of the data table before setting new SMILES values based on the SMILES Definition Table.",
+            "default" : false
+          },
+          "hint" : {
+            "type" : "object"
+          },
+          "smilesColumnName" : {
+            "type" : "string",
+            "title" : "Column with new SMILES values",
+            "description" : "The new SMILES values to be set for the specified Data Table columns. Note, that an empty or missing cell will actually remove the SMILES header information."
+          },
+          "targetColumnName" : {
+            "type" : "string",
+            "title" : "Column with target column names",
+            "description" : "The input column of the SMILES Definition Table that defines which Data Table column headers shall be changed."
+          },
+          "useColumnTitles" : {
+            "type" : "boolean",
+            "title" : "Use column titles of data table as SMILES property definitions",
+            "description" : "Flag this option to use column titles as SMILES values. This option is only visible and takes only effect, if there is no SMILES Definition Table connected and if it is checked. Invalid SMILES values in header titles are ignored without warnings or errors.",
+            "default" : true
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useColumnTitles",
+      "options" : {
+        "format" : "checkbox"
+      },
+      "rule" : {
+        "effect" : "HIDE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/targetColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "id" : "#/properties/model/properties/hint",
+      "options" : {
+        "format" : "textMessage"
+      },
+      "providedOptions" : [ "message" ],
+      "rule" : {
+        "effect" : "HIDE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/smilesColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/completeReset",
+      "options" : {
+        "format" : "checkbox"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "useColumnTitles" : {
+            "configKey" : "use_column_titles_as_smiles"
+          },
+          "targetColumnName" : {
+            "configKey" : "names_column"
+          },
+          "hint" : { },
+          "smilesColumnName" : {
+            "configKey" : "smiles_column"
+          },
+          "completeReset" : {
+            "configKey" : "complete_reset"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/smilesColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/targetColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "id" : "#/properties/model/properties/hint",
+    "providedOptionName" : "message",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : {
+        "title" : "Hint",
+        "description" : "Connect a SMILES definition table to define target columns and their SMILES values.",
+        "type" : "INFO"
+      }
+    } ]
+  } ]
+}

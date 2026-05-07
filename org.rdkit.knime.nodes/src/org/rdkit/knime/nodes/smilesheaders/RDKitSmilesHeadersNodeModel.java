@@ -100,6 +100,18 @@ public class RDKitSmilesHeadersNodeModel extends AbstractRDKitNodeModel implemen
 	/** The type of an additional SMILES header information. */
 	public static final String ADD_HEADER_INFO_SMILES_TYPE = "Smiles";
 
+	/** Config key for the column with target column names. */
+	static final String CFG_NAMES_COLUMN = "names_column";
+
+	/** Config key for the column with SMILES values. */
+	static final String CFG_SMILES_COLUMN = "smiles_column";
+
+	/** Config key for the option to use column titles as SMILES. */
+	static final String CFG_USE_COLUMN_TITLES_AS_SMILES = "use_column_titles_as_smiles";
+
+	/** Config key for the complete reset option. */
+	static final String CFG_COMPLETE_RESET = "complete_reset";
+
 	/** The logger instance. */
 	protected static final NodeLogger LOGGER = NodeLogger
 			.getLogger(RDKitSmilesHeadersNodeModel.class);
