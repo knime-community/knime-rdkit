@@ -1,0 +1,129 @@
+{
+  "data" : {
+    "model" : {
+      "rmsdThreshold" : 0.5,
+      "ignoreHsOption" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "ignoreHsOption" : {
+            "type" : "boolean",
+            "title" : "Ignore Hs (increases performance)",
+            "description" : "Set this option to remove any existing hydrogens before performing the calculation. (Default is false)",
+            "default" : false
+          },
+          "moleculeInputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit mol column with conformers",
+            "description" : "The name of the column with RDKit molecules, each with exactly one conformer. If the molecule has more than one conformer embedded, only the first one will be used for the calculation."
+          },
+          "referenceInputColumnName" : {
+            "type" : "string",
+            "title" : "Reference column (e.g. an ID)",
+            "description" : "The name of the column that defines which conformers belong to each other."
+          },
+          "rmsdThreshold" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "RMSD threshold",
+            "description" : "The RMSD threshold used by the node to split the input table into two output tables. Conformers with an RMSD value above or equal to the threshold go to the first output table, those below go to the second.",
+            "default" : 0.5
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/moleculeInputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/referenceInputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/rmsdThreshold",
+      "options" : {
+        "validation" : {
+          "min" : {
+            "errorMessage" : "The value must be at least 0.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 0.0
+            }
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/ignoreHsOption",
+      "options" : {
+        "format" : "checkbox"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "moleculeInputColumnName" : {
+            "configKey" : "input_mol_column"
+          },
+          "referenceInputColumnName" : {
+            "configKey" : "input_ref_column"
+          },
+          "rmsdThreshold" : {
+            "configKey" : "rmsd_threshold"
+          },
+          "ignoreHsOption" : {
+            "configKey" : "ignore_hs"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/moleculeInputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/referenceInputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ]
+}

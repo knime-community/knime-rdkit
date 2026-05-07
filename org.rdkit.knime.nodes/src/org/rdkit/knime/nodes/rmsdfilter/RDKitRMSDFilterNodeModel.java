@@ -229,6 +229,12 @@ public class RDKitRMSDFilterNodeModel extends AbstractRDKitNodeModel {
 				}
 			}
 		}
+		
+		// If there is no reference input column with "reference" in its name, we try to auto guess it based on the 
+		// first compatible column we find - does not fail
+		SettingsUtils.autoGuessColumn(inSpecs[0], m_modelReferenceInputColumnName, DataValue.class, 0,
+				"Auto guessing: Using column %COLUMN_NAME% as reference input column.",
+				"No valid reference input column in input table.", getWarningConsolidator());
 
 		// Determines, if the reference input column exists - fails if it does not
 		SettingsUtils.checkColumnExistence(inSpecs[0], m_modelReferenceInputColumnName, DataValue.class,
