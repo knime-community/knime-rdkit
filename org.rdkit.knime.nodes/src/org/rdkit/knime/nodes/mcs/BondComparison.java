@@ -49,13 +49,27 @@
 package org.rdkit.knime.nodes.mcs;
 
 import org.RDKit.BondComparator;
+import org.knime.node.parameters.widget.choices.Label;
 
 
 public enum BondComparison {
 
-	CompareAny("Compare Any", BondComparator.BondCompareAny), 
+	@Label(value = "Order", description = """
+			Two bonds will be considered a match if they have the same bond type, i.e. single, double, triple, 
+			aromatic, etc. This is the default comparison type and will usually lead to a smaller common substructure 
+			than Any comparison.
+			""")
 	CompareOrder("Compare Order", BondComparator.BondCompareOrder), 
-	CompareExactOrder("Compare Exact Order", BondComparator.BondCompareOrderExact);
+	@Label(value = "Exact order", description = """
+			Two bonds will be considered a match if they have the same bond type and the same stereo configuration. 
+			This is the strictest comparison type and will usually lead to the smallest common substructure.
+			""")
+	CompareExactOrder("Compare Exact Order", BondComparator.BondCompareOrderExact),
+	@Label(value = "Any", description = """
+	Any bond will be considered a match, i.e. single, double, triple, aromatic, etc. will all be considered 
+	the same. This is the most relaxed comparison type and will usually lead to the largest common substructure.
+	""")
+	CompareAny("Compare Any", BondComparator.BondCompareAny);
 
 	//
 	// Members

@@ -49,6 +49,7 @@
 package org.rdkit.knime.nodes.mcs;
 
 import org.RDKit.AtomComparator;
+import org.knime.node.parameters.widget.choices.Label;
 
 /**
  * This enumeration defines different atom comparators based on the RDKit atom comparators.
@@ -57,9 +58,16 @@ import org.RDKit.AtomComparator;
  */
 public enum AtomComparison {
 
-	CompareAny("Compare Any", AtomComparator.AtomCompareAny), 
+	@Label(value = "Elements", description = """
+	Compares the elements of two atoms. If the elements are the same, the atoms are considered equal.
+	""")
 	CompareElements("Compare Elements", AtomComparator.AtomCompareElements), 
-	CompareIsotopes("Compare Isotopes", AtomComparator.AtomCompareIsotopes);
+	@Label(value = "Isotopes", description = """
+			Compares the isotopes of two atoms. If the isotopes are the same, the atoms are considered equal.
+			""")
+	CompareIsotopes("Compare Isotopes", AtomComparator.AtomCompareIsotopes),
+	@Label(value = "Any", description = "Compares any two atoms as equal.")
+	CompareAny("Compare Any", AtomComparator.AtomCompareAny); 
 
 	//
 	// Members

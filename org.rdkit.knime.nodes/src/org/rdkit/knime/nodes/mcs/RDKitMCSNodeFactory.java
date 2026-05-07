@@ -51,16 +51,56 @@ package org.rdkit.knime.nodes.mcs;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitMCS" Node.
  * 
- *
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitMCSNodeFactory 
-        extends NodeFactory<RDKitMCSNodeModel> {
+public class RDKitMCSNodeFactory extends NodeFactory<RDKitMCSNodeModel> 
+	implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit MCS";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Node to find the Maximum Common Substructure (MCS).
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            This node is used to find the Maximum Common Substructure (MCS) of a set of compounds using the
+            RDKit MCS code. Such a calculation can be a long running process. Therefore, a timeout must be
+            specified as part of the options. The MCS of an empty list of molecules is undefined and results in
+            empty result cells. The MCS of a single molecule is the molecule itself (as SMARTS value). All other
+            MCS calculations are based on the specified parameters.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("RDKit molecules", """
+                Input table with RDKit molecules.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("MCS of the input structures", """
+                Table containing a single row with the MCS as a SMARTS value and additional information (atom count,
+                bond count and if calculation timed out).
+                """)
+    );
+	
     /**
      * Creates a model for the RDKitMCS functionality
      * of the RDKit library. The model is derived from the
@@ -107,12 +147,33 @@ public class RDKitMCSNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitMCSNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitMCSNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitMCSNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 

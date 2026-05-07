@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_column" type="xstring" isnull="true" value=""/>
+    <entry key="threshold" type="xdouble" value="1.0"/>
+    <entry key="ringMatchesRingOnly" type="xboolean" value="false"/>
+    <entry key="completeRingsOnly" type="xboolean" value="false"/>
+    <entry key="matchValences" type="xboolean" value="false"/>
+    <entry key="atomComparison" type="xstring" value="CompareElements"/>
+    <entry key="bondComparison" type="xstring" value="CompareOrder"/>
+    <entry key="timeout" type="xint" value="300"/>
+</config>

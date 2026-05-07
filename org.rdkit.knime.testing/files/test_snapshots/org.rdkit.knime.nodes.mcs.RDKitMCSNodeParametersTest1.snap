@@ -1,0 +1,223 @@
+{
+  "data" : {
+    "model" : {
+      "threshold" : 1.0,
+      "ringMatchesRingOnly" : false,
+      "completeRingsOnly" : false,
+      "matchValences" : false,
+      "atomComparison" : "CompareElements",
+      "bondComparison" : "CompareOrder",
+      "timeout" : 300
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "atomComparison" : {
+            "oneOf" : [ {
+              "const" : "CompareElements",
+              "title" : "Elements"
+            }, {
+              "const" : "CompareIsotopes",
+              "title" : "Isotopes"
+            }, {
+              "const" : "CompareAny",
+              "title" : "Any"
+            } ],
+            "title" : "Atom comparison",
+            "description" : "Specify here how atoms shall be compared.\n<ul>\n<li><b>Elements</b>: Compares the elements of two atoms. If the elements are the same, the atoms are considered equal.\n</li>\n<li><b>Isotopes</b>: Compares the isotopes of two atoms. If the isotopes are the same, the atoms are considered equal.\n</li>\n<li><b>Any</b>: Compares any two atoms as equal.</li>\n</ul>",
+            "default" : "CompareElements"
+          },
+          "bondComparison" : {
+            "oneOf" : [ {
+              "const" : "CompareOrder",
+              "title" : "Order"
+            }, {
+              "const" : "CompareExactOrder",
+              "title" : "Exact order"
+            }, {
+              "const" : "CompareAny",
+              "title" : "Any"
+            } ],
+            "title" : "Bond comparison",
+            "description" : "Specify here how bonds shall be compared.\n<ul>\n<li><b>Order</b>: Two bonds will be considered a match if they have the same bond type, i.e. single, double, triple,\naromatic, etc. This is the default comparison type and will usually lead to a smaller common substructure\nthan Any comparison.\n</li>\n<li><b>Exact order</b>: Two bonds will be considered a match if they have the same bond type and the same stereo configuration.\nThis is the strictest comparison type and will usually lead to the smallest common substructure.\n</li>\n<li><b>Any</b>: Any bond will be considered a match, i.e. single, double, triple, aromatic, etc. will all be considered\nthe same. This is the most relaxed comparison type and will usually lead to the largest common substructure.\n</li>\n</ul>",
+            "default" : "CompareOrder"
+          },
+          "completeRingsOnly" : {
+            "type" : "boolean",
+            "title" : "Complete rings only",
+            "description" : "Determines whether only complete rings are included in the MCS. Default is unchecked.",
+            "default" : false
+          },
+          "inputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit molecule column",
+            "description" : "Select here the RDKit Molecule column to be used as input."
+          },
+          "matchValences" : {
+            "type" : "boolean",
+            "title" : "Match valences",
+            "description" : "Determines whether atom valences are used in the comparison. Default is unchecked.",
+            "default" : false
+          },
+          "ringMatchesRingOnly" : {
+            "type" : "boolean",
+            "title" : "Ring matches ring only",
+            "description" : "Determines whether ring bonds only match other ring bonds. Default is unchecked.",
+            "default" : false
+          },
+          "threshold" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Threshold",
+            "description" : "Fraction of molecules that the MCS must cover. Defaults to 1.0. 0 &lt; threshold &lt;= 1.0.",
+            "default" : 1.0
+          },
+          "timeout" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Timeout (in seconds)",
+            "description" : "Specify here how long the MCS calculation shall run at a maximum. Default is 300 seconds.\nThere is currently no way to interrupt a long-running MCS calculation. Even if you cancel an executing\nnode the calculation will continue in the background and will occupy system resources until it is either\ndone or the specified timeout occurs. Use longer timeouts with care!\n",
+            "default" : 300
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/threshold",
+      "options" : {
+        "stepSize" : 0.05,
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 1.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be greater than 0.",
+            "parameters" : {
+              "isExclusive" : true,
+              "min" : 0.0
+            }
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/ringMatchesRingOnly",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/completeRingsOnly",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/matchValences",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/atomComparison",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/bondComparison",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/timeout",
+      "options" : {
+        "stepSize" : 60.0,
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 0.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 0.0
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "configKey" : "input_column"
+          },
+          "threshold" : {
+            "configKey" : "threshold"
+          },
+          "ringMatchesRingOnly" : {
+            "configKey" : "ringMatchesRingOnly"
+          },
+          "completeRingsOnly" : {
+            "configKey" : "completeRingsOnly"
+          },
+          "matchValences" : {
+            "configKey" : "matchValences"
+          },
+          "atomComparison" : {
+            "configKey" : "atomComparison"
+          },
+          "bondComparison" : {
+            "configKey" : "bondComparison"
+          },
+          "timeout" : {
+            "configKey" : "timeout"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ]
+}
