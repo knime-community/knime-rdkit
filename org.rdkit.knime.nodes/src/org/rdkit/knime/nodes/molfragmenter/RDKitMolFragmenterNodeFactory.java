@@ -51,22 +51,30 @@ package org.rdkit.knime.nodes.molfragmenter;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitMolFragmenter" Node.
  * 
  * @author Greg Landrum
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitMolFragmenterNodeFactory extends NodeFactory<RDKitMolFragmenterNodeModel> {
+public class RDKitMolFragmenterNodeFactory extends NodeFactory<RDKitMolFragmenterNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	protected NodeDialogPane createNodeDialogPane() {
-		return new RDKitMolFragmenterNodeDialog();
-	}
 
 	/**
 	 * Creates a model for the RDKitMolFragmenter functionality
@@ -113,4 +121,54 @@ public class RDKitMolFragmenterNodeFactory extends NodeFactory<RDKitMolFragmente
 	protected boolean hasDialog() {
 		return true;
 	}
+    private static final String NODE_NAME = "RDKit Molecule Fragmenter";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Fragments a set of RDKit molecules.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Fragments a set of RDKit molecules into subgraphs.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Molecules", """
+                Table with RDKit molecules.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Fragments", """
+                Fragments found in the table.
+                """),
+            fixedPort("Molecules with fragment tags", """
+                Table with molecules and tagged fragments.
+                """)
+    );
+
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitMolFragmenterNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitMolFragmenterNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }

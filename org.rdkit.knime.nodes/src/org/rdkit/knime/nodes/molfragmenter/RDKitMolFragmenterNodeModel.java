@@ -103,6 +103,15 @@ public class RDKitMolFragmenterNodeModel extends AbstractRDKitCalculatorNodeMode
 	/** Input data info index for Mol value. */
 	protected static final int INPUT_COLUMN_MOL = 0;
 
+	/** Config key for the input column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the minimum path length. */
+	static final String CFG_MIN_PATH = "min_path";
+
+	/** Config key for the maximum path length. */
+	static final String CFG_MAX_PATH = "max_path";
+
 	//
 	// Members
 	//
