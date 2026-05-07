@@ -1,0 +1,185 @@
+{
+  "data" : {
+    "model" : {
+      "removeSourceColumns" : false,
+      "sanitize" : true,
+      "removeHydrogens" : true,
+      "generateReturnCode" : false,
+      "generateMessage" : false,
+      "generateLog" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "extraInformationColumnNamePrefix" : {
+            "type" : "string",
+            "title" : "New column name prefix for extra information",
+            "description" : "The prefix of column names, which will contain the extra information about the conversion."
+          },
+          "generateLog" : {
+            "type" : "boolean",
+            "title" : "Log column",
+            "description" : "Enable to also generate a column that contains a log message of the InChI code conversion.",
+            "default" : false
+          },
+          "generateMessage" : {
+            "type" : "boolean",
+            "title" : "Message column",
+            "description" : "Enable to also generate a column that contains a message generated during the InChI code conversion.",
+            "default" : false
+          },
+          "generateReturnCode" : {
+            "type" : "boolean",
+            "title" : "Return code column",
+            "description" : "Enable to also generate a column that contains the return code of the InChI code conversion.",
+            "default" : false
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "InChI code column",
+            "description" : "The input column with InChI codes."
+          },
+          "newMolColumnName" : {
+            "type" : "string",
+            "title" : "New column name for RDKit molecules",
+            "description" : "The name of the new column, which will contain the RDKit molecules."
+          },
+          "removeHydrogens" : {
+            "type" : "boolean",
+            "title" : "Remove hydrogens",
+            "description" : "Enable to remove hydrogens from the generated molecule.",
+            "default" : true
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Enable to remove the specified source column from the result table.",
+            "default" : false
+          },
+          "sanitize" : {
+            "type" : "boolean",
+            "title" : "Sanitize molecule",
+            "description" : "Enable to sanitize the generated molecule.",
+            "default" : true
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "label" : "RDKit Molecule Generation",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/newMolColumnName"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/sanitize",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/removeHydrogens",
+        "options" : {
+          "format" : "checkbox"
+        }
+      } ]
+    }, {
+      "label" : "Extra InChI Conversion Information",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/extraInformationColumnNamePrefix"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/generateReturnCode",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/generateMessage",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/generateLog",
+        "options" : {
+          "format" : "checkbox"
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "newMolColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "sanitize" : {
+            "configKey" : "sanitize"
+          },
+          "removeHydrogens" : {
+            "configKey" : "remove_hydrogens"
+          },
+          "extraInformationColumnNamePrefix" : {
+            "configKey" : "new_extra_info_column_name_prefix"
+          },
+          "generateReturnCode" : {
+            "configKey" : "generate_return_code"
+          },
+          "generateMessage" : {
+            "configKey" : "generate_message"
+          },
+          "generateLog" : {
+            "configKey" : "generate_log"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "InChI",
+        "text" : "InChI",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      } ]
+    } ]
+  } ]
+}

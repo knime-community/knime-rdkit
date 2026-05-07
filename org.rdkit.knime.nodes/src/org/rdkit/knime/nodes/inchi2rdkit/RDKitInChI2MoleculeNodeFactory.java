@@ -50,13 +50,27 @@ package org.rdkit.knime.nodes.inchi2rdkit;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitInChI2Molecule" Node.
  * 
  * @author Manuel Schwarze
+ 
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ 
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitInChI2MoleculeNodeFactory extends NodeFactory<RDKitInChI2MoleculeNodeModel> {
+public class RDKitInChI2MoleculeNodeFactory extends NodeFactory<RDKitInChI2MoleculeNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the RDKitInChI2Molecule functionality
@@ -107,9 +121,53 @@ public class RDKitInChI2MoleculeNodeFactory extends NodeFactory<RDKitInChI2Molec
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitInChI2MoleculeNodeDialog();
-	}
+    private static final String NODE_NAME = "RDKit From InChI";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Converts InChI codes to RDKit molecules.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Converts InChI codes to RDKit molecules. Additionally, it offers options to generate extra
+                information about the generation process (return code, message, log message).
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with InChI codes", """
+                Table containing InChI codes.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Result table with RDKit molecules", """
+                Converted RDKit molecules.
+                """)
+    );
+
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitInChI2MoleculeNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitInChI2MoleculeNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
