@@ -76,6 +76,7 @@ import org.rdkit.knime.types.RDKitMolValue;
 import org.rdkit.knime.types.RDKitMolValueRenderer;
 import org.rdkit.knime.types.preferences.RDKitDepicterPreferencePage;
 import org.rdkit.knime.util.InputDataInfo;
+import org.knime.node.parameters.widget.choices.Label;
 import org.rdkit.knime.util.SettingsModelEnumeration;
 import org.rdkit.knime.util.SettingsUtils;
 
@@ -93,7 +94,37 @@ public class RDKit2MoleculeConverterNodeModel extends AbstractRDKitCalculatorNod
 
 	/** Defines supported destination formats. */
 	public enum DestinationFormat {
+		
+		@Label(value = "SDF", description = "Converts molecules to SDF (Structure Data File) format.")
+		SDF {
+			@Override
+			public DataType getDataType() {
+				return SdfAdapterCell.RAW_TYPE;
+			}
+			
+			@Override
+			public DataCell convertRdkitMolecule(final ROMol mol) {
+				// Calculate 2D Coordinates, if necessary
+				if (mol.getNumConformers() == 0) {
+					RDKitMolValueRenderer.compute2DCoords(mol,
+							RDKitDepicterPreferencePage.isUsingCoordGen(),
+							RDKitDepicterPreferencePage.isNormalizeDepictions());
+				}
+				
+				// Fix SDF value
+				String strSdf = mol.MolToMolBlock();
+				// KNIME SDF type requires string to be terminated
+				// by $$$$ -- see org.knime.chem.types.SdfValue for details
+				if (!strSdf.endsWith(SDF_POSTFIX)) {
+					strSdf += SDF_POSTFIX;
+				}
+				
+				// Create the SDF cell
+				return SdfCellFactory.createAdapterCell(strSdf);
+			}
+		},
 
+		@Label(value = "Smiles", description = "Converts molecules to canonical SMILES notation.")
 		Smiles {
 			@Override
 			public DataType getDataType() {
@@ -106,6 +137,7 @@ public class RDKit2MoleculeConverterNodeModel extends AbstractRDKitCalculatorNod
 			}
 		},
 
+		@Label(value = "Smarts", description = "Converts molecules to SMARTS notation.")
 		Smarts {
 			@Override
 			public DataType getDataType() {
@@ -115,34 +147,6 @@ public class RDKit2MoleculeConverterNodeModel extends AbstractRDKitCalculatorNod
 			@Override
 			public DataCell convertRdkitMolecule(final ROMol mol) {
 				return SmartsCellFactory.create(RDKFuncs.MolToSmarts(mol, false)); // Do not include stereo chemistry
-			}
-		},
-
-		SDF {
-			@Override
-			public DataType getDataType() {
-				return SdfAdapterCell.RAW_TYPE;
-			}
-
-			@Override
-			public DataCell convertRdkitMolecule(final ROMol mol) {
-				// Calculate 2D Coordinates, if necessary
-				if (mol.getNumConformers() == 0) {
-					RDKitMolValueRenderer.compute2DCoords(mol,
-						RDKitDepicterPreferencePage.isUsingCoordGen(),
-						RDKitDepicterPreferencePage.isNormalizeDepictions());
-				}
-
-				// Fix SDF value
-				String strSdf = mol.MolToMolBlock();
-				// KNIME SDF type requires string to be terminated
-				// by $$$$ -- see org.knime.chem.types.SdfValue for details
-				if (!strSdf.endsWith(SDF_POSTFIX)) {
-					strSdf += SDF_POSTFIX;
-				}
-
-				// Create the SDF cell
-				return SdfCellFactory.createAdapterCell(strSdf);
 			}
 		};
 
