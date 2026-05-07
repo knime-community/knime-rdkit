@@ -51,15 +51,27 @@ package org.rdkit.knime.nodes.aromatize;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitKekulize" Node.
  * Kekulizes an RDKit Molecule.
  *
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitAromatizeNodeFactory 
-        extends NodeFactory<RDKitAromatizeNodeModel> {
+        extends NodeFactory<RDKitAromatizeNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitKekulize functionality
@@ -110,9 +122,54 @@ public class RDKitAromatizeNodeFactory
     /**
      * {@inheritDoc}
      */
+    private static final String NODE_NAME = "RDKit Aromatizer";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Aromatizes an RDKit molecule.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Aromatizes an RDKit molecule. Note, although the output molecules are aromatized and will be treated
+                as such, the RDKit renderer in the table visualization will still show them in kekulized form.
+                However, other molecule renderers may visualize aromaticity differently.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit molecules", """
+                Input table with RDKit molecules.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Output table with aromatized RDKit molecules", """
+                Output table with aromatized RDKit molecules.
+                """)
+    );
+
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitAromatizeNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitAromatizeNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitAromatizeNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
