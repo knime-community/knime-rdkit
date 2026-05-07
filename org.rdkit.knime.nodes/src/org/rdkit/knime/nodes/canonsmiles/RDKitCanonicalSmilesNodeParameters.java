@@ -44,7 +44,7 @@
  * ------------------------------------------------------------------------
  */
 
-package org.rdkit.knime.nodes.removehs;
+package org.rdkit.knime.nodes.canonsmiles;
 
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.Widget;
@@ -58,17 +58,17 @@ import org.rdkit.knime.util.RDKitMoleculeColumnAutoGuessProvider;
 import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
 
 /**
- * Node parameters for RDKit Remove Hs.
+ * Node parameters for RDKit Canon SMILES.
  *
  * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
  * @author AI Migration Pipeline v1.2
  */
 @LoadDefaultsForAbsentFields
-final class RDKitRemoveHsNodeParameters implements NodeParameters {
+final class RDKitCanonicalSmilesNodeParameters implements NodeParameters {
 
     @Widget(title = "RDKit mol column", description = "The input column with RDKit Molecules.")
     @ChoicesProvider(RDKitMoleculeColumnChoicesProvider.class)
-    @Persist(configKey = RDKitRemoveHsNodeModel.CFG_INPUT_COLUMN)
+    @Persist(configKey = RDKitCanonicalSmilesNodeModel.CFG_INPUT_COLUMN)
     @ValueReference(InputColumnRef.class)
     @ValueProvider(InputColumnDefaultProvider.class)
     String m_inputColumn;
@@ -83,12 +83,12 @@ final class RDKitRemoveHsNodeParameters implements NodeParameters {
     }
 
     @Widget(title = "New column name",
-        description = "The name of the new column, which will contain the calculation results.")
-    @Persist(configKey = RDKitRemoveHsNodeModel.CFG_NEW_COLUMN_NAME)
+        description = "The name of the new column, which will contain the canonical SMILES.")
+    @Persist(configKey = RDKitCanonicalSmilesNodeModel.CFG_NEW_COLUMN_NAME)
     String m_newColumnName;
 
     @Widget(title = "Remove source column",
         description = "Set to true to remove the specified source column from the result table.")
-    @Persist(configKey = RDKitRemoveHsNodeModel.CFG_REMOVE_SOURCE_COLUMNS)
+    @Persist(configKey = RDKitCanonicalSmilesNodeModel.CFG_REMOVE_SOURCE_COLUMNS)
     boolean m_removeSourceColumns;
 }
