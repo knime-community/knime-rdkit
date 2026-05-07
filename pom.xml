@@ -11,7 +11,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<revision>5.2.1</revision>
+		<revision>6.0.0</revision>
 		<changelist>-SNAPSHOT</changelist>
 		<knime.version>nightly</knime.version>
 		<tycho.version>4.0.13</tycho.version>
