@@ -51,16 +51,63 @@ package org.rdkit.knime.nodes.chemicaltransformation;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitChemicalTransformation" Node.
  * Transforms a structure into another structure by applying several reactions provided as SMARTS values.
  *
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitChemicalTransformationNodeFactory 
-        extends NodeFactory<RDKitChemicalTransformationNodeModel> {
+public class RDKitChemicalTransformationNodeFactory extends NodeFactory<RDKitChemicalTransformationNodeModel> 
+	implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit Chemical Transformation";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Transforms a structure into another structure by applying several reactions provided as SMARTS
+            values or Rxn Blocks.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            Transforms a structure into another structure by applying several reactions provided as SMARTS
+            values or Rxn Blocks. Every valid reaction found in table 2 will be applied multiple times to every
+            input molecule in table 1. If the result does not change anymore for one reaction, the next one will
+            be applied, and so on. Sometimes, a reaction could be applied forever. To avoid this scenario a
+            maximal number of reaction cycles can be set. If a reaction fails in some cycle the failure will be
+            ignored and the next reaction is being executed on the last successful product. At the very end
+            after all reactions were applied the end product is being sanitized. If this sanitization fails for
+            some reason the result cell will be empty.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Molecules", """
+                Table with RDKit Molecule column.
+                """),
+            fixedPort("Reactions", """
+                Table with reactions to be applied.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Transformed molecules", """
+                Transformed molecules.
+                """)
+    );
+	
     /**
      * Creates a model for the RDKitChemicalTransformation functionality
      * of the RDKit library. The model is derived from the
@@ -107,12 +154,33 @@ public class RDKitChemicalTransformationNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitChemicalTransformationNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitChemicalTransformationNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitChemicalTransformationNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
