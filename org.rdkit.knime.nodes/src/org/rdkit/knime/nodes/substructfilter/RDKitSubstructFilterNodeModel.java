@@ -72,6 +72,7 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.node.parameters.widget.choices.Label;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
 import org.rdkit.knime.types.RDKitMolValue;
@@ -94,7 +95,12 @@ public class RDKitSubstructFilterNodeModel extends AbstractRDKitNodeModel {
 
 	/** Defines several modes to tell what to do with found substructure matches. */
 	public enum MatchHandling {
-		DoNotAddMatchColumn, AddFirstMatchColumn, AddAllFlattenedMatchColumn;
+		@Label("Do not add column with matching atoms")
+		DoNotAddMatchColumn,
+		@Label("Add column with atom list of first match")
+		AddFirstMatchColumn,
+		@Label("Add column with atom list of all matches (overlap possible)")
+		AddAllFlattenedMatchColumn;
 
 		/**
 		 * {@inheritDoc}
