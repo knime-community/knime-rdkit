@@ -1,0 +1,150 @@
+{
+  "data" : {
+    "model" : {
+      "tolerance" : 0.1,
+      "failOnFirstDifference" : true,
+      "limitConsoleOutput" : 3
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "failOnFirstDifference" : {
+            "type" : "boolean",
+            "title" : "Fail already on first encountered difference",
+            "description" : "Set to true to fail immediately when the first difference has been encountered. Set to false to walk\nthrough the tables until the end to find more differences (console output) and then fail and report the\nfirst encountered difference.\n",
+            "default" : true
+          },
+          "inputColumn1Name" : {
+            "type" : "string",
+            "title" : "SDF column (table 1)",
+            "description" : "The first input column with SDF strings."
+          },
+          "inputColumn2Name" : {
+            "type" : "string",
+            "title" : "SDF column (table 2)",
+            "description" : "The second input column with SDF strings."
+          },
+          "limitConsoleOutput" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Limit console output about different rows to",
+            "description" : "To avoid that the console gets cluttered with all differences that may be found you may set a limit here.\nDefault is 3.\n",
+            "default" : 3
+          },
+          "tolerance" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Tolerance for all floating point numbers",
+            "description" : "Every floating point number in the SDF string to be compared is allowed to have this tolerance range.\n",
+            "default" : 0.1
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn1Name",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn2Name",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/tolerance"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/failOnFirstDifference",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/limitConsoleOutput",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn1Name" : {
+            "configKey" : "input_column_1"
+          },
+          "inputColumn2Name" : {
+            "configKey" : "input_column_2"
+          },
+          "tolerance" : {
+            "configKey" : "tolerance"
+          },
+          "failOnFirstDifference" : {
+            "configKey" : "failOnFirstDifference"
+          },
+          "limitConsoleOutput" : {
+            "configKey" : "limitConsoleOutput"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn1Name",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumn2Name",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule (#1)",
+        "text" : "Molecule (#1)",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      } ]
+    } ]
+  } ]
+}
