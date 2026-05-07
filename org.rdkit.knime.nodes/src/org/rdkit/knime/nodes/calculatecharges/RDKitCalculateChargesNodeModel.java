@@ -89,6 +89,12 @@ public class RDKitCalculateChargesNodeModel extends AbstractRDKitCalculatorNodeM
 			.getLogger(RDKitCalculateChargesNodeModel.class);
 
 
+	/** Config key for the input molecule column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the new output column name. */
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
+
 	/** Input data info index for Mol value. */
 	protected static final int INPUT_COLUMN_MOL = 0;
 
