@@ -104,7 +104,19 @@ public class RDKitMoleculeCatalogFilterNodeModel extends AbstractRDKitNodeModel 
 	/** The logger instance. */
 	protected static final NodeLogger LOGGER = NodeLogger
 			.getLogger(RDKitMoleculeCatalogFilterNodeModel.class);
-	
+
+	/** Config key for the input column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the filter catalogs selection. */
+	static final String CFG_CATALOGS = "catalogs";
+
+	/** Config key for the output column prefix. */
+	static final String CFG_OUTPUT_COLUMN_PREFIX = "output_column_prefix";
+
+	/** Config key for the atom list handling option. */
+	static final String CFG_GENERATE_ATOM_LIST = "generate_atom_list";
+
 	/** Input data info index for Mol value. */
 	protected static final int INPUT_COLUMN_MOL = 0;
 	

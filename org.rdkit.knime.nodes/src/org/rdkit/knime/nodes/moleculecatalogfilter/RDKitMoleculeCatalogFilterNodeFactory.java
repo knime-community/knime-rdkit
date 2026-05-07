@@ -51,15 +51,27 @@ package org.rdkit.knime.nodes.moleculecatalogfilter;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitMoleculeCatalogFilter" Node.
  * Filters a list of molecules by applying filters defined in standard catalogs: PAINS, PAINS A, PAINS B, PAINS C, BRENK, NIH, ZINC or ALL.
  *
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitMoleculeCatalogFilterNodeFactory 
-        extends NodeFactory<RDKitMoleculeCatalogFilterNodeModel> {
+        extends NodeFactory<RDKitMoleculeCatalogFilterNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitMoleculeCatalogFilter functionality
@@ -107,12 +119,59 @@ public class RDKitMoleculeCatalogFilterNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    private static final String NODE_NAME = "RDKit Molecule Catalog Filter";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Filters a table of molecules by applying filters taken from a set of standard catalogs.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Filters a table of molecules by applying filters taken from a set of standard catalogs. The second
+                output table contains a very detailed view of the reasons why a molecule was filtered out. The node
+                gives the option to generate one or more atom lists columns with the indexes of the atoms that
+                matched the rule; this information can be used with the RDKit Molecule Highlighting node to color
+                the associated substructures.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit molecules", """
+                Input table with RDKit Molecules to be filtered.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Good molecules", """
+                Molecules which have not been filtered out.
+                """),
+            fixedPort("Bad molecules", """
+                Molecules which have been filtered out and associated reasons.
+                """)
+    );
+
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitMoleculeCatalogFilterNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitMoleculeCatalogFilterNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitMoleculeCatalogFilterNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
