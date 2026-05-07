@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_column" type="xstring" value="Molecule"/>
+    <entry key="smarts_value" type="xstring" value="eqr3qb"/>
+    <entry key="exact_match" type="xboolean" value="true"/>
+    <entry key="use_chirality" type="xboolean" value="false"/>
+    <entry key="match_handling" type="xstring" value="AddFirstMatchColumn"/>
+    <entry key="new_match_column" type="xstring" value="Matching Atom Lists"/>
+</config>

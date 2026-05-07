@@ -1,0 +1,153 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumnName" : "Molecule",
+      "smartsQuery" : "eqr3qb",
+      "exactMatch" : true,
+      "useChirality" : false,
+      "matchHandling" : "AddFirstMatchColumn",
+      "newMatchColumnName" : "Matching Atom Lists"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "exactMatch" : {
+            "type" : "boolean",
+            "title" : "Do exact match",
+            "description" : "If this is set, only molecules containing the same number of atoms as the substructure query can match.\nThis isn't exactly equivalent to an exact structure match.\n",
+            "default" : false
+          },
+          "inputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The column containing the molecules."
+          },
+          "matchHandling" : {
+            "oneOf" : [ {
+              "const" : "DoNotAddMatchColumn",
+              "title" : "Do not add column with matching atoms"
+            }, {
+              "const" : "AddFirstMatchColumn",
+              "title" : "Add column with atom list of first match"
+            }, {
+              "const" : "AddAllFlattenedMatchColumn",
+              "title" : "Add column with atom list of all matches (overlap possible)"
+            } ],
+            "title" : "Match handling",
+            "description" : "Specify here, if an additional column with details about the match shall be added. It is possible to add\nthe Atom List of the First Match or of all matches.",
+            "default" : "DoNotAddMatchColumn"
+          },
+          "newMatchColumnName" : {
+            "type" : "string",
+            "title" : "Column name for matching atom list",
+            "description" : "The column name of the for the atom list column, if enabled.",
+            "default" : "Matching Atom List"
+          },
+          "smartsQuery" : {
+            "type" : "string",
+            "title" : "SMARTS query",
+            "description" : "A SMARTS string describing the query.",
+            "default" : ""
+          },
+          "useChirality" : {
+            "type" : "boolean",
+            "title" : "Use stereochemistry",
+            "description" : "If this is set, information about stereochemistry will be used in the substructure search.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/smartsQuery"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/exactMatch",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useChirality",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/matchHandling"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newMatchColumnName",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/matchHandling",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "AddFirstMatchColumn"
+            }, {
+              "const" : "AddAllFlattenedMatchColumn"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "configPaths" : [ [ "input_column" ] ]
+          },
+          "smartsQuery" : {
+            "configKey" : "smarts_value"
+          },
+          "exactMatch" : {
+            "configKey" : "exact_match"
+          },
+          "useChirality" : {
+            "configKey" : "use_chirality"
+          },
+          "matchHandling" : {
+            "configKey" : "match_handling"
+          },
+          "newMatchColumnName" : {
+            "configKey" : "new_match_column"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ]
+}
