@@ -1,0 +1,156 @@
+{
+  "data" : {
+    "model" : {
+      "molInputColumnName" : "Molecule",
+      "reactionInputColumnName" : "Molecule",
+      "newColumnName" : "Molecule Test (Transformed)",
+      "removeSourceColumns" : true,
+      "maxReactionCycles" : 96
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "maxReactionCycles" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Maximal number of applied reaction cycles",
+            "description" : "To avoid eternal reaction cycles the number of cycles can be limited.",
+            "default" : 100
+          },
+          "molInputColumnName" : {
+            "type" : "string",
+            "title" : "Reactant RDKit mol column (table 1)",
+            "description" : "The input column with RDKit Molecules."
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name",
+            "description" : "The name of the new column, which will contain the calculation results."
+          },
+          "reactionInputColumnName" : {
+            "type" : "string",
+            "title" : "Reaction column (table 2)",
+            "description" : "The input column with the reactions (either SMARTS or Rxn)."
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Set to true to remove the molecule input column from the result table.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/molInputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/reactionInputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/maxReactionCycles",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 9999.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 9999.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "molInputColumnName" : {
+            "configKey" : "input_mol_column"
+          },
+          "reactionInputColumnName" : {
+            "configKey" : "input_reaction_column"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "maxReactionCycles" : {
+            "configKey" : "max_reaction_cycles"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/molInputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/reactionInputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.knime.chem.types.SmartsValue",
+          "text" : "SMARTS"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/molInputColumnName"
+    },
+    "dependencies" : [ "#/properties/model/properties/molInputColumnName", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}
