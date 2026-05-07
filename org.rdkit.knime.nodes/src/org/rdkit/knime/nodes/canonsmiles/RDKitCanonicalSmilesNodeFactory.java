@@ -51,14 +51,29 @@ package org.rdkit.knime.nodes.canonsmiles;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeFactory.NodeType;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import java.util.Map;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitCanonicalSmiles" Node.
  * 
  * @author Greg Landrum
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitCanonicalSmilesNodeFactory extends NodeFactory<RDKitCanonicalSmilesNodeModel> {
+@SuppressWarnings("restriction")
+public class RDKitCanonicalSmilesNodeFactory extends NodeFactory<RDKitCanonicalSmilesNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the RDKitCanonicalSmiles functionality
@@ -106,12 +121,52 @@ public class RDKitCanonicalSmilesNodeFactory extends NodeFactory<RDKitCanonicalS
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitCanonicalSmilesNodeDialog();
-	}
+    private static final String NODE_NAME = "RDKit Canon SMILES";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Generates RDKit canonical SMILES for an input RDKit Mol column.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Generates RDKit canonical SMILES for an input RDKit Mol column and appends it to the table.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit molecules", """
+                Data with RDKit Mol column.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Data with canonical SMILES", """
+                Data with canonical SMILES column.
+                """)
+    );
+
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitCanonicalSmilesNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitCanonicalSmilesNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
