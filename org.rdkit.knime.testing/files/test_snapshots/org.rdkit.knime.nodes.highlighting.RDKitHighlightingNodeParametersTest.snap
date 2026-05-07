@@ -1,0 +1,242 @@
+{
+  "data" : {
+    "model" : {
+      "highlightings" : [ ]
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "highlightings" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "active" : {
+                  "oneOf" : [ {
+                    "const" : "ACTIVE",
+                    "title" : "Active"
+                  }, {
+                    "const" : "INACTIVE",
+                    "title" : "Inactive"
+                  } ],
+                  "title" : "Highlighting",
+                  "description" : "Activates the highlighting definition. Inactive definitions are ignored and not applied to the molecule.\n",
+                  "default" : "ACTIVE"
+                },
+                "color" : {
+                  "type" : "string",
+                  "title" : "Color",
+                  "description" : "Hex color for highlighting (e.g. #FF0000). Leave blank to use the RDKit default color."
+                },
+                "inputColumn" : {
+                  "type" : "object",
+                  "properties" : {
+                    "regularChoice" : {
+                      "type" : "string"
+                    },
+                    "specialChoice" : {
+                      "oneOf" : [ {
+                        "const" : "NONE",
+                        "title" : "None"
+                      } ]
+                    }
+                  },
+                  "title" : "Column with indexes",
+                  "description" : "Select the column that contains atom or bond indexes (integer or long collection).",
+                  "default" : {
+                    "specialChoice" : "NONE"
+                  }
+                },
+                "neighborhood" : {
+                  "type" : "boolean",
+                  "title" : "Include neighborhood",
+                  "description" : "Flag to also highlight bonds between two highlighted atoms or atoms around a highlighted bond.\n",
+                  "default" : false
+                },
+                "type" : {
+                  "oneOf" : [ {
+                    "const" : "Atoms",
+                    "title" : "Atoms"
+                  }, {
+                    "const" : "Bonds",
+                    "title" : "Bonds"
+                  } ],
+                  "title" : "Type",
+                  "description" : "Determines whether the indexes refer to atoms or bonds.",
+                  "default" : "Atoms"
+                }
+              }
+            },
+            "title" : "Highlighting definitions",
+            "description" : "Each entry defines a set of atoms or bonds to highlight with an optional color.",
+            "default" : [ ]
+          },
+          "inputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The input column with RDKit molecules."
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "Column name for molecule with highlighting",
+            "description" : "The name of the new column, which will contain the result."
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "label" : "Highlighting Definitions",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/highlightings",
+        "options" : {
+          "detail" : [ {
+            "type" : "HorizontalLayout",
+            "elements" : [ {
+              "type" : "Control",
+              "scope" : "#/properties/active",
+              "options" : {
+                "format" : "valueSwitch"
+              }
+            }, {
+              "type" : "Control",
+              "scope" : "#/properties/type",
+              "options" : {
+                "format" : "valueSwitch"
+              }
+            } ]
+          }, {
+            "type" : "Control",
+            "scope" : "#/properties/inputColumn",
+            "options" : {
+              "format" : "singleSelection",
+              "specialChoices" : [ {
+                "id" : "NONE",
+                "text" : "None"
+              } ]
+            },
+            "providedOptions" : [ "possibleValues" ]
+          }, {
+            "type" : "Control",
+            "scope" : "#/properties/color",
+            "options" : {
+              "format" : "color"
+            }
+          }, {
+            "type" : "Control",
+            "scope" : "#/properties/neighborhood",
+            "options" : {
+              "format" : "checkbox"
+            }
+          } ],
+          "addButtonText" : "Add new highlighting definition",
+          "arrayElementTitle" : "Highlighting"
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "configKey" : "input_column"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "highlightings" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "active" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "select_${array_index}" ] ]
+                },
+                "type" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "type_${array_index}" ] ]
+                },
+                "inputColumn" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "input_column_${array_index}" ] ]
+                },
+                "color" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "color_${array_index}" ] ]
+                },
+                "neighborhood" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "neighborhood_${array_index}" ] ]
+                }
+              }
+            },
+            "route" : [ "highlighting" ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/highlightings/items/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "List*(LongCol)",
+        "text" : "List*(LongCol)",
+        "type" : {
+          "id" : "org.knime.core.data.collection.ListDataValue",
+          "text" : "Collection (List)"
+        }
+      }, {
+        "id" : "List*(LongCol) (#1)",
+        "text" : "List*(LongCol) (#1)",
+        "type" : {
+          "id" : "org.knime.core.data.collection.ListDataValue",
+          "text" : "Collection (List)"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumnName"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumnName", "#/properties/model/properties/newColumnName" ]
+  } ]
+}
