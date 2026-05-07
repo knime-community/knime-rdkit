@@ -51,16 +51,57 @@ package org.rdkit.knime.nodes.sdfdifferencechecker;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitSDFDifferenceChecker" Node.
  * 
- *
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitSDFDifferenceCheckerNodeFactory 
-        extends NodeFactory<RDKitSDFDifferenceCheckerNodeModel> {
+public class RDKitSDFDifferenceCheckerNodeFactory extends NodeFactory<RDKitSDFDifferenceCheckerNodeModel> 
+	implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit SDF Difference Checker";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Compares SDF strings of two columns and fails if differences are found.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            Compares SDF strings of two columns and fails if differences are found. A tolerance range can be
+            defined for comparing floating point numbers. There is no "real" SDF logic in this node. It simply
+            does the following: First it removes all operating system specific characters and removes all white
+            spaces that are found in a row replacing them by a single space. Then it walks through all remaining
+            items which are now separated by single spaces and compares them. If a numeric value is encountered
+            that includes a floating point, it will try to parse it as a double number, and if this succeeds for
+            both sides, it will compare the numbers with each other. For the comparison we can specify a
+            tolerance.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input first table with SDF strings to be compared", """
+                SDF strings to be compared.
+                """),
+            fixedPort("Input second table with SDF strings to be compared", """
+                SDF strings to be compared.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of();
+	
     /**
      * Creates a model for the RDKitSDFDifferenceChecker functionality
      * of the RDKit library. The model is derived from the
@@ -107,12 +148,33 @@ public class RDKitSDFDifferenceCheckerNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitSDFDifferenceCheckerNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitSDFDifferenceCheckerNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitSDFDifferenceCheckerNodeParameters.class, //
+            null, //
+            NodeType.Other, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
