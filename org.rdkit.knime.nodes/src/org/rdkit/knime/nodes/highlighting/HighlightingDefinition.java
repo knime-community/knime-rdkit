@@ -47,11 +47,14 @@
 package org.rdkit.knime.nodes.highlighting;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.RDKit.DrawColour;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.config.Config;
+import org.knime.node.parameters.widget.choices.Label;
 import org.rdkit.knime.util.SettingsUtils;
 
 //
@@ -65,7 +68,25 @@ public class HighlightingDefinition {
 	//
 
 	public enum Type {
-		Atoms, Bonds
+		@Label("Atoms")
+		Atoms,
+		@Label("Bonds")
+		Bonds;
+		
+        static Type getFromValue(final String value) throws InvalidSettingsException {
+            for (final Type type : values()) {
+                if (type.name().equals(value)) {
+                    return type;
+                }
+            }
+            throw new InvalidSettingsException(createInvalidSettingsExceptionMessage(value));
+        }
+
+        private static String createInvalidSettingsExceptionMessage(final String name) {
+            var values = Arrays.stream(Type.values()).map(Enum::name).collect(Collectors.joining(", "));
+            return String.format("Invalid value '%s'. Possible values: %s", name, values);
+        }
+        
 	};
 
 	//
