@@ -86,6 +86,15 @@ public class RDKitAddHsNodeModel extends AbstractRDKitCalculatorNodeModel {
 	protected static final NodeLogger LOGGER = NodeLogger
 			.getLogger(RDKitAddHsNodeModel.class);
 
+	/** Config key for the input column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the new column name. */
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
+
+	/** Config key for the remove source columns option. */
+	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
+
 
 	/** Input data info index for Mol value. */
 	protected static final int INPUT_COLUMN_MOL = 0;
