@@ -51,15 +51,53 @@ package org.rdkit.knime.nodes.rdkit2molecule;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKit2Molecule" Node.
  * 
  * @author Bernd Wiswedel
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKit2MoleculeConverterNodeFactory extends NodeFactory<RDKit2MoleculeConverterNodeModel> {
+public class RDKit2MoleculeConverterNodeFactory extends NodeFactory<RDKit2MoleculeConverterNodeModel> 
+	implements NodeDialogFactory {
 
+	private static final String NODE_NAME = "RDKit To Molecule";
+	
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Converts RDKit molecules into string based molecule representations (SDF or Smiles).
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            Converts RDKit molecules into string based molecule representations (SDF or Smiles) and appends it
+                to the table.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("RDKit molecules", """
+                Table containing RDKit molecules.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Converted string representations", """
+                Table with the molecules' converted string representations.
+                """)
+    );
+	
 	/**
 	 * Creates a model for the RDKit2Molecule functionality
 	 * of the RDKit library. The model is derived from the
@@ -106,12 +144,33 @@ public class RDKit2MoleculeConverterNodeFactory extends NodeFactory<RDKit2Molecu
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKit2MoleculeConverterNodeDialog();
-	}
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKit2MoleculeConverterNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKit2MoleculeConverterNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 

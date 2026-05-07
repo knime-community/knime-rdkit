@@ -1,0 +1,119 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumnName" : "Molecule",
+      "newColumnName" : "Molecule Test (Molecule)",
+      "removeSourceColumns" : true,
+      "destinationFormat" : "Smarts"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "destinationFormat" : {
+            "oneOf" : [ {
+              "const" : "SDF",
+              "title" : "SDF"
+            }, {
+              "const" : "Smiles",
+              "title" : "Smiles"
+            }, {
+              "const" : "Smarts",
+              "title" : "Smarts"
+            } ],
+            "title" : "Destination format",
+            "description" : "The format to which the RDKit molecules will be converted.\n<ul>\n<li><b>SDF</b>: Converts molecules to SDF (Structure Data File) format.</li>\n<li><b>Smiles</b>: Converts molecules to canonical SMILES notation.</li>\n<li><b>Smarts</b>: Converts molecules to SMARTS notation.</li>\n</ul>",
+            "default" : "SDF"
+          },
+          "inputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The column containing RDKit molecules to be converted."
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name",
+            "description" : "Name of the new column appended to the output table."
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "If checked, the input RDKit mol column is removed from the output table.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/destinationFormat",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "configPaths" : [ [ "input_column" ] ]
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "destinationFormat" : {
+            "configKey" : "destination_format"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumnName"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumnName", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}
