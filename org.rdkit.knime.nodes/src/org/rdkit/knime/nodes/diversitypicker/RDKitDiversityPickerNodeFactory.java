@@ -51,23 +51,58 @@ package org.rdkit.knime.nodes.diversitypicker;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitDiversityPicker" Node.
  * 
  * @author Greg Landrum
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitDiversityPickerNodeFactory extends NodeFactory<RDKitDiversityPickerNodeModel> {
+public class RDKitDiversityPickerNodeFactory extends NodeFactory<RDKitDiversityPickerNodeModel> 
+	implements NodeDialogFactory {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected NodeDialogPane createNodeDialogPane() {
-		return new RDKitDiversityPickerNodeDialog();
-	}
-
+    private static final String NODE_NAME = "RDKit Diversity Picker";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Picks diverse rows.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            Picks diverse rows from an input table based on tanimoto distance between fingerprints. The picking
+            is done using the MaxMin algorithm (Ashton, M. et. al., Quant. Struct.-Act. Relat., 21 (2002),
+            598-604). The algorithm is quite fast, even for large datasets, but note that runtime increases
+            rapidly with the number of rows to be picked.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Molecules or fingerprints", """
+                Table with either molecule or fingerprints for diversity picking.
+                """),
+            fixedPort("Additional input to bias away from", """
+                Table with either molecules or fingerprints to bias away from.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Diverse rows", """
+                The results of the diversity pick.
+                """)
+    );
+	
 	/**
 	 * Creates a model for the RDKitDiversityPicker functionality
 	 * of the RDKit library. The model is derived from the
@@ -113,5 +148,33 @@ public class RDKitDiversityPickerNodeFactory extends NodeFactory<RDKitDiversityP
 	protected boolean hasDialog() {
 		return true;
 	}
+
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitDiversityPickerNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitDiversityPickerNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
 
 }

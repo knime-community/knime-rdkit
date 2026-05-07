@@ -1,0 +1,174 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumnName" : "Molecule",
+      "additionalInputColumnName" : {
+        "specialChoice" : "NONE"
+      },
+      "numPicks" : 8,
+      "randomSeed" : -1
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "additionalInputColumnName" : {
+            "type" : "object",
+            "properties" : {
+              "regularChoice" : {
+                "type" : "string"
+              },
+              "specialChoice" : {
+                "oneOf" : [ {
+                  "const" : "NONE",
+                  "title" : "None"
+                } ]
+              }
+            },
+            "title" : "Molecule or fingerprint column to bias away from (table 2)",
+            "description" : "The column containing molecules or fingerprints to bias away from. This option has the effect of seeding\nthe diversity pick: Molecules selected will be diverse with respect to these biasing molecules as well as\neach other. If molecules are provided as input their fingerprints will be calculated automatically based on\ninput of table 1. If table 1 has fingerprints with unknown settings this calculation will fail. In this\ncase please regenerate fingerprints in table 1 with the RDKit Fingerprint Node or select a compatible\nfingerprint column in table 2 instead of a molecule column.\n",
+            "default" : {
+              "specialChoice" : "NONE"
+            }
+          },
+          "inputColumnName" : {
+            "type" : "string",
+            "title" : "Molecule or fingerprint column (table 1)",
+            "description" : "The column containing the molecules or fingerprints to pick from. If molecules are selected their\nfingerprints will be calculated automatically with Morgan, Radius 2, 2048 bit length.\n"
+          },
+          "numPicks" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Number to pick",
+            "description" : "Number of diverse rows to pick.",
+            "default" : 10
+          },
+          "randomSeed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Random seed",
+            "description" : "Random number seed to use.",
+            "default" : -1
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/additionalInputColumnName",
+      "options" : {
+        "format" : "singleSelection",
+        "specialChoices" : [ {
+          "id" : "NONE",
+          "text" : "None"
+        } ]
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/numPicks",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/randomSeed",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least -2147483648.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : -2.147483648E9
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "configPaths" : [ [ "input_column" ] ]
+          },
+          "additionalInputColumnName" : {
+            "configPaths" : [ [ "additional_input_column" ] ]
+          },
+          "numPicks" : {
+            "configKey" : "num_picks"
+          },
+          "randomSeed" : {
+            "configKey" : "random_seed"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/additionalInputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ]
+}
