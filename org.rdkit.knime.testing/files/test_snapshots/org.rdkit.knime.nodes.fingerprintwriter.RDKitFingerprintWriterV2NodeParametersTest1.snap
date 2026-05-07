@@ -1,0 +1,267 @@
+{
+  "data" : {
+    "model" : {
+      "outputFile" : {
+        "file" : {
+          "path" : {
+            "fsCategory" : "LOCAL",
+            "path" : "test.fps",
+            "timeout" : 10000,
+            "context" : {
+              "fsToString" : "(LOCAL, test.fps)"
+            }
+          }
+        },
+        "createMissingFolders" : true,
+        "overwritePolicy" : "overwrite"
+      },
+      "fingerprintColumn" : "BitVector",
+      "idColumn" : {
+        "specialChoice" : "ROW_ID"
+      },
+      "suppressTime" : 0
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "fingerprintColumn" : {
+            "type" : "string",
+            "title" : "Fingerprint column",
+            "description" : "The input column containing fingerprints (DenseBitVector cells).",
+            "default" : ""
+          },
+          "idColumn" : {
+            "type" : "object",
+            "properties" : {
+              "regularChoice" : {
+                "type" : "string"
+              },
+              "specialChoice" : {
+                "oneOf" : [ {
+                  "const" : "ROW_ID",
+                  "title" : "RowID"
+                } ]
+              }
+            },
+            "title" : "ID column",
+            "description" : "The input column containing IDs that shall be written as the second column into the FPS file. It is possible to use Row IDs.",
+            "default" : {
+              "specialChoice" : "ROW_ID"
+            }
+          },
+          "outputFile" : {
+            "type" : "object",
+            "properties" : {
+              "createMissingFolders" : {
+                "type" : "boolean",
+                "title" : "Create missing folders",
+                "description" : "Select if the folders of the selected output location should be created if they do not already\nexist. If this option is unchecked, the node will fail if a folder does not exist.\n",
+                "default" : false
+              },
+              "file" : {
+                "type" : "object",
+                "properties" : {
+                  "path" : {
+                    "type" : "object",
+                    "default" : {
+                      "fsCategory" : "LOCAL",
+                      "path" : "",
+                      "timeout" : 10000,
+                      "context" : {
+                        "fsToString" : "(LOCAL, )"
+                      }
+                    }
+                  }
+                },
+                "title" : "Output file",
+                "description" : "The location of the output file where the FPS file will be created.\n",
+                "default" : {
+                  "path" : {
+                    "fsCategory" : "LOCAL",
+                    "path" : "",
+                    "timeout" : 10000,
+                    "context" : {
+                      "fsToString" : "(LOCAL, )"
+                    }
+                  }
+                }
+              },
+              "overwritePolicy" : {
+                "oneOf" : [ {
+                  "const" : "fail",
+                  "title" : "Fail"
+                }, {
+                  "const" : "overwrite",
+                  "title" : "Overwrite"
+                }, {
+                  "const" : "ignore",
+                  "title" : "Ignore"
+                }, {
+                  "const" : "append",
+                  "title" : "Append"
+                } ],
+                "title" : "If exists",
+                "description" : "Specify the behavior of the node in case the output file already exists.<ul><li><b>Fail</b>: Will issue an error during the node's execution (to prevent unintentional overwrite).</li><li><b>Overwrite</b>: Will replace any existing file.</li></ul>",
+                "default" : "overwrite"
+              }
+            },
+            "default" : {
+              "file" : {
+                "path" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              },
+              "createMissingFolders" : false,
+              "overwritePolicy" : "overwrite"
+            }
+          },
+          "suppressTime" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "label" : "Output File",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/outputFile/properties/file",
+        "options" : {
+          "fileExtension" : "fps",
+          "isLocal" : true,
+          "isWriter" : true,
+          "spaceFSOptions" : {
+            "mountId" : "Local space"
+          },
+          "format" : "fileChooser"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/outputFile/properties/createMissingFolders",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/outputFile/properties/overwritePolicy",
+        "options" : {
+          "format" : "valueSwitch"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      } ]
+    }, {
+      "label" : "Column Selection",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/fingerprintColumn",
+        "options" : {
+          "format" : "dropDown"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/idColumn",
+        "options" : {
+          "format" : "singleSelection",
+          "specialChoices" : [ {
+            "id" : "ROW_ID",
+            "text" : "RowID"
+          } ]
+        },
+        "providedOptions" : [ "possibleValues" ]
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "outputFile" : {
+            "type" : "object",
+            "properties" : {
+              "file" : {
+                "configPaths" : [ [ "path" ] ]
+              },
+              "createMissingFolders" : {
+                "configKey" : "create_missing_folders"
+              },
+              "overwritePolicy" : {
+                "configKey" : "if_path_exists"
+              }
+            },
+            "configKey" : "output_file"
+          },
+          "fingerprintColumn" : {
+            "configKey" : "fps_column"
+          },
+          "idColumn" : {
+            "configPaths" : [ [ "columnName", "useRowID" ] ],
+            "route" : [ "id_column" ]
+          },
+          "suppressTime" : {
+            "configKey" : "suppress_time"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/fingerprintColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Fingerprint",
+        "text" : "Fingerprint",
+        "type" : {
+          "id" : "org.knime.core.data.vector.bitvector.BitVectorValue",
+          "text" : "Bit Vector"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/idColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Identifier",
+        "text" : "Identifier",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/outputFile/properties/overwritePolicy",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "fail",
+        "text" : "Fail"
+      }, {
+        "id" : "overwrite",
+        "text" : "Overwrite"
+      } ]
+    } ]
+  } ]
+}
