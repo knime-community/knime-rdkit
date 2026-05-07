@@ -90,6 +90,11 @@ public class RDKitIUPACToRDKitNodeModel extends AbstractRDKitCalculatorNodeModel
 	protected static final NodeLogger LOGGER = NodeLogger
 			.getLogger(RDKitIUPACToRDKitNodeModel.class);
 
+	/** Config key for the input column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the new column name. */
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
 
 	/** Input data info index for IUPAC name. */
 	protected static final int INPUT_COLUMN_IUPAC = 0;
