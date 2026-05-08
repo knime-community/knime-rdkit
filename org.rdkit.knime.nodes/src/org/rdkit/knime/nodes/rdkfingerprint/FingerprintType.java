@@ -66,6 +66,7 @@ import org.knime.core.data.IntValue;
 import org.knime.core.data.vector.bitvector.DenseBitVector;
 import org.knime.core.data.vector.bytevector.DenseByteVector;
 import org.knime.core.node.InvalidSettingsException;
+import org.knime.node.parameters.widget.choices.Label;
 import org.rdkit.knime.util.ChemUtils;
 import org.rdkit.knime.util.SettingsUtils;
 import org.rdkit.knime.util.StringUtils;
@@ -73,6 +74,7 @@ import org.rdkit.knime.util.StringUtils;
 /** Defines supported fingerprint types. */
 public enum FingerprintType {
 
+	@Label(value = "Morgan", description = "Circular fingerprint based on the Morgan algorithm and connectivity invariants (ECFP-like).")
 	morgan("Morgan") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -169,6 +171,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "FeatMorgan", description = "Circular fingerprint based on the Morgan algorithm and feature invariants (FCFP-like).")
 	featmorgan("FeatMorgan") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -287,6 +290,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "AtomPair", description = "Atom-pair fingerprint.")
 	atompair("AtomPair") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -439,6 +443,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "Torsion", description = "Topological-torsion fingerprint.")
 	torsion("Torsion") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -566,6 +571,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "RDKit", description = "Daylight-like topological fingerprint.")
 	rdkit("RDKit") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -641,6 +647,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "Avalon", description = "Fingerprint from the Avalon toolkit (http://sourceforge.net/p/avalontoolkit/).")
 	avalon("Avalon") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -684,6 +691,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "Layered", description = "An experimental substructure-matching fingerprint (see LayerFlags definition from above).")
 	layered("Layered") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -762,6 +770,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "MACCS", description = "RDKit implementation of the 166 public MACCS keys.")
 	maccs("MACCS") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
@@ -809,6 +818,7 @@ public enum FingerprintType {
 		}
 	},
 
+	@Label(value = "Pattern", description = "Substructure screening fingerprint based on a small number of very generic SMARTS patterns.")
 	pattern("Pattern") {
 		@Override
 		public FingerprintSettings getSpecification(final int iTorsionPathLength, final int iMinPath,
