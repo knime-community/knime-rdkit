@@ -50,6 +50,7 @@ package org.rdkit.knime.nodes.optimizegeometry;
 
 import org.RDKit.ForceField;
 import org.RDKit.ROMol;
+import org.knime.node.parameters.widget.choices.Label;
 
 /**
  * This enumeration lists different force fields supported by the RDKit.
@@ -58,18 +59,8 @@ import org.RDKit.ROMol;
  * @author Manuel Schwarze
  */
 public enum ForceFieldType {
-	UFF {
-		@Override
-		public ForceField generateForceField(final ROMol mol) {
-			return mol == null ? null : ForceField.UFFGetMoleculeForceField(mol);
-		}
-
-		@Override
-		public int optimizeMolecule(final ROMol mol, final int iIterations) {
-			return ForceField.UFFOptimizeMolecule(mol, iIterations);
-		}
-	},
-
+	@Label(value = "MMFF94",
+		description = "Merck molecular force field 94.")
 	MMFF94 {
 		@Override
 		public ForceField generateForceField(final ROMol mol) {
@@ -82,6 +73,9 @@ public enum ForceFieldType {
 		}
 	},
 
+	@Label(value = "MMFF94S",
+		description = "Static variant of MMFF94. Incorporates altered out-of-plane bending parameters "
+			+ "that yield planar energy-minimized geometries at unstrained delocalized trigonal nitrogen centers.")
 	MMFF94S {
 		@Override
 		public ForceField generateForceField(final ROMol mol) {
@@ -91,6 +85,21 @@ public enum ForceFieldType {
 		@Override
 		public int optimizeMolecule(final ROMol mol, final int iIterations) {
 			return ForceField.MMFFOptimizeMolecule(mol, "MMFF94S", iIterations);
+		}
+	},
+	
+	@Label(value = "UFF",
+	description = "Universal force field. An all-atom potential containing parameters for every atom, "
+			+ "estimated using general rules based on element, hybridization, and connectivity.")
+	UFF {
+		@Override
+		public ForceField generateForceField(final ROMol mol) {
+			return mol == null ? null : ForceField.UFFGetMoleculeForceField(mol);
+		}
+	
+		@Override
+		public int optimizeMolecule(final ROMol mol, final int iIterations) {
+			return ForceField.UFFOptimizeMolecule(mol, iIterations);
 		}
 	};
 

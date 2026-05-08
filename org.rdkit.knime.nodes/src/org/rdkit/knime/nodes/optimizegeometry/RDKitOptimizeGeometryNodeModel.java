@@ -100,6 +100,30 @@ public class RDKitOptimizeGeometryNodeModel extends AbstractRDKitCalculatorNodeM
 	/** Input data info index for Mol value. */
 	protected static final int INPUT_COLUMN_MOL = 0;
 
+	/** Config key for the input column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the force field. */
+	static final String CFG_FORCE_FIELD = "forceField";
+
+	/** Config key for the new molecule column name. */
+	static final String CFG_NEW_MOLECULE_COLUMN_NAME = "new_molecule_column_name";
+
+	/** Config key for the remove source columns option. */
+	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
+
+	/** Config key for the new converge column name. */
+	static final String CFG_NEW_CONVERGE_COLUMN_NAME = "new_converge_column_name";
+
+	/** Config key for the new energy column name. */
+	static final String CFG_NEW_ENERGY_COLUMN_NAME = "new_energy_column_name";
+
+	/** Config key for the iterations setting. */
+	static final String CFG_ITERATIONS = "iterations";
+
+	/** Config key for the remove starting coordinates option. */
+	static final String CFG_REMOVE_STARTING_COORDINATES = "remove_starting_coordinates";
+
 	//
 	// Members
 	//
