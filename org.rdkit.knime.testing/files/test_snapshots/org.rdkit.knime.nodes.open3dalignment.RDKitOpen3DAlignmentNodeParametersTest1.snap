@@ -1,0 +1,237 @@
+{
+  "data" : {
+    "model" : {
+      "removeSourceColumns" : false,
+      "allowReflection" : false,
+      "maxIterations" : 50,
+      "accuracy" : 0
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "accuracy" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Accuracy (0 - most accurate, 3 - least accurate)",
+            "description" : "Determines how accurate the alignment process shall work (0 - most accurate, 3 - least accurate).",
+            "default" : 0
+          },
+          "allowReflection" : {
+            "type" : "boolean",
+            "title" : "Allow reflection",
+            "description" : "Set to true to allow reflection of structure parts during the alignment process.",
+            "default" : false
+          },
+          "maxIterations" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Maximal number of iterations",
+            "description" : "The maximal number of iterations used in the alignment process.",
+            "default" : 50
+          },
+          "newAlignedColumnName" : {
+            "type" : "string",
+            "title" : "New column name for aligned molecule",
+            "description" : "The name of the new column, which will contain the aligned molecule."
+          },
+          "newRefIdColumnName" : {
+            "type" : "string",
+            "title" : "New column name for Row IDs of reference used molecule",
+            "description" : "The name of the new column, which will contain the row id of the used reference molecule of table 2."
+          },
+          "newRmsdColumnName" : {
+            "type" : "string",
+            "title" : "New column name for RMSD information",
+            "description" : "The name of the new column, which will contain the root-mean-square deviation (RMSD) for the aligned molecule."
+          },
+          "newScoreColumnName" : {
+            "type" : "string",
+            "title" : "New column name for score information",
+            "description" : "The name of the new column, which will contain the score for the aligned molecule."
+          },
+          "queryInputColumn" : {
+            "type" : "string",
+            "title" : "Query RDKit mol column (table 1)",
+            "description" : "The input column of table 1 with RDKit Query Molecules to be aligned."
+          },
+          "referenceInputColumn" : {
+            "type" : "string",
+            "title" : "Reference RDKit mol column (table 2)",
+            "description" : "The input column of table 2 with RDKit Reference Molecules to base the alignment on. If the table contains only a single row all query molecules of table 1 will be aligned based on this. If the table contains more than one row, the alignment will be performed row by row until one of the tables has no more rows to process."
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Set to true to remove the specified source column of table 1 from the result table.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/queryInputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/referenceInputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newAlignedColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newRefIdColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newRmsdColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newScoreColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/allowReflection",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/maxIterations",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/accuracy",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 3.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 3.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 0.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 0.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "queryInputColumn" : {
+            "configKey" : "input_query_column"
+          },
+          "referenceInputColumn" : {
+            "configKey" : "input_reference_column"
+          },
+          "newAlignedColumnName" : {
+            "configKey" : "new_aligned_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "newRefIdColumnName" : {
+            "configKey" : "new_refid_column_name"
+          },
+          "newRmsdColumnName" : {
+            "configKey" : "new_rmsd_column_name"
+          },
+          "newScoreColumnName" : {
+            "configKey" : "new_score_column_name"
+          },
+          "allowReflection" : {
+            "configKey" : "allowReflection"
+          },
+          "maxIterations" : {
+            "configKey" : "maxIterations"
+          },
+          "accuracy" : {
+            "configKey" : "accuracy"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/queryInputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Query Molecule",
+        "text" : "Query Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/referenceInputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Reference Molecule",
+        "text" : "Reference Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/queryInputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/newAlignedColumnName", "#/properties/model/properties/newRefIdColumnName", "#/properties/model/properties/newRmsdColumnName", "#/properties/model/properties/newScoreColumnName", "#/properties/model/properties/queryInputColumn", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}

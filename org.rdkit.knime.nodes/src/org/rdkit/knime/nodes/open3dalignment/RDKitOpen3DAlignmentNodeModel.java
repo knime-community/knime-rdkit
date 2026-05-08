@@ -102,6 +102,17 @@ public class RDKitOpen3DAlignmentNodeModel extends AbstractRDKitCalculatorNodeMo
 	/** Input data info index for reference Mol value (table 2). */
 	protected static final int REFERENCE_INPUT_COLUMN_MOL = 0;
 
+	static final String CFG_QUERY_INPUT_COLUMN = "input_query_column";
+	static final String CFG_REFERENCE_INPUT_COLUMN = "input_reference_column";
+	static final String CFG_NEW_ALIGNED_COLUMN_NAME = "new_aligned_column_name";
+	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
+	static final String CFG_NEW_REFID_COLUMN_NAME = "new_refid_column_name";
+	static final String CFG_NEW_RMSD_COLUMN_NAME = "new_rmsd_column_name";
+	static final String CFG_NEW_SCORE_COLUMN_NAME = "new_score_column_name";
+	static final String CFG_ALLOW_REFLECTION = "allowReflection";
+	static final String CFG_MAX_ITERATIONS = "maxIterations";
+	static final String CFG_ACCURACY = "accuracy";
+
 	//
 	// Members
 	//

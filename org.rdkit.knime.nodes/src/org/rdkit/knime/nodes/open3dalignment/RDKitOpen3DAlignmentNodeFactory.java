@@ -51,15 +51,27 @@ package org.rdkit.knime.nodes.open3dalignment;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitOpen3DAlignment" Node.
  * 
  *
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitOpen3DAlignmentNodeFactory 
-        extends NodeFactory<RDKitOpen3DAlignmentNodeModel> {
+        extends NodeFactory<RDKitOpen3DAlignmentNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitOpen3DAlignment functionality
@@ -107,12 +119,61 @@ public class RDKitOpen3DAlignmentNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
+    private static final String NODE_NAME = "RDKit Open 3D Alignment";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Aligns the 3D model of two structures based on their shape and three-dimensional conformation.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Aligns the 3D model of two structures based on their shape and three-dimensional conformation. The
+                structure taken from table 1 will be aligned to a reference structure taken from table 2. If
+                reference table 2 contains only a single row all query molecules of table 1 will be aligned to this
+                single structure. If reference table 2 contains more than one row, the alignment will be performed
+                row by row until one of the tables has no more rows to process. If the passed in molecules have no
+                conformation, it will be calculated.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit query molecules", """
+                The table with the molecules to be aligned.
+                """),
+            fixedPort("Input table with RDKit reference molecules", """
+                The table with the reference molecules to base the alignment on.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Result table", """
+                Aligned molecules.
+                """)
+    );
+
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitOpen3DAlignmentNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitOpen3DAlignmentNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitOpen3DAlignmentNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
