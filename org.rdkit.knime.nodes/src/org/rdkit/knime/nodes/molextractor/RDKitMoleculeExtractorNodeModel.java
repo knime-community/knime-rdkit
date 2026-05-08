@@ -116,6 +116,36 @@ public class RDKitMoleculeExtractorNodeModel extends AbstractRDKitNodeModel {
 	/** The SDF postfix. */
 	private static final String SDF_POSTFIX = "\n$$$$\n";
 
+	/** Config key for the input molecules (variable/data input). */
+	static final String CFG_INPUT_MOLECULES = "input_molecules";
+
+	/** Config key for the input molecules format (variable/data input). */
+	static final String CFG_INPUT_MOLECULES_FORMAT = "input_molecules_format";
+
+	/** Config key for the input column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the reference input column name. */
+	static final String CFG_INPUT_REF_COLUMN = "input_ref_column";
+
+	/** Config key for the molecule output column name. */
+	static final String CFG_OUTPUT_MOL_NAME = "output_mol_name";
+
+	/** Config key for the reference output column name. */
+	static final String CFG_OUTPUT_REF_NAME = "output_ref_name";
+
+	/** Config key for the sanitize fragments option. */
+	static final String CFG_SANITIZE_FRAGMENTS = "sanitize_fragments";
+
+	/** Config key for the error handling option. */
+	static final String CFG_ERROR_HANDLING = "error_handling";
+
+	/** Config key for the empty cell handling option. */
+	static final String CFG_EMPTY_CELL_HANDLING = "empty_cell_handling";
+
+	/** Config key for the empty molecule handling option. */
+	static final String CFG_EMPTY_MOLECULE_HANDLING = "empty_molecule_handling";
+
 	//
 	// Members
 	//
