@@ -1,0 +1,604 @@
+{
+  "data" : {
+    "model" : {
+      "reactionSmarts" : "",
+      "randomizeReactants" : false,
+      "maxNumberOfRandomizedReactions" : 100,
+      "randomSeed" : -1,
+      "uniquifyProducts" : false,
+      "matrixExpansion" : false,
+      "additionalColumnsEnabled" : false,
+      "additionalColumnsFilter1" : {
+        "mode" : "MANUAL",
+        "patternFilter" : {
+          "pattern" : "",
+          "isCaseSensitive" : false,
+          "isInverted" : false
+        },
+        "manualFilter" : {
+          "manuallySelected" : [ ],
+          "manuallyDeselected" : [ ],
+          "includeUnknownColumns" : false
+        },
+        "typeFilter" : {
+          "selectedTypes" : [ ],
+          "typeDisplays" : [ ]
+        }
+      },
+      "additionalColumnsFilter2" : {
+        "mode" : "MANUAL",
+        "patternFilter" : {
+          "pattern" : "",
+          "isCaseSensitive" : false,
+          "isInverted" : false
+        },
+        "manualFilter" : {
+          "manuallySelected" : [ ],
+          "manuallyDeselected" : [ ],
+          "includeUnknownColumns" : false
+        },
+        "typeFilter" : {
+          "selectedTypes" : [ ],
+          "typeDisplays" : [ ]
+        }
+      }
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "additionalColumnsEnabled" : {
+            "type" : "boolean",
+            "title" : "Include additional columns from reactant input tables into product output table",
+            "description" : "Enable this option in order to select additional data columns from reactant input tables to be included into the result table.",
+            "default" : false
+          },
+          "additionalColumnsFilter1" : {
+            "type" : "object",
+            "properties" : {
+              "manualFilter" : {
+                "type" : "object",
+                "properties" : {
+                  "includeUnknownColumns" : {
+                    "type" : "boolean",
+                    "default" : false
+                  },
+                  "manuallyDeselected" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  },
+                  "manuallySelected" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "default" : {
+                  "manuallySelected" : [ ],
+                  "manuallyDeselected" : [ ],
+                  "includeUnknownColumns" : false
+                }
+              },
+              "mode" : {
+                "oneOf" : [ {
+                  "const" : "MANUAL",
+                  "title" : "Manual"
+                }, {
+                  "const" : "REGEX",
+                  "title" : "Regex"
+                }, {
+                  "const" : "WILDCARD",
+                  "title" : "Wildcard"
+                }, {
+                  "const" : "TYPE",
+                  "title" : "Type"
+                } ],
+                "default" : "MANUAL"
+              },
+              "patternFilter" : {
+                "type" : "object",
+                "properties" : {
+                  "isCaseSensitive" : {
+                    "type" : "boolean",
+                    "default" : false
+                  },
+                  "isInverted" : {
+                    "type" : "boolean",
+                    "default" : false
+                  },
+                  "pattern" : {
+                    "type" : "string",
+                    "default" : ""
+                  }
+                },
+                "default" : {
+                  "pattern" : "",
+                  "isCaseSensitive" : false,
+                  "isInverted" : false
+                }
+              },
+              "selected" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                }
+              },
+              "typeFilter" : {
+                "type" : "object",
+                "properties" : {
+                  "selectedTypes" : {
+                    "default" : [ ],
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "default" : {
+                  "selectedTypes" : [ ],
+                  "typeDisplays" : [ ]
+                }
+              }
+            },
+            "title" : "Additional columns from Reactant #1 table",
+            "description" : "Selection of additional data columns from reactant #1 input table.",
+            "default" : {
+              "mode" : "MANUAL",
+              "patternFilter" : {
+                "pattern" : "",
+                "isCaseSensitive" : false,
+                "isInverted" : false
+              },
+              "manualFilter" : {
+                "manuallySelected" : [ ],
+                "manuallyDeselected" : [ ],
+                "includeUnknownColumns" : false
+              },
+              "typeFilter" : {
+                "selectedTypes" : [ ],
+                "typeDisplays" : [ ]
+              }
+            }
+          },
+          "additionalColumnsFilter2" : {
+            "type" : "object",
+            "properties" : {
+              "manualFilter" : {
+                "type" : "object",
+                "properties" : {
+                  "includeUnknownColumns" : {
+                    "type" : "boolean",
+                    "default" : false
+                  },
+                  "manuallyDeselected" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  },
+                  "manuallySelected" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "default" : {
+                  "manuallySelected" : [ ],
+                  "manuallyDeselected" : [ ],
+                  "includeUnknownColumns" : false
+                }
+              },
+              "mode" : {
+                "oneOf" : [ {
+                  "const" : "MANUAL",
+                  "title" : "Manual"
+                }, {
+                  "const" : "REGEX",
+                  "title" : "Regex"
+                }, {
+                  "const" : "WILDCARD",
+                  "title" : "Wildcard"
+                }, {
+                  "const" : "TYPE",
+                  "title" : "Type"
+                } ],
+                "default" : "MANUAL"
+              },
+              "patternFilter" : {
+                "type" : "object",
+                "properties" : {
+                  "isCaseSensitive" : {
+                    "type" : "boolean",
+                    "default" : false
+                  },
+                  "isInverted" : {
+                    "type" : "boolean",
+                    "default" : false
+                  },
+                  "pattern" : {
+                    "type" : "string",
+                    "default" : ""
+                  }
+                },
+                "default" : {
+                  "pattern" : "",
+                  "isCaseSensitive" : false,
+                  "isInverted" : false
+                }
+              },
+              "selected" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                }
+              },
+              "typeFilter" : {
+                "type" : "object",
+                "properties" : {
+                  "selectedTypes" : {
+                    "default" : [ ],
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "default" : {
+                  "selectedTypes" : [ ],
+                  "typeDisplays" : [ ]
+                }
+              }
+            },
+            "title" : "Additional columns from Reactant #2 table",
+            "description" : "Selection of additional data columns from reactant #2 input table.",
+            "default" : {
+              "mode" : "MANUAL",
+              "patternFilter" : {
+                "pattern" : "",
+                "isCaseSensitive" : false,
+                "isInverted" : false
+              },
+              "manualFilter" : {
+                "manuallySelected" : [ ],
+                "manuallyDeselected" : [ ],
+                "includeUnknownColumns" : false
+              },
+              "typeFilter" : {
+                "selectedTypes" : [ ],
+                "typeDisplays" : [ ]
+              }
+            }
+          },
+          "matrixExpansion" : {
+            "type" : "boolean",
+            "title" : "Do matrix expansion",
+            "description" : "If checked, each reactant 1 will be combined with each reactant 2 yielding the combinatorial expansion of the reactants. If not checked, reactants 1 and 2 are combined pairwise (row by row).",
+            "default" : false
+          },
+          "maxNumberOfRandomizedReactions" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Maximum number of random reactions",
+            "description" : "Specify here the maximum number of reactions to be calculated. Note: When picking a number higher than a million and switching on Matrix expansion this can lead to memory issues.",
+            "default" : 100
+          },
+          "randomSeed" : {
+            "type" : "integer",
+            "format" : "int64",
+            "title" : "Random seed",
+            "description" : "Specify here a seed for the random number generator or -1 to use it without a seed.",
+            "default" : -1
+          },
+          "randomizeReactants" : {
+            "type" : "boolean",
+            "title" : "Randomize reactants",
+            "description" : "If checked, random reactants will be picked for the reactions.",
+            "default" : false
+          },
+          "reactant1ColumnName" : {
+            "type" : "string",
+            "title" : "Reactants 1 RDKit mol column",
+            "description" : "The column containing the first reactant molecules."
+          },
+          "reactant2ColumnName" : {
+            "type" : "string",
+            "title" : "Reactants 2 RDKit mol column",
+            "description" : "The column containing the second reactant molecules."
+          },
+          "reactionSmarts" : {
+            "type" : "string",
+            "title" : "Reaction SMARTS",
+            "description" : "A reaction SMARTS describing the reaction. Only used when no reaction table is connected to the third input port. For a description of the format, please have a look in <a href=\"http://rdkit.org/docs/RDKit_Book.html#reaction-smarts\">The RDKit Book</a>.\n",
+            "default" : ""
+          },
+          "rxnColumnName" : {
+            "type" : "string",
+            "title" : "Rxn column",
+            "description" : "The column from the third table containing the Rxn. Only used when a reaction table is connected to the third input port."
+          },
+          "uniquifyProducts" : {
+            "type" : "boolean",
+            "title" : "Uniquify products",
+            "description" : "Enable this option to filter out duplicates of products caused by symmetry in molecules. Only the first of multiple encountered products will show up in the result table.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/reactant1ColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/reactant2ColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/rxnColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : {
+            "not" : { }
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/reactionSmarts"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/randomizeReactants",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/maxNumberOfRandomizedReactions",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        }
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/randomizeReactants",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/randomSeed",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "Value too large to process without risking precision loss (> 9007199254740991).",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 9.007199254740991E15
+            }
+          },
+          "min" : {
+            "errorMessage" : "Value too small to process without risking precision loss (< -9007199254740991).",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : -9.007199254740991E15
+            }
+          }
+        }
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/randomizeReactants",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/uniquifyProducts",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/matrixExpansion",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/additionalColumnsEnabled",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/additionalColumnsFilter1",
+      "options" : {
+        "format" : "typedStringFilter",
+        "unknownValuesText" : "Any unknown column",
+        "emptyStateLabel" : "No columns in this list.",
+        "isAdvanced" : true
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/additionalColumnsEnabled",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/additionalColumnsFilter2",
+      "options" : {
+        "format" : "typedStringFilter",
+        "unknownValuesText" : "Any unknown column",
+        "emptyStateLabel" : "No columns in this list.",
+        "isAdvanced" : true
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/additionalColumnsEnabled",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "reactant1ColumnName" : {
+            "configPaths" : [ [ "reactant1_column" ] ]
+          },
+          "reactant2ColumnName" : {
+            "configPaths" : [ [ "reactant2_column" ] ]
+          },
+          "rxnColumnName" : {
+            "configKey" : "rxnColumn"
+          },
+          "reactionSmarts" : {
+            "configKey" : "reactionSmarts"
+          },
+          "randomizeReactants" : {
+            "configKey" : "randomizeReactants"
+          },
+          "maxNumberOfRandomizedReactions" : {
+            "configKey" : "maxNumberOfRandomizedReactions"
+          },
+          "randomSeed" : {
+            "configKey" : "randomSeed"
+          },
+          "uniquifyProducts" : {
+            "configKey" : "uniquifyProducts"
+          },
+          "matrixExpansion" : {
+            "configKey" : "matrixExpansion"
+          },
+          "additionalColumnsEnabled" : {
+            "configKey" : "additionalColumnsEnabled"
+          },
+          "additionalColumnsFilter1" : {
+            "configPaths" : [ [ "additionalColumnsFilter1", "filter-type" ], [ "additionalColumnsFilter1", "included_names" ], [ "additionalColumnsFilter1", "excluded_names" ], [ "additionalColumnsFilter1", "enforce_option" ], [ "additionalColumnsFilter1", "name_pattern", "pattern" ], [ "additionalColumnsFilter1", "name_pattern", "type" ], [ "additionalColumnsFilter1", "name_pattern", "caseSensitive" ], [ "additionalColumnsFilter1", "name_pattern", "excludeMatching" ] ]
+          },
+          "additionalColumnsFilter2" : {
+            "configPaths" : [ [ "additionalColumnsFilter2", "filter-type" ], [ "additionalColumnsFilter2", "included_names" ], [ "additionalColumnsFilter2", "excluded_names" ], [ "additionalColumnsFilter2", "enforce_option" ], [ "additionalColumnsFilter2", "name_pattern", "pattern" ], [ "additionalColumnsFilter2", "name_pattern", "type" ], [ "additionalColumnsFilter2", "name_pattern", "caseSensitive" ], [ "additionalColumnsFilter2", "name_pattern", "excludeMatching" ] ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/additionalColumnsFilter1",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/additionalColumnsFilter2",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/reactant1ColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/reactant2ColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/rxnColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ ]
+    } ]
+  } ]
+}
