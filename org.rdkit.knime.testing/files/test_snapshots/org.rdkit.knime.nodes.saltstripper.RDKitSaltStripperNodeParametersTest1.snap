@@ -1,0 +1,163 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumnName" : "Molecule",
+      "newColumnName" : "Salt Stripped Molecule",
+      "removeSourceColumns" : false,
+      "keepOnlyLargestFragment" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The name of the column in first table containing RDKit molecules for stripping."
+          },
+          "keepOnlyLargestFragment" : {
+            "type" : "boolean",
+            "title" : "Keep only largest fragment after salt stripping",
+            "description" : "Option to reduce the salt stripping outcome even more keeping only the largest fragment of all remaining fragments. If there are multiple fragments with the same number of atoms identified as largest fragments, it will keep only the first one it encounters.",
+            "default" : false
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name",
+            "description" : "The new name of the column that will contained the salt stripped molecule."
+          },
+          "noSaltTableMessage" : {
+            "type" : "object"
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Toggles removal of the input RDKit Mol column in the output table.",
+            "default" : false
+          },
+          "saltColumnName" : {
+            "type" : "string",
+            "title" : "Salt definition column",
+            "description" : "The name of the column in the optional second table containing RDKit molecules as salt definitions (generated usually from SMARTS). This only applies, if a second table is connected."
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "id" : "#/properties/model/properties/noSaltTableMessage",
+      "options" : {
+        "format" : "textMessage"
+      },
+      "providedOptions" : [ "message" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/saltColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/keepOnlyLargestFragment",
+      "options" : {
+        "format" : "checkbox"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "configKey" : "input_column"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "noSaltTableMessage" : { },
+          "saltColumnName" : {
+            "configKey" : "salt_input"
+          },
+          "keepOnlyLargestFragment" : {
+            "configKey" : "keep_only_largest_fragment"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/saltColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "id" : "#/properties/model/properties/noSaltTableMessage",
+    "providedOptionName" : "message",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : null
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumnName"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumnName", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}

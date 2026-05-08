@@ -25,6 +25,8 @@ public abstract class RDKitResultColumnNameAutoGuessProvider implements StatePro
 	
 	private String m_resultColumnNameSuffix;
 	
+	private String m_suggestedResultColumnName;
+	
 	/**
 	 * Create a new auto guess provider for result column names.
 	 * 
@@ -36,15 +38,18 @@ public abstract class RDKitResultColumnNameAutoGuessProvider implements StatePro
 	 * table inputs)
 	 * @param resultColumnNameSuffix the suffix to append to the input column name for the suggested new column name 
 	 * (e.g. "(Aromatized)"), which is used in case the user did not specify a new column name
+	 * @param suggestedResultColumnName the suggested name to use for the new column, which is used as base name for 
+	 * the auto-guess.
 	 */
 	protected RDKitResultColumnNameAutoGuessProvider(
 		final Class<? extends ParameterReference<String>> inputColumnNameRef,
 		final Class<? extends ParameterReference<String>> resultColumnNameRef, final Integer tableInputIndex, 
-		final String resultColumnNameSuffix) {
+		final String resultColumnNameSuffix, final String suggestedResultColumnName) {
 		m_inputColumnNameRef = inputColumnNameRef;
 		m_resultColumnNameRef = resultColumnNameRef;
 		m_tableInputIndex = tableInputIndex;
 		m_resultColumnNameSuffix = resultColumnNameSuffix;
+		m_suggestedResultColumnName = suggestedResultColumnName;
 	}
 	
 	
@@ -61,7 +66,23 @@ public abstract class RDKitResultColumnNameAutoGuessProvider implements StatePro
 	protected RDKitResultColumnNameAutoGuessProvider(
 		final Class<? extends ParameterReference<String>> inputColumnNameRef, 
 		final Class<? extends ParameterReference<String>> resultColumnRef, final String resultColumnNameSuffix) {
-		this(inputColumnNameRef, resultColumnRef, 0, resultColumnNameSuffix);
+		this(inputColumnNameRef, resultColumnRef, 0, resultColumnNameSuffix, null);
+	}
+	
+	/**
+	 * Create a new auto guess provider for result column names, which considers the first table input (index 0).
+	 * 
+	 * @param suggestedResultColumnName the suggested name to use for the new column, which is used as base name for 
+	 * the auto-guess.
+	 * @param inputColumnNameRef the parameter reference for the input column name parameter, which is used to obtain 
+	 * the input column name for the auto-guess
+	 * @param resultColumnRef the parameter reference for the result column name parameter, which is used to obtain the 
+	 * user input for the new column name
+	 */
+	protected RDKitResultColumnNameAutoGuessProvider(final String suggestedResultColumnName,
+		final Class<? extends ParameterReference<String>> inputColumnNameRef, 
+		final Class<? extends ParameterReference<String>> resultColumnRef) {
+		this(inputColumnNameRef, resultColumnRef, 0, null, suggestedResultColumnName);
 	}
 	
 	private Supplier<String> m_inputColumnNameSupplier;
@@ -85,7 +106,8 @@ public abstract class RDKitResultColumnNameAutoGuessProvider implements StatePro
 				m_resultColumnNameSupplier.get(),
 				getAdditionalColumnNames(parametersInput, strInputColumnName),
 				getExcludedColumnNames(parametersInput, strInputColumnName), 
-				"%s %s".formatted(strInputColumnName, m_resultColumnNameSuffix));
+				m_suggestedResultColumnName == null ? 
+						"%s %s".formatted(strInputColumnName, m_resultColumnNameSuffix) : m_suggestedResultColumnName);
 	}
 	
 	/**
