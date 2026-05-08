@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="reactant1_column" type="xstring" value="Molecule"/>
+    <entry key="reactant2_column" type="xstring" value="Molecule"/>
+    <entry key="rxnColumn" type="xstring" value="Molecule"/>
+    <entry key="reactionSmarts" type="xstring" value=""/>
+    <entry key="randomizeReactants" type="xboolean" value="true"/>
+    <entry key="maxNumberOfRandomizedReactions" type="xint" value="1008"/>
+    <entry key="randomSeed" type="xlong" value="-18"/>
+    <entry key="uniquifyProducts" type="xboolean" value="true"/>
+    <entry key="matrixExpansion" type="xboolean" value="false"/>
+    <entry key="additionalColumnsEnabled" type="xboolean" value="true"/>
+    <config key="additionalColumnsFilter1">
+        <entry key="filter-type" type="xstring" value="STANDARD"/>
+        <config key="included_names">
+            <entry key="array-size" type="xint" value="0"/>
+        </config>
+        <config key="excluded_names">
+            <entry key="array-size" type="xint" value="1"/>
+            <entry key="0" type="xstring" value="Molecule"/>
+        </config>
+        <entry key="enforce_option" type="xstring" value="EnforceExclusion"/>
+        <config key="name_pattern">
+            <entry key="pattern" type="xstring" value=""/>
+            <entry key="caseSensitive" type="xboolean" value="true"/>
+            <entry key="excludeMatching" type="xboolean" value="false"/>
+            <entry key="type" type="xstring" value="Wildcard"/>
+        </config>
+        <config key="datatype">
+            <config key="typelist"/>
+        </config>
+    </config>
+    <config key="additionalColumnsFilter2">
+        <entry key="filter-type" type="xstring" value="STANDARD"/>
+        <config key="included_names">
+            <entry key="array-size" type="xint" value="1"/>
+            <entry key="0" type="xstring" value="Molecule"/>
+        </config>
+        <config key="excluded_names">
+            <entry key="array-size" type="xint" value="0"/>
+        </config>
+        <entry key="enforce_option" type="xstring" value="EnforceExclusion"/>
+        <config key="name_pattern">
+            <entry key="pattern" type="xstring" value=""/>
+            <entry key="caseSensitive" type="xboolean" value="true"/>
+            <entry key="excludeMatching" type="xboolean" value="false"/>
+            <entry key="type" type="xstring" value="Wildcard"/>
+        </config>
+        <config key="datatype">
+            <config key="typelist"/>
+        </config>
+    </config>
+</config>
