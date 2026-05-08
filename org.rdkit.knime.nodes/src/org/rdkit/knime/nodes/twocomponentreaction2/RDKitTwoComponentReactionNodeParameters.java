@@ -1,0 +1,296 @@
+/*
+ * ------------------------------------------------------------------------
+ *
+ *  Copyright by KNIME AG, Zurich, Switzerland
+ *  Website: http://www.knime.com; Email: contact@knime.com
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License, Version 3, as
+ *  published by the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, see <http://www.gnu.org/licenses>.
+ *
+ *  Additional permission under GNU GPL version 3 section 7:
+ *
+ *  KNIME interoperates with ECLIPSE solely via ECLIPSE's plug-in APIs.
+ *  Hence, KNIME and ECLIPSE are both independent programs and are not
+ *  derived from each other. Should, however, the interpretation of the
+ *  GNU GPL Version 3 ("License") under any applicable laws result in
+ *  KNIME and ECLIPSE being a combined program, KNIME AG herewith grants
+ *  you the additional permission to use and propagate KNIME together with
+ *  ECLIPSE with only the license terms in place for ECLIPSE applying to
+ *  ECLIPSE and the GNU GPL Version 3 applying for KNIME, provided the
+ *  license terms of ECLIPSE themselves allow for the respective use and
+ *  propagation of ECLIPSE together with KNIME.
+ *
+ *  Additional permission relating to nodes for KNIME that extend the Node
+ *  Extension (and in particular that are based on subclasses of NodeModel,
+ *  NodeDialog, and NodeView) and that only interoperate with KNIME through
+ *  standard APIs ("Nodes"):
+ *  Nodes are deemed to be separate and independent programs and to not be
+ *  covered works.  Notwithstanding anything to the contrary in the
+ *  License, the License does not apply to Nodes, you are not required to
+ *  license Nodes under the License, and you are granted a license to
+ *  prepare and propagate Nodes, in each case even if such Nodes are
+ *  propagated with or for interoperation with KNIME.  The owner of a Node
+ *  may freely choose the license terms applicable to such Node, including
+ *  when such Node is propagated with or for interoperation with KNIME.
+ * ------------------------------------------------------------------------
+ */
+
+package org.rdkit.knime.nodes.twocomponentreaction2;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.knime.chem.types.RxnValue;
+import org.knime.core.data.DataColumnSpec;
+import org.knime.node.parameters.Advanced;
+import org.knime.node.parameters.NodeParameters;
+import org.knime.node.parameters.NodeParametersInput;
+import org.knime.node.parameters.Widget;
+import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
+import org.knime.node.parameters.persistence.Persist;
+import org.knime.node.parameters.persistence.Persistor;
+import org.knime.node.parameters.updates.Effect;
+import org.knime.node.parameters.updates.Effect.EffectType;
+import org.knime.node.parameters.updates.EffectPredicate;
+import org.knime.node.parameters.updates.EffectPredicateProvider;
+import org.knime.node.parameters.updates.ParameterReference;
+import org.knime.node.parameters.updates.ValueProvider;
+import org.knime.node.parameters.updates.ValueReference;
+import org.knime.node.parameters.updates.util.BooleanReference;
+import org.knime.node.parameters.widget.choices.ChoicesProvider;
+import org.knime.node.parameters.widget.choices.filter.ColumnFilter;
+import org.knime.node.parameters.widget.choices.filter.ColumnFilterWidget;
+import org.knime.node.parameters.widget.choices.util.AllColumnsProvider;
+import org.knime.node.parameters.widget.choices.util.ColumnSelectionUtil;
+import org.knime.node.parameters.widget.choices.util.CompatibleColumnsProvider;
+import org.knime.node.parameters.widget.number.NumberInputWidget;
+import org.knime.node.parameters.widget.number.NumberInputWidgetValidation.MinValidation.IsPositiveIntegerValidation;
+import org.knime.node.parameters.legacy.updates.ColumnNameAutoGuessValueProvider;
+import org.knime.node.parameters.legacy.widget.choices.filter.LegacyColumnFilterPersistor;
+import org.rdkit.knime.util.RDKitLegacyPersistors.LegacyMoleculeColumnPersistor;
+import org.rdkit.knime.util.RDKitMoleculeColumnAutoGuessProvider;
+import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
+
+/**
+ * Node parameters for RDKit Two Component Reaction.
+ *
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
+ */
+@LoadDefaultsForAbsentFields
+final class RDKitTwoComponentReactionNodeParameters implements NodeParameters {
+
+    @Widget(title = "Reactants 1 RDKit mol column",
+        description = "The column containing the first reactant molecules.")
+    @Persistor(Reactant1ColumnPersistor.class)
+    @ChoicesProvider(RDKitMoleculeColumnChoicesProvider.class)
+    @ValueProvider(Reactant1ColumnAutoGuessProvider.class)
+    @ValueReference(Reactant1ColumnRef.class)
+    String m_reactant1ColumnName;
+
+    static final class Reactant1ColumnRef implements ParameterReference<String> {
+    }
+
+    @Widget(title = "Reactants 2 RDKit mol column",
+        description = "The column containing the second reactant molecules.")
+    @Persistor(Reactant2ColumnPersistor.class)
+    @ChoicesProvider(Reactant2MolColumnChoicesProvider.class)
+    @ValueProvider(Reactant2ColumnAutoGuessProvider.class)
+    @ValueReference(Reactant2ColumnRef.class)
+    String m_reactant2ColumnName;
+
+    static final class Reactant2ColumnRef implements ParameterReference<String> {
+    }
+
+    @Widget(title = "Rxn column",
+        description = "The column from the third table containing the Rxn. "
+            + "Only used when a reaction table is connected to the third input port.")
+    @Persist(configKey = "rxnColumn")
+    @ChoicesProvider(RxnColumnChoicesProvider.class)
+    @ValueProvider(RxnColumnAutoGuessProvider.class)
+    @ValueReference(RxnColumnRef.class)
+    @Effect(predicate = IsOptionalPortConnected.class, type = EffectType.SHOW)
+    String m_rxnColumnName;
+
+    static final class RxnColumnRef implements ParameterReference<String> {
+    }
+
+    @Widget(title = "Reaction SMARTS",
+        description = """
+            A reaction SMARTS describing the reaction. Only used when no reaction table is connected to the third \
+            input port. For a description of the format, please have a look in \
+            <a href="http://rdkit.org/docs/RDKit_Book.html#reaction-smarts">The RDKit Book</a>.
+            """)
+    @Persist(configKey = "reactionSmarts")
+    String m_reactionSmarts = "";
+
+    @Widget(title = "Randomize reactants",
+        description = "If checked, random reactants will be picked for the reactions.")
+    @Persist(configKey = "randomizeReactants")
+    @ValueReference(IsRandomizeReactant.class)
+    boolean m_randomizeReactants;
+
+    static final class IsRandomizeReactant implements BooleanReference {
+    }
+
+    @Widget(title = "Maximum number of random reactions",
+        description = "Specify here the maximum number of reactions to be calculated. "
+            + "Note: When picking a number higher than a million and switching on Matrix expansion "
+            + "this can lead to memory issues.")
+    @NumberInputWidget(minValidation = IsPositiveIntegerValidation.class)
+    @Persist(configKey = "maxNumberOfRandomizedReactions")
+    @Effect(predicate = IsRandomizeReactant.class, type = EffectType.SHOW)
+    int m_maxNumberOfRandomizedReactions = 100;
+
+    @Widget(title = "Random seed",
+        description = "Specify here a seed for the random number generator or -1 to use it without a seed.")
+    @Persist(configKey = "randomSeed")
+    @Effect(predicate = IsRandomizeReactant.class, type = EffectType.SHOW)
+    long m_randomSeed = -1L;
+
+    @Widget(title = "Uniquify products",
+        description = "Enable this option to filter out duplicates of products caused by symmetry in molecules. "
+            + "Only the first of multiple encountered products will show up in the result table.")
+    @Persist(configKey = "uniquifyProducts")
+    boolean m_uniquifyProducts;
+
+    @Widget(title = "Do matrix expansion",
+        description = "If checked, each reactant 1 will be combined with each reactant 2 yielding the "
+            + "combinatorial expansion of the reactants. If not checked, reactants 1 and 2 are combined "
+            + "pairwise (row by row).")
+    @Persist(configKey = "matrixExpansion")
+    boolean m_matrixExpansion;
+
+    @Advanced
+    @Widget(title = "Include additional columns from reactant input tables into product output table",
+        description = "Enable this option in order to select additional data columns from reactant input tables "
+            + "to be included into the result table.")
+    @Persist(configKey = "additionalColumnsEnabled")
+    @ValueReference(IsAdditionalColumnsEnabled.class)
+    boolean m_additionalColumnsEnabled;
+
+    static final class IsAdditionalColumnsEnabled implements BooleanReference {
+    }
+
+    @Advanced
+    @Widget(title = "Additional columns from Reactant #1 table",
+        description = "Selection of additional data columns from reactant #1 input table.")
+    @Persistor(AdditionalColumnsFilter1Persistor.class)
+    @ColumnFilterWidget(choicesProvider = AllColumnsProvider.class)
+    @Effect(predicate = IsAdditionalColumnsEnabled.class, type = EffectType.SHOW)
+    ColumnFilter m_additionalColumnsFilter1 = new ColumnFilter();
+
+    @Advanced
+    @Widget(title = "Additional columns from Reactant #2 table",
+        description = "Selection of additional data columns from reactant #2 input table.")
+    @Persistor(AdditionalColumnsFilter2Persistor.class)
+    @ColumnFilterWidget(choicesProvider = AllColumnsFromPort1Provider.class)
+    @Effect(predicate = IsAdditionalColumnsEnabled.class, type = EffectType.SHOW)
+    ColumnFilter m_additionalColumnsFilter2 = new ColumnFilter();
+
+    static final class IsOptionalPortConnected implements EffectPredicateProvider {
+    	
+        @Override
+        public EffectPredicate init(final PredicateInitializer i) {
+            return i.getConstant(pi -> pi.getInPortObject(2).isPresent());
+        }
+        
+    }
+    
+    static final class Reactant1ColumnAutoGuessProvider extends RDKitMoleculeColumnAutoGuessProvider {
+    	
+        Reactant1ColumnAutoGuessProvider() {
+            super(Reactant1ColumnRef.class, 0);
+        }
+        
+    }
+
+    static final class Reactant1ColumnPersistor extends LegacyMoleculeColumnPersistor {
+    	
+        Reactant1ColumnPersistor() {
+            super("reactant1_column", "firstColumn");
+        }
+        
+    }
+    
+    static final class Reactant2ColumnAutoGuessProvider extends RDKitMoleculeColumnAutoGuessProvider {
+    	
+        Reactant2ColumnAutoGuessProvider() {
+            super(Reactant2ColumnRef.class, 1);
+        }
+        
+    }
+
+    static final class Reactant2ColumnPersistor extends LegacyMoleculeColumnPersistor {
+    	
+        Reactant2ColumnPersistor() {
+            super("reactant2_column", "secondColumn");
+        }
+        
+    }
+
+    static final class Reactant2MolColumnChoicesProvider extends RDKitMoleculeColumnChoicesProvider {
+    	
+        Reactant2MolColumnChoicesProvider() {
+            super(1);
+        }
+        
+    }
+
+    static final class RxnColumnAutoGuessProvider extends ColumnNameAutoGuessValueProvider {
+    	
+        protected RxnColumnAutoGuessProvider() {
+            super(RxnColumnRef.class);
+        }
+
+        @Override
+        protected Optional<DataColumnSpec> autoGuessColumn(final NodeParametersInput parametersInput) {
+            return ColumnSelectionUtil.getFirstCompatibleColumnOfFirstPort(parametersInput, RxnValue.class);
+        }
+        
+    }
+
+    static final class RxnColumnChoicesProvider extends CompatibleColumnsProvider {
+    	
+        protected RxnColumnChoicesProvider() {
+            super(List.of(RxnValue.class));
+        }
+        
+    }
+
+    static final class AllColumnsFromPort1Provider extends AllColumnsProvider {
+
+		@Override
+		public int getInputTableIndex(NodeParametersInput parametersInput) {
+			return 1;
+		}
+    	
+    }
+
+    static final class AdditionalColumnsFilter1Persistor extends LegacyColumnFilterPersistor {
+    	
+        AdditionalColumnsFilter1Persistor() {
+            super("additionalColumnsFilter1");
+        }
+        
+    }
+
+    static final class AdditionalColumnsFilter2Persistor extends LegacyColumnFilterPersistor {
+    	
+        AdditionalColumnsFilter2Persistor() {
+            super("additionalColumnsFilter2");
+        }
+        
+    }
+    
+}
+     
