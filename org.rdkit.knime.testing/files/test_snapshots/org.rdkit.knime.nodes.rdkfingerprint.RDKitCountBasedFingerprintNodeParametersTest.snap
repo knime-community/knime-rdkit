@@ -1,0 +1,478 @@
+{
+  "data" : {
+    "model" : {
+      "fpType" : "morgan",
+      "removeSourceColumns" : false,
+      "numBits" : 1024,
+      "radius" : 2,
+      "torsionPathLength" : 4,
+      "atomPairMinPath" : 1,
+      "atomPairMaxPath" : 30,
+      "useChirality" : false,
+      "isRooted" : false,
+      "atomListColumn" : {
+        "specialChoice" : "NONE"
+      },
+      "includeAtoms" : true
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "atomListColumn" : {
+            "type" : "object",
+            "properties" : {
+              "regularChoice" : {
+                "type" : "string"
+              },
+              "specialChoice" : {
+                "oneOf" : [ {
+                  "const" : "NONE",
+                  "title" : "None"
+                } ]
+              }
+            },
+            "title" : "Atom list column for rooted fingerprints",
+            "description" : "The column containing the atom lists that are necessary when calculating rooted fingerprints. Instead of a list it is also possible to provide an integer column with a single atom index.",
+            "default" : {
+              "specialChoice" : "NONE"
+            }
+          },
+          "atomPairMaxPath" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Max path length",
+            "description" : "Maximum length (in bonds) of the paths to be considered (AtomPair only).",
+            "default" : 30
+          },
+          "atomPairMinPath" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Min path length",
+            "description" : "Minimum length (in bonds) of the paths to be considered (AtomPair only).",
+            "default" : 1
+          },
+          "fpType" : {
+            "oneOf" : [ {
+              "const" : "morgan",
+              "title" : "Morgan"
+            }, {
+              "const" : "featmorgan",
+              "title" : "FeatMorgan"
+            }, {
+              "const" : "atompair",
+              "title" : "AtomPair"
+            }, {
+              "const" : "torsion",
+              "title" : "Torsion"
+            }, {
+              "const" : "rdkit",
+              "title" : "RDKit"
+            }, {
+              "const" : "avalon",
+              "title" : "Avalon"
+            }, {
+              "const" : "layered",
+              "title" : "Layered"
+            }, {
+              "const" : "maccs",
+              "title" : "MACCS"
+            }, {
+              "const" : "pattern",
+              "title" : "Pattern"
+            } ],
+            "title" : "Fingerprint type",
+            "default" : "morgan"
+          },
+          "includeAtoms" : {
+            "type" : "boolean",
+            "title" : "Include atoms",
+            "description" : "Check this option to include the atoms when calculating rooted fingerprints or uncheck to exclude them.",
+            "default" : true
+          },
+          "isRooted" : {
+            "type" : "boolean",
+            "title" : "Create rooted fingerprint",
+            "description" : "Check this option to create a rooted fingerprint based on an atom list.",
+            "default" : false
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New fingerprint column name",
+            "description" : "Name of the fingerprint column in the output table."
+          },
+          "numBits" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Num bits",
+            "description" : "Number of bits in the fingerprint.",
+            "default" : 1024
+          },
+          "radius" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Radius",
+            "description" : "The radius of the atomic environments considered.",
+            "default" : 2
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Toggles removal of the input RDKit Mol column in the output table.",
+            "default" : false
+          },
+          "smilesColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The column containing reactant molecules."
+          },
+          "torsionPathLength" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Path length",
+            "description" : "Path length to be used (Torsion only).",
+            "default" : 4
+          },
+          "useChirality" : {
+            "type" : "boolean",
+            "title" : "Use chirality",
+            "description" : "Whether chirality should be taken into account when calculating the fingerprint.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/smilesColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/fpType",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/numBits",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 65535.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 65535.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/radius",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 6.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 6.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 0.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 0.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/fpType",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "morgan"
+            }, {
+              "const" : "featmorgan"
+            } ]
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/torsionPathLength",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 10.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 10.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/fpType",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "torsion"
+            } ]
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/atomPairMinPath",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 30.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 30.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/fpType",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "atompair"
+            } ]
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/atomPairMaxPath",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 30.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 30.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/fpType",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "atompair"
+            } ]
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useChirality",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/isRooted",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/atomListColumn",
+      "options" : {
+        "format" : "singleSelection",
+        "specialChoices" : [ {
+          "id" : "NONE",
+          "text" : "None"
+        } ],
+        "isAdvanced" : true
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/isRooted",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/includeAtoms",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/isRooted",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "smilesColumn" : {
+            "configKey" : "smiles_column"
+          },
+          "fpType" : {
+            "configKey" : "fp_type"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "numBits" : {
+            "configKey" : "num_bits"
+          },
+          "radius" : {
+            "configKey" : "radius"
+          },
+          "torsionPathLength" : {
+            "configKey" : "torsion_path_length"
+          },
+          "atomPairMinPath" : {
+            "configKey" : "atompairs_min_path"
+          },
+          "atomPairMaxPath" : {
+            "configKey" : "atompairs_max_path"
+          },
+          "useChirality" : {
+            "configKey" : "use_chirality"
+          },
+          "isRooted" : {
+            "configKey" : "is_rooted"
+          },
+          "atomListColumn" : {
+            "configPaths" : [ [ "atom_list_column" ] ]
+          },
+          "includeAtoms" : {
+            "configKey" : "include_atoms"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/atomListColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/fpType",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "morgan",
+        "text" : "Morgan"
+      }, {
+        "id" : "featmorgan",
+        "text" : "FeatMorgan"
+      }, {
+        "id" : "atompair",
+        "text" : "AtomPair"
+      }, {
+        "id" : "torsion",
+        "text" : "Torsion"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/smilesColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/smilesColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns", "#/properties/model/properties/smilesColumn" ]
+  } ]
+}
