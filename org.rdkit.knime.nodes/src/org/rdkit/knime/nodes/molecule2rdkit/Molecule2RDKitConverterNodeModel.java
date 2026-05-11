@@ -73,6 +73,7 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.util.ButtonGroupEnumInterface;
+import org.knime.node.parameters.widget.choices.Label;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
 import org.rdkit.knime.types.RDKitAdapterCell;
@@ -111,10 +112,14 @@ public class Molecule2RDKitConverterNodeModel extends AbstractRDKitNodeModel {
 	public enum ParseErrorPolicy implements ButtonGroupEnumInterface {
 
 		/** Policy to send rows with erroneous molecules to second output. */
+		@Label(value = "Send error rows to second output",
+				description = "The table at the second port contains the input rows with problematic structures.")
 		SPLIT_ROWS("Send error rows to second output", "The table at the second "
 				+ "port contains the input rows with problematic structures"),
 
 				/** Policy to insert missing values for an erroneous molecules. */
+				@Label(value = "Insert missing values",
+						description = "If the input structure can't be translated, a missing value is inserted.")
 				MISS_VAL("Insert missing values", "If the input structure can't be "
 						+ "translated, a missing value is inserted.");
 
@@ -191,6 +196,21 @@ public class Molecule2RDKitConverterNodeModel extends AbstractRDKitNodeModel {
 
 	/** Input data info index for Mol value. */
 	protected static final int INPUT_COLUMN_MOL = 0;
+
+	static final String CFG_INPUT_COLUMN = "input_column";
+	static final String CFG_TREAT_AS_QUERY = "treat_as_query";
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
+	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
+	static final String CFG_BAD_ROWS_TO_PORT1 = "bad_rows_to_port1";
+	static final String CFG_GENERATE_ERROR_INFO = "generateErrorInfo";
+	static final String CFG_ERROR_INFO_COLUMN_NAME = "errorInfoColumnName";
+	static final String CFG_GENERATE_COORDINATES = "generateCoordinates";
+	static final String CFG_FORCE_GENERATE_COORDINATES = "forceGenerateCoordinates";
+	static final String CFG_KEEP_HS = "keepHs";
+	static final String CFG_SKIP_SANITIZATION = "skip_sanitization";
+	static final String CFG_STRICT_PARSING = "strict_parsing";
+	static final String CFG_DO_AROMATICITY = "do_aromaticity";
+	static final String CFG_DO_STEREOCHEM = "do_stereochem";
 
 	//
 	// Members
