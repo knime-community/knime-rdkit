@@ -49,6 +49,7 @@
 package org.rdkit.knime.nodes.rgroupdecomposition;
 
 import org.RDKit.RGroupLabelling;
+import org.knime.node.parameters.widget.choices.Label;
 
 /**
  * This enumeration defines different R Group labeling options based on the 
@@ -62,8 +63,11 @@ import org.RDKit.RGroupLabelling;
  */
 public enum Labeling {
 
-	AtomMap("Atom Map", RGroupLabelling.AtomMap),
-	Isotope("Isotope", RGroupLabelling.Isotope),
+	@Label(value = "Atom map")
+    AtomMap("Atom Map", RGroupLabelling.AtomMap), //
+    @Label(value = "Isotope")
+    Isotope("Isotope", RGroupLabelling.Isotope), //
+    @Label(value = "MDLR group")
 	MDLRGroup("MDLR Group", RGroupLabelling.MDLRGroup);
 
 	//

@@ -49,6 +49,7 @@
 package org.rdkit.knime.nodes.rgroupdecomposition;
 
 import org.RDKit.RGroupLabels;
+import org.knime.node.parameters.widget.choices.Label;
 
 /**
  * This enumeration defines different R Group label options based on the 
@@ -61,12 +62,19 @@ import org.RDKit.RGroupLabels;
  */
 public enum Labels {
 
-	AutoDetect("Auto Detect", RGroupLabels.AutoDetect),
-	IsotopeLabels("Isotope Labels", RGroupLabels.IsotopeLabels),
-	AtomMapLabels("Atom Map Labels", RGroupLabels.AtomMapLabels), 
-	AtomIndexLabels("Atom Index Labels", RGroupLabels.AtomIndexLabels),
-	RelabelDuplicateLabels("Relabel Duplicate Labels", RGroupLabels.RelabelDuplicateLabels),
-	DummyAtomLabels("Dummy Atom Labels", RGroupLabels.DummyAtomLabels),
+	@Label(value = "Auto detect")
+    AutoDetect("Auto Detect", RGroupLabels.AutoDetect),
+    @Label(value = "Isotope labels")
+    IsotopeLabels("Isotope Labels", RGroupLabels.IsotopeLabels),
+    @Label(value = "Atom map labels")
+    AtomMapLabels("Atom Map Labels", RGroupLabels.AtomMapLabels),
+    @Label(value = "Atom index labels")
+    AtomIndexLabels("Atom Index Labels", RGroupLabels.AtomIndexLabels),
+    @Label(value = "Relabel duplicate labels")
+    RelabelDuplicateLabels("Relabel Duplicate Labels", RGroupLabels.RelabelDuplicateLabels),
+    @Label(value = "Dummy atom labels")
+    DummyAtomLabels("Dummy Atom Labels", RGroupLabels.DummyAtomLabels),
+    @Label(value = "MDL R-group labels")
 	MDLRGroupLabels("MDL RGroup Labels", RGroupLabels.MDLRGroupLabels);
 
 	//
