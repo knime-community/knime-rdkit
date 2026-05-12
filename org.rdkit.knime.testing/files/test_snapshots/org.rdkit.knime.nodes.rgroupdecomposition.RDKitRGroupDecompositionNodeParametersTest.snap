@@ -1,0 +1,520 @@
+{
+  "data" : {
+    "model" : {
+      "strictParsingEnabled" : false,
+      "strictParsing" : true,
+      "smarts" : "",
+      "addMatchingSmartsCore" : true,
+      "newMatchingSmartsCoreColumnName" : "Core",
+      "addMatchingExplicitCore" : false,
+      "newMatchingExplicitCoreColumnName" : "Explicit Core",
+      "useAtomMapsForExplicitCore" : true,
+      "useRLabelsForExplicitCore" : true,
+      "removeEmptyColumns" : true,
+      "failForNoMatch" : true,
+      "labels" : [ "AutoDetect" ],
+      "matchingStrategy" : "GreedyChunks",
+      "labeling" : [ "AtomMap", "MDLRGroup" ],
+      "coreAlignment" : "MCS",
+      "matchOnlyAtRGroups" : false,
+      "removeHydrogenOnlyRGroups" : true,
+      "removeHydrogensPostMatch" : true
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "addMatchingExplicitCore" : {
+            "type" : "boolean",
+            "title" : "Add matching explicit core",
+            "description" : "Flag to be set to add a column that contains the matching explicit core based on the matching SMARTS and\ninput molecule. It shows the real matching core derived from the input molecule.\n",
+            "default" : false
+          },
+          "addMatchingSmartsCore" : {
+            "type" : "boolean",
+            "title" : "Add matching SMARTS core",
+            "description" : "Flag to be set to add a column that contains the matching core from SMARTS input.\n",
+            "default" : true
+          },
+          "coreAlignment" : {
+            "oneOf" : [ {
+              "const" : "MCS",
+              "title" : "Align MCS"
+            }, {
+              "const" : "None",
+              "title" : "No alignment"
+            } ],
+            "title" : "Core alignment",
+            "description" : "Select how cores shall be aligned.",
+            "default" : "MCS"
+          },
+          "coresInputColumn" : {
+            "type" : "string",
+            "title" : "Core input column (2nd table)",
+            "description" : "If a second table is connected, the column containing cores as RDKit Molecules, SMARTS, SMILES or SDF.\nWhen no second table is connected, use the Core SMARTS text field below instead.\n"
+          },
+          "failForNoMatch" : {
+            "type" : "boolean",
+            "title" : "Fail if no cores are matching at all",
+            "description" : "Flag to be set to let the node fail if no matches for the provided cores have been found at all.\n",
+            "default" : true
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The column containing molecules."
+          },
+          "labeling" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Labeling for R-Groups output",
+            "description" : "Enable options how to label R-Groups in the output.\n",
+            "default" : [ "AtomMap", "MDLRGroup" ]
+          },
+          "labels" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Labels to recognize R-Groups in scaffolds",
+            "description" : "Enable one or multiple labels to be used to recognize R-Groups in scaffolds. At least one item\nneeds to be picked.\n",
+            "default" : [ "AutoDetect" ]
+          },
+          "matchOnlyAtRGroups" : {
+            "type" : "boolean",
+            "title" : "Match only at R-Groups",
+            "description" : "Flag to be set to find matches only at R-Groups.",
+            "default" : false
+          },
+          "matchingStrategy" : {
+            "oneOf" : [ {
+              "const" : "Greedy",
+              "title" : "Greedy"
+            }, {
+              "const" : "GreedyChunks",
+              "title" : "Greedy chunks"
+            }, {
+              "const" : "Exhaustive",
+              "title" : "Exhaustive"
+            }, {
+              "const" : "NoSymmetrization",
+              "title" : "No symmetrization"
+            }, {
+              "const" : "GA",
+              "title" : "GA"
+            } ],
+            "title" : "Matching strategy",
+            "description" : "Select how matches shall be found.",
+            "default" : "GreedyChunks"
+          },
+          "newMatchingExplicitCoreColumnName" : {
+            "type" : "string",
+            "title" : "Explicit core column name",
+            "description" : "The column name for the matching explicit core column, if it is set to be added.\n",
+            "default" : "Explicit Core"
+          },
+          "newMatchingSmartsCoreColumnName" : {
+            "type" : "string",
+            "title" : "Core column name",
+            "description" : "The column name for the SMARTS core column, if it is set to be added.\n",
+            "default" : "Core"
+          },
+          "removeEmptyColumns" : {
+            "type" : "boolean",
+            "title" : "Remove empty Rx columns",
+            "description" : "Flag to be set to detect Rx columns that are completely empty and remove them.\n",
+            "default" : true
+          },
+          "removeHydrogenOnlyRGroups" : {
+            "type" : "boolean",
+            "title" : "Remove hydrogen only R-Groups",
+            "description" : "Flag to be set to remove R-Groups that consist only of hydrogens from matching.\n",
+            "default" : true
+          },
+          "removeHydrogensPostMatch" : {
+            "type" : "boolean",
+            "title" : "Remove hydrogens post match",
+            "description" : "Flag to be set to remove all hydrogens in the resulting R-Groups output.\n",
+            "default" : true
+          },
+          "smarts" : {
+            "type" : "string",
+            "title" : "Core SMARTS",
+            "description" : "If no second table is connected, one or multiple new-line separated SMARTS can be defined as the cores to\nbe used.\n",
+            "default" : ""
+          },
+          "strictParsing" : {
+            "type" : "boolean",
+            "title" : "Strict parsing of mol blocks",
+            "description" : "When SDF molecules are used as cores, this option sets the tolerance level for parsing mol blocks.\nOnly applicable when SDF-compatible columns are used as core input. The default value is defined in the\nRDKit preferences.\n",
+            "default" : true
+          },
+          "strictParsingEnabled" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "useAtomMapsForExplicitCore" : {
+            "type" : "boolean",
+            "title" : "Use atom maps",
+            "description" : "Flag to be set to control atom properties of the matching explicit core.\n",
+            "default" : true
+          },
+          "useRLabelsForExplicitCore" : {
+            "type" : "boolean",
+            "title" : "Use R-labels",
+            "description" : "Flag to be set to control atom properties of the matching explicit core.\n",
+            "default" : true
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/coresInputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "MultiRuleWrapper",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/strictParsingEnabled",
+          "schema" : {
+            "const" : true
+          }
+        }
+      },
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/strictParsing",
+        "options" : {
+          "format" : "checkbox"
+        },
+        "rule" : {
+          "effect" : "SHOW",
+          "condition" : {
+            "schema" : { }
+          }
+        }
+      } ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/smarts",
+      "options" : {
+        "rows" : 5,
+        "format" : "textArea"
+      },
+      "rule" : {
+        "effect" : "HIDE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/addMatchingSmartsCore",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newMatchingSmartsCoreColumnName",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/addMatchingSmartsCore",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/addMatchingExplicitCore",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newMatchingExplicitCoreColumnName",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/addMatchingExplicitCore",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useAtomMapsForExplicitCore",
+      "options" : {
+        "format" : "checkbox"
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/addMatchingExplicitCore",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useRLabelsForExplicitCore",
+      "options" : {
+        "format" : "checkbox"
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/addMatchingExplicitCore",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeEmptyColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/failForNoMatch",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/labels",
+      "options" : {
+        "format" : "comboBox",
+        "isAdvanced" : true
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/matchingStrategy",
+      "options" : {
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/labeling",
+      "options" : {
+        "format" : "comboBox",
+        "isAdvanced" : true
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/coreAlignment",
+      "options" : {
+        "isAdvanced" : true,
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/matchOnlyAtRGroups",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeHydrogenOnlyRGroups",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeHydrogensPostMatch",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "coresInputColumn" : {
+            "configKey" : "cores_input_column"
+          },
+          "strictParsingEnabled" : {
+            "configPaths" : [ ]
+          },
+          "strictParsing" : {
+            "configKey" : "strict_parsing"
+          },
+          "smarts" : {
+            "configKey" : "smarts_value"
+          },
+          "addMatchingSmartsCore" : {
+            "configKey" : "add_matching_smarts_core"
+          },
+          "newMatchingSmartsCoreColumnName" : {
+            "configKey" : "new_matching_smarts_core_column_name"
+          },
+          "addMatchingExplicitCore" : {
+            "configKey" : "add_matching_explicit_core"
+          },
+          "newMatchingExplicitCoreColumnName" : {
+            "configKey" : "new_matching_explicit_core_column_name"
+          },
+          "useAtomMapsForExplicitCore" : {
+            "configKey" : "use_atom_maps_for_explicit_core"
+          },
+          "useRLabelsForExplicitCore" : {
+            "configKey" : "use_r_labels_for_explicit_core"
+          },
+          "removeEmptyColumns" : {
+            "configKey" : "remove_empty_columns"
+          },
+          "failForNoMatch" : {
+            "configKey" : "fail_for_no_match"
+          },
+          "labels" : {
+            "configKey" : "labels"
+          },
+          "matchingStrategy" : {
+            "configKey" : "matching_strategy"
+          },
+          "labeling" : {
+            "configKey" : "labeling"
+          },
+          "coreAlignment" : {
+            "configKey" : "core_alignment"
+          },
+          "matchOnlyAtRGroups" : {
+            "configKey" : "match_only_at_rgroups"
+          },
+          "removeHydrogenOnlyRGroups" : {
+            "configKey" : "remove_hydrogen_only_rgroups"
+          },
+          "removeHydrogensPostMatch" : {
+            "configKey" : "remove_hydrogens_post_match"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/coresInputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/labeling",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "AtomMap",
+        "text" : "Atom map"
+      }, {
+        "id" : "Isotope",
+        "text" : "Isotope"
+      }, {
+        "id" : "MDLRGroup",
+        "text" : "MDLR group"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/labels",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "AutoDetect",
+        "text" : "Auto detect"
+      }, {
+        "id" : "IsotopeLabels",
+        "text" : "Isotope labels"
+      }, {
+        "id" : "AtomMapLabels",
+        "text" : "Atom map labels"
+      }, {
+        "id" : "AtomIndexLabels",
+        "text" : "Atom index labels"
+      }, {
+        "id" : "RelabelDuplicateLabels",
+        "text" : "Relabel duplicate labels"
+      }, {
+        "id" : "DummyAtomLabels",
+        "text" : "Dummy atom labels"
+      }, {
+        "id" : "MDLRGroupLabels",
+        "text" : "MDL R-group labels"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/strictParsingEnabled",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : false
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/coresInputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/coresInputColumn" ]
+  } ]
+}

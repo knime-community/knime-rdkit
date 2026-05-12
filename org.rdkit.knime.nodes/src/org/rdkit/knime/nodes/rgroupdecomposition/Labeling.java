@@ -62,9 +62,9 @@ import org.RDKit.RGroupLabelling;
  */
 public enum Labeling {
 
-	AtomMap("Atom Map", RGroupLabelling.AtomMap),
-	Isotope("Isotope", RGroupLabelling.Isotope),
-	MDLRGroup("MDLR Group", RGroupLabelling.MDLRGroup);
+    AtomMap("Atom Map", "Atom map", RGroupLabelling.AtomMap), //
+    Isotope("Isotope", "Isotope", RGroupLabelling.Isotope), //
+	MDLRGroup("MDLR Group", "MDLR group", RGroupLabelling.MDLRGroup);
 
 	//
 	// Members
@@ -75,6 +75,9 @@ public enum Labeling {
 	
 	/** The name to be shown to the user. */
 	private final String m_strName;
+	
+	/** The label to be shown to the user. */
+	private final String m_label;
 
 	//
 	// Constructors
@@ -85,9 +88,10 @@ public enum Labeling {
 	 * 
 	 * @param strName Name to be shown as string representation.
 	 */
-	private Labeling(final String strName, final RGroupLabelling rdkitRGroupLabelings) {
+	private Labeling(final String strName, final String label, final RGroupLabelling rdkitRGroupLabelings) {
 		m_rdkitRGroupLabeling = rdkitRGroupLabelings;
 		m_strName = strName;
+		m_label = label;
 	}
 
 	/**
@@ -104,6 +108,15 @@ public enum Labeling {
 	@Override
 	public String toString() {
 		return m_strName;
+	}
+	
+	/**
+	 * Returns the label to be used for the R Group column in the output.
+	 * 
+	 * @return The label to be used for the R Group column in the output.
+	 */
+	public String getLabel() {
+		return m_label;
 	}
 
 	//

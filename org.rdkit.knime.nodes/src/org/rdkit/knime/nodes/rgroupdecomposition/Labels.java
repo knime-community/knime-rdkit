@@ -61,13 +61,13 @@ import org.RDKit.RGroupLabels;
  */
 public enum Labels {
 
-	AutoDetect("Auto Detect", RGroupLabels.AutoDetect),
-	IsotopeLabels("Isotope Labels", RGroupLabels.IsotopeLabels),
-	AtomMapLabels("Atom Map Labels", RGroupLabels.AtomMapLabels), 
-	AtomIndexLabels("Atom Index Labels", RGroupLabels.AtomIndexLabels),
-	RelabelDuplicateLabels("Relabel Duplicate Labels", RGroupLabels.RelabelDuplicateLabels),
-	DummyAtomLabels("Dummy Atom Labels", RGroupLabels.DummyAtomLabels),
-	MDLRGroupLabels("MDL RGroup Labels", RGroupLabels.MDLRGroupLabels);
+    AutoDetect("Auto Detect", "Auto detect", RGroupLabels.AutoDetect),
+    IsotopeLabels("Isotope Labels", "Isotope labels", RGroupLabels.IsotopeLabels),
+    AtomMapLabels("Atom Map Labels", "Atom map labels", RGroupLabels.AtomMapLabels),
+    AtomIndexLabels("Atom Index Labels", "Atom index labels", RGroupLabels.AtomIndexLabels),
+    RelabelDuplicateLabels("Relabel Duplicate Labels", "Relabel duplicate labels", RGroupLabels.RelabelDuplicateLabels),
+    DummyAtomLabels("Dummy Atom Labels", "Dummy atom labels", RGroupLabels.DummyAtomLabels),
+	MDLRGroupLabels("MDL RGroup Labels", "MDL R-group labels", RGroupLabels.MDLRGroupLabels);
 
 	//
 	// Members
@@ -78,6 +78,9 @@ public enum Labels {
 	
 	/** The name to be shown to the user. */
 	private final String m_strName;
+	
+	/** The label to be used in the output. */
+	private final String m_label;
 
 	//
 	// Constructors
@@ -88,9 +91,10 @@ public enum Labels {
 	 * 
 	 * @param strName Name to be shown as string representation.
 	 */
-	private Labels(final String strName, final RGroupLabels rdkitRGroupLabels) {
+	private Labels(final String strName, final String label, final RGroupLabels rdkitRGroupLabels) {
 		m_rdkitRGroupLabels = rdkitRGroupLabels;
 		m_strName = strName;
+		m_label = label;
 	}
 
 	/**
@@ -107,6 +111,15 @@ public enum Labels {
 	@Override
 	public String toString() {
 		return m_strName;
+	}
+	
+	/**
+	 * Returns the label to be used for the R Group column in the output.
+	 * 
+	 * @return The label to be used for the R Group column in the output.
+	 */
+	public String getLabel() {
+		return m_label;
 	}
 
 	//
