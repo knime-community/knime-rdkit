@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_column" type="xstring" value="Molecule"/>
+    <entry key="new_column_name" type="xstring" value="sdvqe"/>
+    <entry key="remove_source_columns" type="xboolean" value="true"/>
+    <entry key="prepare_before_drawing" type="xboolean" value="true"/>
+    <entry key="center_before_drawing" type="xboolean" value="false"/>
+    <entry key="clear_background" type="xboolean" value="true"/>
+    <entry key="add_atom_indices" type="xboolean" value="false"/>
+    <entry key="add_bond_indices" type="xboolean" value="false"/>
+    <entry key="explicit_methyl" type="xboolean" value="false"/>
+    <entry key="dummies_are_attachments" type="xboolean" value="true"/>
+    <entry key="include_radicals" type="xboolean" value="false"/>
+    <entry key="no_atom_labels" type="xboolean" value="false"/>
+    <entry key="isotope_labels" type="xboolean" value="false"/>
+    <entry key="dummy_isotope_labels" type="xboolean" value="true"/>
+    <entry key="comic_mode" type="xboolean" value="false"/>
+    <entry key="bw_mode" type="xboolean" value="false"/>
+    <entry key="single_color_wedge_bonds" type="xboolean" value="true"/>
+    <entry key="add_stereo_annotation" type="xboolean" value="true"/>
+    <entry key="include_chiral_flag" type="xboolean" value="false"/>
+    <entry key="simplified_stereo_groups" type="xboolean" value="false"/>
+    <entry key="bond_line_width_double" type="xdouble" value="0.05"/>
+    <entry key="min_font_size" type="xint" value="10"/>
+    <entry key="max_font_size" type="xint" value="33"/>
+    <entry key="annotation_font_scale" type="xdouble" value="0.75"/>
+</config>
