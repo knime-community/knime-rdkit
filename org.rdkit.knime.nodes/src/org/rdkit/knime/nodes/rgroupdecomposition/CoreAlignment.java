@@ -49,6 +49,7 @@
 package org.rdkit.knime.nodes.rgroupdecomposition;
 
 import org.RDKit.RGroupCoreAlignment;
+import org.knime.node.parameters.widget.choices.Label;
 
 /**
  * This enumeration defines different R Group core alignments based on the 
@@ -59,8 +60,10 @@ import org.RDKit.RGroupCoreAlignment;
  */
 public enum CoreAlignment {
 
-	None("No alignment", RGroupCoreAlignment.NoAlignment), 
-	MCS("Align MCS", RGroupCoreAlignment.MCS);
+	@Label(value = "Align MCS")
+	MCS("Align MCS", RGroupCoreAlignment.MCS), //
+	@Label(value = "No alignment")
+    None("No alignment", RGroupCoreAlignment.NoAlignment);
 
 	//
 	// Members

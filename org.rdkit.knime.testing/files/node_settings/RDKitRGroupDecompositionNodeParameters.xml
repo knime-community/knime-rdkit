@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="input_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="input_column" type="xstring" value="Molecule"/>
+        <config key="cores_input_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="cores_input_column" type="xstring" value="Molecule"/>
+        <config key="strict_parsing_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="false"/>
+        </config>
+        <entry key="strict_parsing" type="xboolean" value="true"/>
+        <config key="smarts_value_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="smarts_value" type="xstring" value=""/>
+        <config key="add_matching_smarts_core_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="add_matching_smarts_core" type="xboolean" value="true"/>
+        <config key="new_matching_smarts_core_column_name_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="new_matching_smarts_core_column_name" type="xstring" value="Corestest"/>
+        <config key="add_matching_explicit_core_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="add_matching_explicit_core" type="xboolean" value="true"/>
+        <config key="new_matching_explicit_core_column_name_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="new_matching_explicit_core_column_name" type="xstring" value="Explicit Coretest"/>
+        <config key="use_atom_maps_for_explicit_core_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="use_atom_maps_for_explicit_core" type="xboolean" value="false"/>
+        <config key="use_r_labels_for_explicit_core_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="use_r_labels_for_explicit_core" type="xboolean" value="true"/>
+        <config key="remove_empty_columns_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="remove_empty_columns" type="xboolean" value="true"/>
+        <config key="fail_for_no_match_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="fail_for_no_match" type="xboolean" value="false"/>
+        <config key="labels_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="labels">
+            <entry key="array-size" type="xint" value="2"/>
+            <entry key="0" type="xstring" value="AutoDetect"/>
+            <entry key="1" type="xstring" value="AtomIndexLabels"/>
+        </config>
+        <config key="matching_strategy_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="matching_strategy" type="xstring" value="GA"/>
+        <config key="labeling_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="labeling">
+            <entry key="array-size" type="xint" value="1"/>
+            <entry key="0" type="xstring" value="AtomMap"/>
+        </config>
+        <config key="core_alignment_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="core_alignment" type="xstring" value="None"/>
+        <config key="match_only_at_rgroups_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="match_only_at_rgroups" type="xboolean" value="true"/>
+        <config key="remove_hydrogen_only_rgroups_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="remove_hydrogen_only_rgroups" type="xboolean" value="true"/>
+        <config key="remove_hydrogens_post_match_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="remove_hydrogens_post_match" type="xboolean" value="false"/>
+    </config>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="CONFIGURED"/>
+    <entry key="factory" type="xstring" value="org.rdkit.knime.nodes.rgroupdecomposition.RDKitRGroupDecompositionNodeFactory"/>
+    <entry key="node-name" type="xstring" value="RDKit R-Group Decomposition"/>
+    <entry key="node-bundle-name" type="xstring" value="RDKit Nodes"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="org.rdkit.knime.nodes"/>
+    <entry key="node-bundle-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-bundle-version" type="xstring" value="5.2.1.v202507231837"/>
+    <entry key="node-feature-name" type="xstring" value="RDKit Nodes Feature"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="org.rdkit.knime.feature.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-feature-version" type="xstring" value="5.2.1.v202507231837"/>
+    <config key="factory_settings"/>
+    <entry key="name" type="xstring" value="RDKit R-Group Decomposition"/>
+    <entry key="hasContent" type="xboolean" value="false"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+        <config key="port_2">
+            <entry key="index" type="xint" value="2"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" isnull="true" value=""/>
+    </config>
+</config>

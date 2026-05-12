@@ -51,14 +51,59 @@ package org.rdkit.knime.nodes.rgroupdecomposition;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitRGroups" Node.
  * 
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitRGroupDecompositionNodeFactory extends NodeFactory<RDKitRGroupDecompositionNodeModel> {
+public class RDKitRGroupDecompositionNodeFactory extends NodeFactory<RDKitRGroupDecompositionNodeModel> 
+	implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit R-Group Decomposition";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Performs an R-Group decomposition for an input RDKit mol column.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            Performs an R-Group decomposition for an input RDKit mol column. The algorithm in RDKit was
+            developed in 2018/2019. It is still in beta state and should be used with care. Results may vary in
+            later versions.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Molecules", """
+                Molecules as RDKit molecule, SMILES or SDF column.
+                """),
+            fixedPort("Scaffolds", """
+                Cores as RDKit molecule, SMARTS, SMILES or SDF column.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Matches with R-groups", """
+                Table with matching core and decomposed R-Groups.
+                """),
+            fixedPort("Unmatched molecules", """
+                Table with unmatched input rows.
+                """)
+    );
+	
 	/**
 	 * Creates a model for the RDKitRGroups functionality
 	 * of the RDKit library. The model is derived from the
@@ -105,12 +150,33 @@ public class RDKitRGroupDecompositionNodeFactory extends NodeFactory<RDKitRGroup
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitRGroupDecompositionNodeDialog();
-	}
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitRGroupDecompositionNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitRGroupDecompositionNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 

@@ -50,6 +50,7 @@ package org.rdkit.knime.nodes.rgroupdecomposition;
 
 import org.RDKit.RGroupCoreAlignment;
 import org.RDKit.RGroupMatching;
+import org.knime.node.parameters.widget.choices.Label;
 
 /**
  * This enumeration defines different R Group matching strategies based on the 
@@ -60,10 +61,15 @@ import org.RDKit.RGroupMatching;
  */
 public enum Matching {
 
-	Greedy("Greedy", RGroupMatching.Greedy),
-	GreedyChunks("Greedy Chunks", RGroupMatching.GreedyChunks), 
-	Exhaustive("Exhaustive", RGroupMatching.Exhaustive), // Not useful for large datasets
-	NoSymmetrization("No Symmetrization", RGroupMatching.NoSymmetrization),
+	@Label(value = "Greedy")
+    Greedy("Greedy", RGroupMatching.Greedy),
+    @Label(value = "Greedy chunks")
+    GreedyChunks("Greedy Chunks", RGroupMatching.GreedyChunks),
+    @Label(value = "Exhaustive")
+    Exhaustive("Exhaustive", RGroupMatching.Exhaustive),
+    @Label(value = "No symmetrization")
+    NoSymmetrization("No Symmetrization", RGroupMatching.NoSymmetrization),
+    @Label(value = "GA")
 	GA("GA", RGroupMatching.GA);
 
 	//
