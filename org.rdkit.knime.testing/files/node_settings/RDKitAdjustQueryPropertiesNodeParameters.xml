@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="input_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="input_column" type="xstring" value="Molecule"/>
+        <config key="new_column_name_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="new_column_name" type="xstring" value="Molecule Test (Adjusted Queries)"/>
+        <config key="remove_source_columns_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="remove_source_columns" type="xboolean" value="true"/>
+        <config key="adjust_degree_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="adjust_degree" type="xboolean" value="true"/>
+        <config key="adjust_degree_flags_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="adjust_degree_flags">
+            <entry key="array-size" type="xint" value="3"/>
+            <entry key="0" type="xstring" value="ADJUST_IGNORECHAINS"/>
+            <entry key="1" type="xstring" value="ADJUST_IGNOREDUMMIES"/>
+            <entry key="2" type="xstring" value="ADJUST_IGNOREMAPPED"/>
+        </config>
+        <config key="adjust_ring_count_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="adjust_ring_count" type="xboolean" value="true"/>
+        <config key="adjust_ring_count_flags_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="adjust_ring_count_flags">
+            <entry key="array-size" type="xint" value="1"/>
+            <entry key="0" type="xstring" value="ADJUST_IGNORECHAINS"/>
+        </config>
+        <config key="make_atoms_generic_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="make_atoms_generic" type="xboolean" value="true"/>
+        <config key="make_atoms_generic_flags_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="make_atoms_generic_flags">
+            <entry key="array-size" type="xint" value="5"/>
+            <entry key="0" type="xstring" value="ADJUST_IGNORECHAINS"/>
+            <entry key="1" type="xstring" value="ADJUST_IGNORERINGS"/>
+            <entry key="2" type="xstring" value="ADJUST_IGNOREDUMMIES"/>
+            <entry key="3" type="xstring" value="ADJUST_IGNORENONDUMMIES"/>
+            <entry key="4" type="xstring" value="ADJUST_IGNOREMAPPED"/>
+        </config>
+        <config key="make_bonds_generic_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="make_bonds_generic" type="xboolean" value="false"/>
+        <config key="make_bonds_generic_flags_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="false"/>
+        </config>
+        <config key="make_bonds_generic_flags">
+            <entry key="array-size" type="xint" value="1"/>
+            <entry key="0" type="xstring" value="ADJUST_IGNOREDUMMIES"/>
+        </config>
+        <config key="make_dummies_queries_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="make_dummies_queries" type="xboolean" value="false"/>
+        <config key="aromatize_if_possible_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="aromatize_if_possible" type="xboolean" value="true"/>
+        <config key="adjust_conjugated_five_rings_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="adjust_conjugated_five_rings" type="xboolean" value="false"/>
+        <config key="set_mdl_five_ring_aromaticity_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="set_mdl_five_ring_aromaticity" type="xboolean" value="true"/>
+        <config key="adjust_single_bonds_to_degree_1_neighbors_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="adjust_single_bonds_to_degree_1_neighbors" type="xboolean" value="false"/>
+        <config key="adjust_single_bonds_between_aromatic_atoms_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="adjust_single_bonds_between_aromatic_atoms" type="xboolean" value="false"/>
+        <config key="use_stereo_care_for_bonds_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="use_stereo_care_for_bonds" type="xboolean" value="true"/>
+    </config>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="CONFIGURED"/>
+    <entry key="factory" type="xstring" value="org.rdkit.knime.nodes.adjustqueryproperties.RDKitAdjustQueryPropertiesNodeFactory"/>
+    <entry key="node-name" type="xstring" value="RDKit Adjust Query Properties"/>
+    <entry key="node-bundle-name" type="xstring" value="RDKit Nodes"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="org.rdkit.knime.nodes"/>
+    <entry key="node-bundle-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-bundle-version" type="xstring" value="5.2.1.v202507231837"/>
+    <entry key="node-feature-name" type="xstring" value="RDKit Nodes Feature"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="org.rdkit.knime.feature.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-feature-version" type="xstring" value="5.2.1.v202507231837"/>
+    <config key="factory_settings"/>
+    <entry key="name" type="xstring" value="RDKit Adjust Query Properties"/>
+    <entry key="hasContent" type="xboolean" value="false"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" isnull="true" value=""/>
+    </config>
+</config>

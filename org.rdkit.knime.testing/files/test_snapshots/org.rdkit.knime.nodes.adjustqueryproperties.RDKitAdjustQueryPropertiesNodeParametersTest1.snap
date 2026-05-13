@@ -1,0 +1,486 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumn" : "Molecule",
+      "newColumnName" : "Molecule Test (Adjusted Queries)",
+      "removeSourceColumns" : true,
+      "adjustDegree" : true,
+      "adjustDegreeFlags" : [ "ADJUST_IGNORECHAINS", "ADJUST_IGNOREDUMMIES", "ADJUST_IGNOREMAPPED" ],
+      "adjustRingCount" : true,
+      "adjustRingCountFlags" : [ "ADJUST_IGNORECHAINS" ],
+      "makeAtomsGeneric" : true,
+      "makeAtomsGenericFlags" : [ "ADJUST_IGNORECHAINS", "ADJUST_IGNORERINGS", "ADJUST_IGNOREDUMMIES", "ADJUST_IGNORENONDUMMIES", "ADJUST_IGNOREMAPPED" ],
+      "makeBondsGeneric" : false,
+      "makeBondsGenericFlags" : [ "ADJUST_IGNOREDUMMIES" ],
+      "makeDummiesQueries" : false,
+      "aromatizeIfPossible" : true,
+      "adjustConjugatedFiveRings" : false,
+      "setMDLFiveRingAromaticity" : true,
+      "adjustSingleBondsToDegree1Neighbors" : false,
+      "adjustSingleBondsBetweenAromaticAtoms" : false,
+      "useStereoCareForBonds" : true
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "adjustConjugatedFiveRings" : {
+            "type" : "boolean",
+            "title" : "Adjust conjugated 5 rings",
+            "description" : "Sets bond queries in conjugated five-rings to SINGLE|DOUBLE|AROMATIC.\n",
+            "default" : false
+          },
+          "adjustDegree" : {
+            "type" : "boolean",
+            "title" : "Adjust degree",
+            "description" : "Enable so that modified atoms have an explicit-degree query added based on their degree in the query.\n",
+            "default" : true
+          },
+          "adjustDegreeFlags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Flags to adjust degree queries",
+            "description" : "Control which atoms have a degree query added.",
+            "default" : [ "ADJUST_IGNORECHAINS", "ADJUST_IGNOREDUMMIES" ]
+          },
+          "adjustRingCount" : {
+            "type" : "boolean",
+            "title" : "Adjust ring count",
+            "description" : "Enable so that modified atoms have a ring-count query added based on their ring count in the query.\n",
+            "default" : false
+          },
+          "adjustRingCountFlags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Flags to adjust ring-count queries",
+            "description" : "Control which atoms have a ring-count query added.",
+            "default" : [ "ADJUST_IGNORECHAINS", "ADJUST_IGNOREDUMMIES" ]
+          },
+          "adjustSingleBondsBetweenAromaticAtoms" : {
+            "type" : "boolean",
+            "title" : "Adjust single bonds between aromatic atoms",
+            "description" : "Sets non-ring single bonds between two aromatic atoms to SINGLE|AROMATIC.\n",
+            "default" : false
+          },
+          "adjustSingleBondsToDegree1Neighbors" : {
+            "type" : "boolean",
+            "title" : "Adjust single bonds to degree 1 neighbors",
+            "description" : "Sets single bonds between aromatic atoms and degree one neighbors to SINGLE|AROMATIC.\n",
+            "default" : false
+          },
+          "aromatizeIfPossible" : {
+            "type" : "boolean",
+            "title" : "Aromatize if possible",
+            "description" : "Perceive and set aromaticity.",
+            "default" : true
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The input column with molecules to be used as queries."
+          },
+          "makeAtomsGeneric" : {
+            "type" : "boolean",
+            "title" : "Make atoms generic",
+            "description" : "Convert atoms to any-atom queries.",
+            "default" : false
+          },
+          "makeAtomsGenericFlags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Flags to adjust any-atom queries",
+            "description" : "Control which atoms are converted to any-atom queries.",
+            "default" : [ ]
+          },
+          "makeBondsGeneric" : {
+            "type" : "boolean",
+            "title" : "Make bonds generic",
+            "description" : "Convert bonds to any-bond queries.",
+            "default" : false
+          },
+          "makeBondsGenericFlags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Flags to adjust any-bond queries",
+            "description" : "Control which bonds are converted to any-bond queries.",
+            "default" : [ ]
+          },
+          "makeDummiesQueries" : {
+            "type" : "boolean",
+            "title" : "Make dummies queries",
+            "description" : "Enable so that dummy atoms that do not have a specified isotope are converted to any-atom queries.\n",
+            "default" : true
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name",
+            "description" : "The name of the new column which will contain the tuned queries as RDKit Molecules.\n"
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Set to true to remove the specified source column from the result table.\n",
+            "default" : false
+          },
+          "setMDLFiveRingAromaticity" : {
+            "type" : "boolean",
+            "title" : "Set MDL 5 ring aromaticity",
+            "description" : "Uses the 5-ring aromaticity behavior of the (former) MDL software as documented in the Chemical\nRepresentation Guide.\n",
+            "default" : false
+          },
+          "useStereoCareForBonds" : {
+            "type" : "boolean",
+            "title" : "Use stereo care for bonds",
+            "description" : "Remove stereochemistry info from double bonds that do not have the stereoCare property set.\n",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/adjustDegree",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/adjustDegreeFlags",
+      "options" : {
+        "format" : "comboBox"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/adjustDegree",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/adjustRingCount",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/adjustRingCountFlags",
+      "options" : {
+        "format" : "comboBox"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/adjustRingCount",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/makeAtomsGeneric",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/makeAtomsGenericFlags",
+      "options" : {
+        "format" : "comboBox"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/makeAtomsGeneric",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/makeBondsGeneric",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/makeBondsGenericFlags",
+      "options" : {
+        "format" : "comboBox"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/makeBondsGeneric",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/makeDummiesQueries",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/aromatizeIfPossible",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/adjustConjugatedFiveRings",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/setMDLFiveRingAromaticity",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/adjustSingleBondsToDegree1Neighbors",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/adjustSingleBondsBetweenAromaticAtoms",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useStereoCareForBonds",
+      "options" : {
+        "format" : "checkbox"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "adjustDegree" : {
+            "configKey" : "adjust_degree"
+          },
+          "adjustDegreeFlags" : {
+            "configKey" : "adjust_degree_flags",
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "adjustRingCount" : {
+            "configKey" : "adjust_ring_count"
+          },
+          "adjustRingCountFlags" : {
+            "configKey" : "adjust_ring_count_flags",
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "makeAtomsGeneric" : {
+            "configKey" : "make_atoms_generic"
+          },
+          "makeAtomsGenericFlags" : {
+            "configKey" : "make_atoms_generic_flags",
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "makeBondsGeneric" : {
+            "configKey" : "make_bonds_generic"
+          },
+          "makeBondsGenericFlags" : {
+            "configKey" : "make_bonds_generic_flags",
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "makeDummiesQueries" : {
+            "configKey" : "make_dummies_queries"
+          },
+          "aromatizeIfPossible" : {
+            "configKey" : "aromatize_if_possible"
+          },
+          "adjustConjugatedFiveRings" : {
+            "configKey" : "adjust_conjugated_five_rings"
+          },
+          "setMDLFiveRingAromaticity" : {
+            "configKey" : "set_mdl_five_ring_aromaticity"
+          },
+          "adjustSingleBondsToDegree1Neighbors" : {
+            "configKey" : "adjust_single_bonds_to_degree_1_neighbors"
+          },
+          "adjustSingleBondsBetweenAromaticAtoms" : {
+            "configKey" : "adjust_single_bonds_between_aromatic_atoms"
+          },
+          "useStereoCareForBonds" : {
+            "configKey" : "use_stereo_care_for_bonds"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/adjustDegreeFlags",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "ADJUST_IGNORECHAINS",
+        "text" : "ADJUST_IGNORECHAINS"
+      }, {
+        "id" : "ADJUST_IGNORERINGS",
+        "text" : "ADJUST_IGNORERINGS"
+      }, {
+        "id" : "ADJUST_IGNOREDUMMIES",
+        "text" : "ADJUST_IGNOREDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNORENONDUMMIES",
+        "text" : "ADJUST_IGNORENONDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNOREMAPPED",
+        "text" : "ADJUST_IGNOREMAPPED"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/adjustRingCountFlags",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "ADJUST_IGNORECHAINS",
+        "text" : "ADJUST_IGNORECHAINS"
+      }, {
+        "id" : "ADJUST_IGNORERINGS",
+        "text" : "ADJUST_IGNORERINGS"
+      }, {
+        "id" : "ADJUST_IGNOREDUMMIES",
+        "text" : "ADJUST_IGNOREDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNORENONDUMMIES",
+        "text" : "ADJUST_IGNORENONDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNOREMAPPED",
+        "text" : "ADJUST_IGNOREMAPPED"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/makeAtomsGenericFlags",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "ADJUST_IGNORECHAINS",
+        "text" : "ADJUST_IGNORECHAINS"
+      }, {
+        "id" : "ADJUST_IGNORERINGS",
+        "text" : "ADJUST_IGNORERINGS"
+      }, {
+        "id" : "ADJUST_IGNOREDUMMIES",
+        "text" : "ADJUST_IGNOREDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNORENONDUMMIES",
+        "text" : "ADJUST_IGNORENONDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNOREMAPPED",
+        "text" : "ADJUST_IGNOREMAPPED"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/makeBondsGenericFlags",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "ADJUST_IGNORECHAINS",
+        "text" : "ADJUST_IGNORECHAINS"
+      }, {
+        "id" : "ADJUST_IGNORERINGS",
+        "text" : "ADJUST_IGNORERINGS"
+      }, {
+        "id" : "ADJUST_IGNOREDUMMIES",
+        "text" : "ADJUST_IGNOREDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNORENONDUMMIES",
+        "text" : "ADJUST_IGNORENONDUMMIES"
+      }, {
+        "id" : "ADJUST_IGNOREMAPPED",
+        "text" : "ADJUST_IGNOREMAPPED"
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumn", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}
