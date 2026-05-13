@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_column" type="xstring" value="Molecule"/>
+    <entry key="new_column_name" type="xstring" value="Molecule Test (Adjusted Queries)"/>
+    <entry key="remove_source_columns" type="xboolean" value="true"/>
+    <entry key="adjust_degree" type="xboolean" value="true"/>
+    <config key="adjust_degree_flags">
+        <entry key="array-size" type="xint" value="3"/>
+        <entry key="0" type="xstring" value="ADJUST_IGNORECHAINS"/>
+        <entry key="1" type="xstring" value="ADJUST_IGNOREDUMMIES"/>
+        <entry key="2" type="xstring" value="ADJUST_IGNOREMAPPED"/>
+    </config>
+    <entry key="adjust_ring_count" type="xboolean" value="true"/>
+    <config key="adjust_ring_count_flags">
+        <entry key="array-size" type="xint" value="1"/>
+        <entry key="0" type="xstring" value="ADJUST_IGNORECHAINS"/>
+    </config>
+    <entry key="make_atoms_generic" type="xboolean" value="true"/>
+    <config key="make_atoms_generic_flags">
+        <entry key="array-size" type="xint" value="5"/>
+        <entry key="0" type="xstring" value="ADJUST_IGNORECHAINS"/>
+        <entry key="1" type="xstring" value="ADJUST_IGNORERINGS"/>
+        <entry key="2" type="xstring" value="ADJUST_IGNOREDUMMIES"/>
+        <entry key="3" type="xstring" value="ADJUST_IGNORENONDUMMIES"/>
+        <entry key="4" type="xstring" value="ADJUST_IGNOREMAPPED"/>
+    </config>
+    <entry key="make_bonds_generic" type="xboolean" value="false"/>
+    <config key="make_bonds_generic_flags">
+        <entry key="array-size" type="xint" value="1"/>
+        <entry key="0" type="xstring" value="ADJUST_IGNOREDUMMIES"/>
+    </config>
+    <entry key="make_dummies_queries" type="xboolean" value="false"/>
+    <entry key="aromatize_if_possible" type="xboolean" value="true"/>
+    <entry key="adjust_conjugated_five_rings" type="xboolean" value="false"/>
+    <entry key="set_mdl_five_ring_aromaticity" type="xboolean" value="true"/>
+    <entry key="adjust_single_bonds_to_degree_1_neighbors" type="xboolean" value="false"/>
+    <entry key="adjust_single_bonds_between_aromatic_atoms" type="xboolean" value="false"/>
+    <entry key="use_stereo_care_for_bonds" type="xboolean" value="true"/>
+</config>
