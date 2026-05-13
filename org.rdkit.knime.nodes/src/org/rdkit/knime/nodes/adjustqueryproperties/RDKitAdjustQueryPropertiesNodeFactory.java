@@ -51,16 +51,59 @@ package org.rdkit.knime.nodes.adjustqueryproperties;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitAdjustQueryProperties" Node.
- * Structure searches based on queries molecules are not always leading to the desired results. Often some fine tuning of the query structure helps to increase the search results. RDKit offers query properties that can be set explicitely for query molecules to influence a search. This node lets the user define the properties to be adjusted.
+ * Structure searches based on queries molecules are not always leading to the desired results. Often some fine tuning 
+ * of the query structure helps to increase the search results. RDKit offers query properties that can be set 
+ * explicitly for query molecules to influence a search. This node lets the user define the properties to be adjusted.
  *
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitAdjustQueryPropertiesNodeFactory 
-        extends NodeFactory<RDKitAdjustQueryPropertiesNodeModel> {
+public class RDKitAdjustQueryPropertiesNodeFactory extends NodeFactory<RDKitAdjustQueryPropertiesNodeModel> 
+	implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit Adjust Query Properties";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            This node allows common adjustments to the matching behavior of molecules that are intended to be
+            used as queries to get better search results.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            This node allows common adjustments to the matching behavior of molecules that are intended to be
+            used as queries. Structure searches based on queries molecules are not always leading to the desired
+            results. Often some fine tuning of the query structure helps to increase the search results. RDKit
+            offers query properties that can be set explicitly for query molecules to influence a search. This
+            node lets the user define the properties to be adjusted.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with molecules to be used as queries", """
+                Molecules to be used as queries.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Tuned query molecules", """
+                Tuned query molecules.
+                """)
+    );
+	
     /**
      * Creates a model for the RDKitAdjustQueryProperties functionality
      * of the RDKit library. The model is derived from the
@@ -107,12 +150,33 @@ public class RDKitAdjustQueryPropertiesNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitAdjustQueryPropertiesNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitAdjustQueryPropertiesNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitAdjustQueryPropertiesNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
