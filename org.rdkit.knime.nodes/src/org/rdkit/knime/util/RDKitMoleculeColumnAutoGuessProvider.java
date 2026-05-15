@@ -2,15 +2,16 @@ package org.rdkit.knime.util;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.DataType;
 import org.knime.core.data.DataValue;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.legacy.updates.ColumnNameAutoGuessValueProvider;
 import org.knime.node.parameters.updates.ParameterReference;
-import org.knime.node.parameters.widget.choices.util.ColumnSelectionUtil;
 
 /**
  * Auto guess provider for RDKit molecule columns. By default, it considers compatible columns of type 
@@ -76,8 +77,10 @@ public abstract class RDKitMoleculeColumnAutoGuessProvider extends ColumnNameAut
 
 	@Override
 	protected Optional<DataColumnSpec> autoGuessColumn(NodeParametersInput parametersInput) {
-		final var compatibleColumns = ColumnSelectionUtil.getCompatibleColumns(
-				parametersInput, m_inputTableIndex, m_valueClasses);
+		final var compatibleColumns = parametersInput.getInTableSpec(m_inputTableIndex)
+				.map(spec -> spec.stream()
+				.filter(this::isColumnCompatible).toList())
+				.orElse(List.of());
 		if (compatibleColumns.isEmpty()) {
 			return Optional.empty();
 		} else if (m_valueIndex < compatibleColumns.size()) {
@@ -86,5 +89,15 @@ public abstract class RDKitMoleculeColumnAutoGuessProvider extends ColumnNameAut
 			return Optional.of(compatibleColumns.get(0));
 		}
 	}
+	
+	private boolean isColumnCompatible(DataColumnSpec colSpec) {
+        DataType colType = colSpec.getType();
+        for (Class<? extends DataValue> clazz : RDKitAdapterCellSupport.expandByAdaptableTypes(m_valueClasses)) {
+            if (colType.isCompatible(clazz) || colType.isAdaptable(clazz)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
