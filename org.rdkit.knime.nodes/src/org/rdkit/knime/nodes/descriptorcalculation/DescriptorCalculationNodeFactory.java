@@ -51,15 +51,54 @@ package org.rdkit.knime.nodes.descriptorcalculation;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitDescriptorCalculation" Node.
  * 
  * @author Dillip K Mohanty
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class DescriptorCalculationNodeFactory extends NodeFactory<DescriptorCalculationNodeModel> {
+public class DescriptorCalculationNodeFactory extends NodeFactory<DescriptorCalculationNodeModel> 
+	implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit Descriptor Calculation";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Node for descriptor calculation of RDKit molecules.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            This node is used for calculating the descriptors for each molecule in the input table. The user has
+            the option to choose which descriptors need to be calculated and the calculated descriptor values
+            for each molecule in the input table are shown in its own column in the output table.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("RDKit molecules", """
+                Table containing RDKit molecules.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Molecules with calculated descriptors", """
+                Table containing calculated descriptor values.
+                """)
+    );
+	
 	/**
 	 * Creates a model for the RDKitDescriptorCalculation functionality
 	 * of the RDKit library. The model is derived from the
@@ -106,12 +145,33 @@ public class DescriptorCalculationNodeFactory extends NodeFactory<DescriptorCalc
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new DescriptorCalculationNodeDialog();
-	}
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, DescriptorCalculationNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            DescriptorCalculationNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 

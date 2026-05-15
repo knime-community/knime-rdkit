@@ -1,0 +1,223 @@
+{
+  "data" : {
+    "model" : {
+      "selectedDescriptors" : [ "slogp", "smr", "LabuteASA", "TPSA", "AMW", "ExactMW", "NumLipinskiHBA", "NumLipinskiHBD", "NumRotatableBonds", "NumHBD", "NumHBA", "NumAmideBonds", "NumHeteroAtoms", "NumHeavyAtoms", "NumAtoms", "NumStereocenters", "NumUnspecifiedStereocenters", "NumRings", "NumAromaticRings", "NumSaturatedRings", "NumAliphaticRings", "NumAromaticHeterocycles", "NumSaturatedHeterocycles", "NumAliphaticHeterocycles", "NumAromaticCarbocycles", "NumSaturatedCarbocycles", "NumAliphaticCarbocycles", "FractionCSP3", "Chi0v", "Chi1v", "Chi2v", "Chi3v", "Chi4v", "Chi1n", "Chi2n", "Chi3n", "Chi4n", "HallKierAlpha", "kappa1", "kappa2", "kappa3", "slogp_VSA_1_12", "smr_VSA_1_10", "peoe_VSA_1_14", "MQN" ]
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The name of the column in input table containing RDKit molecules.\n"
+          },
+          "selectedDescriptors" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Available descriptors",
+            "description" : "The list of descriptors that are available for calculation.\n",
+            "default" : [ "slogp", "smr", "LabuteASA", "TPSA", "AMW", "ExactMW", "NumLipinskiHBA", "NumLipinskiHBD", "NumRotatableBonds", "NumHBD", "NumHBA", "NumAmideBonds", "NumHeteroAtoms", "NumHeavyAtoms", "NumAtoms", "NumStereocenters", "NumUnspecifiedStereocenters", "NumRings", "NumAromaticRings", "NumSaturatedRings", "NumAliphaticRings", "NumAromaticHeterocycles", "NumSaturatedHeterocycles", "NumAliphaticHeterocycles", "NumAromaticCarbocycles", "NumSaturatedCarbocycles", "NumAliphaticCarbocycles", "FractionCSP3", "Chi0v", "Chi1v", "Chi2v", "Chi3v", "Chi4v", "Chi1n", "Chi2n", "Chi3n", "Chi4n", "HallKierAlpha", "kappa1", "kappa2", "kappa3", "slogp_VSA_1_12", "smr_VSA_1_10", "peoe_VSA_1_14", "MQN" ]
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/selectedDescriptors",
+      "options" : {
+        "format" : "twinList",
+        "includedLabel" : "Calculate",
+        "excludedLabel" : "Skip"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "selectedDescriptors" : {
+            "configPaths" : [ [ "selectedDescriptors" ] ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/selectedDescriptors",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "slogp",
+        "text" : "SlogP"
+      }, {
+        "id" : "smr",
+        "text" : "SMR"
+      }, {
+        "id" : "LabuteASA",
+        "text" : "LabuteASA"
+      }, {
+        "id" : "TPSA",
+        "text" : "TPSA"
+      }, {
+        "id" : "AMW",
+        "text" : "AMW"
+      }, {
+        "id" : "ExactMW",
+        "text" : "ExactMW"
+      }, {
+        "id" : "NumLipinskiHBA",
+        "text" : "NumLipinskiHBA"
+      }, {
+        "id" : "NumLipinskiHBD",
+        "text" : "NumLipinskiHBD"
+      }, {
+        "id" : "NumRotatableBonds",
+        "text" : "NumRotatableBonds"
+      }, {
+        "id" : "NumHBD",
+        "text" : "NumHBD"
+      }, {
+        "id" : "NumHBA",
+        "text" : "NumHBA"
+      }, {
+        "id" : "NumAmideBonds",
+        "text" : "NumAmideBonds"
+      }, {
+        "id" : "NumHeteroAtoms",
+        "text" : "NumHeteroAtoms"
+      }, {
+        "id" : "NumHeavyAtoms",
+        "text" : "NumHeavyAtoms"
+      }, {
+        "id" : "NumAtoms",
+        "text" : "NumAtoms"
+      }, {
+        "id" : "NumStereocenters",
+        "text" : "NumStereocenters"
+      }, {
+        "id" : "NumUnspecifiedStereocenters",
+        "text" : "NumUnspecifiedStereocenters"
+      }, {
+        "id" : "NumRings",
+        "text" : "NumRings"
+      }, {
+        "id" : "NumAromaticRings",
+        "text" : "NumAromaticRings"
+      }, {
+        "id" : "NumSaturatedRings",
+        "text" : "NumSaturatedRings"
+      }, {
+        "id" : "NumAliphaticRings",
+        "text" : "NumAliphaticRings"
+      }, {
+        "id" : "NumAromaticHeterocycles",
+        "text" : "NumAromaticHeterocycles"
+      }, {
+        "id" : "NumSaturatedHeterocycles",
+        "text" : "NumSaturatedHeterocycles"
+      }, {
+        "id" : "NumAliphaticHeterocycles",
+        "text" : "NumAliphaticHeterocycles"
+      }, {
+        "id" : "NumAromaticCarbocycles",
+        "text" : "NumAromaticCarbocycles"
+      }, {
+        "id" : "NumSaturatedCarbocycles",
+        "text" : "NumSaturatedCarbocycles"
+      }, {
+        "id" : "NumAliphaticCarbocycles",
+        "text" : "NumAliphaticCarbocycles"
+      }, {
+        "id" : "FractionCSP3",
+        "text" : "FractionCSP3"
+      }, {
+        "id" : "Chi0v",
+        "text" : "Chi0v"
+      }, {
+        "id" : "Chi1v",
+        "text" : "Chi1v"
+      }, {
+        "id" : "Chi2v",
+        "text" : "Chi2v"
+      }, {
+        "id" : "Chi3v",
+        "text" : "Chi3v"
+      }, {
+        "id" : "Chi4v",
+        "text" : "Chi4v"
+      }, {
+        "id" : "Chi1n",
+        "text" : "Chi1n"
+      }, {
+        "id" : "Chi2n",
+        "text" : "Chi2n"
+      }, {
+        "id" : "Chi3n",
+        "text" : "Chi3n"
+      }, {
+        "id" : "Chi4n",
+        "text" : "Chi4n"
+      }, {
+        "id" : "HallKierAlpha",
+        "text" : "HallKierAlpha"
+      }, {
+        "id" : "kappa1",
+        "text" : "kappa1"
+      }, {
+        "id" : "kappa2",
+        "text" : "kappa2"
+      }, {
+        "id" : "kappa3",
+        "text" : "kappa3"
+      }, {
+        "id" : "slogp_VSA_1_12",
+        "text" : "slogp_VSA[1..12]"
+      }, {
+        "id" : "smr_VSA_1_10",
+        "text" : "smr_VSA[1..10]"
+      }, {
+        "id" : "peoe_VSA_1_14",
+        "text" : "peoe_VSA[1..14]"
+      }, {
+        "id" : "MQN",
+        "text" : "MQN[1..42]"
+      } ]
+    } ]
+  } ]
+}
