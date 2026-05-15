@@ -79,7 +79,7 @@ public class RDKitMoleculeColumnChoicesProvider implements ColumnChoicesProvider
 
 	private boolean isColumnCompatible(DataColumnSpec colSpec) {
         DataType colType = colSpec.getType();
-        for (Class<? extends DataValue> clazz : m_valueClasses) {
+        for (Class<? extends DataValue> clazz : RDKitAdapterCellSupport.expandByAdaptableTypes(m_valueClasses)) {
             if (colType.isCompatible(clazz) || colType.isAdaptable(clazz)) {
                 return true;
             }
