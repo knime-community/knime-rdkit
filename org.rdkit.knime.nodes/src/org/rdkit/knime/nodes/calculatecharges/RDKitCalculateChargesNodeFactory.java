@@ -51,15 +51,27 @@ package org.rdkit.knime.nodes.calculatecharges;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitCalculateCharges" Node.
  * 
  *
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitCalculateChargesNodeFactory 
-        extends NodeFactory<RDKitCalculateChargesNodeModel> {
+        extends NodeFactory<RDKitCalculateChargesNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitCalculateCharges functionality
@@ -110,9 +122,54 @@ public class RDKitCalculateChargesNodeFactory
     /**
      * {@inheritDoc}
      */
+    private static final String NODE_NAME = "RDKit Calculate Charges";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Calculates Gasteiger charges for all atoms of a molecule.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Calculates Gasteiger charges for all atoms of a molecule. The charges are computed using an
+                iterative procedure presented in J. Gasteiger, M. Marseli: Iterative Equalization of Orbital
+                Electronegativity - A Rapid Access to Atomic Charges, Tetrahedron Vol 36 p3219 1980
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit molecules", """
+                Input table with RDKit Molecules.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Result table", """
+                Table with calculated Gasteiger charges.
+                """)
+    );
+
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitCalculateChargesNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitCalculateChargesNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitCalculateChargesNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
