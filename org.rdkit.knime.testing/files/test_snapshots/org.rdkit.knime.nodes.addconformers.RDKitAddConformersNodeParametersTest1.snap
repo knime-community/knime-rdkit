@@ -1,0 +1,509 @@
+{
+  "data" : {
+    "model" : {
+      "moleculeInputColumnName" : "Molecule",
+      "referenceInputColumnName" : {
+        "regularChoice" : "Molecule"
+      },
+      "moleculeOutputColumnName" : "wetb",
+      "referenceOutputColumnName" : "etbetb",
+      "numberOfConformers" : 13,
+      "maxIterations" : 5,
+      "randomSeed" : -1,
+      "pruneRmsThreshold" : -1.0,
+      "enforceChirality" : true,
+      "useExpTorsionAngles" : false,
+      "etVersion" : 1,
+      "useSmallRingTorsions" : false,
+      "useMacrocycleTorsions" : false,
+      "useMacrocycle14" : true,
+      "useBasicKnowledge" : true,
+      "forceTransAmides" : false,
+      "onlyHeavyAtomsForRMS" : true,
+      "useSymmetryForPruning" : true,
+      "embedFragmentsSeparately" : false,
+      "useRandomCoordinates" : false,
+      "boxSizeMultiplier" : 2.0,
+      "cleanupWithUff" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "boxSizeMultiplier" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Multiplier for the size of the box for random coordinates",
+            "description" : "Specifies a multiplier for the size of the box for random coordinates.",
+            "default" : 2.0
+          },
+          "cleanupWithUff" : {
+            "type" : "boolean",
+            "title" : "Perform a cleanup using UFF (Universal force field) after calculation",
+            "description" : "Set this flag to perform cleanup with UFF after the conformer's calculation. Just clear this flag to\noutput unprocessed conformers in case you want to use another force field for cleanup.\n",
+            "default" : true
+          },
+          "embedFragmentsSeparately" : {
+            "type" : "boolean",
+            "title" : "Embed fragments separately",
+            "description" : "Embed each of the molecule's fragments individually. Each fragment will be centered at the origin (i.e. the fragments will overlap). When this option is not set the fragments will be placed randomly.\n",
+            "default" : true
+          },
+          "enforceChirality" : {
+            "type" : "boolean",
+            "title" : "Enforce the preservation of input chirality",
+            "description" : "Ensures that the chirality/bond stereochemistry specified in the input structures is reflected in the conformers.\n",
+            "default" : true
+          },
+          "etVersion" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Experimental torsion angles version",
+            "description" : "Choose the version of the experimental torsion definitions to use. Possible values are 1 and 2.",
+            "default" : 2
+          },
+          "forceTransAmides" : {
+            "type" : "boolean",
+            "title" : "Force amide bonds to be trans",
+            "description" : "Applies constraints to force amide, ester, and related bonds to have trans configurations.",
+            "default" : true
+          },
+          "maxIterations" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Maximum number of tries to generate conformers",
+            "description" : "Maximum number of tries that the RDKit will use to generate conformers. 0 means that the RDKit code sets the value to 10 times the number of atoms.\n",
+            "default" : 0
+          },
+          "moleculeInputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The input column with RDKit molecules."
+          },
+          "moleculeOutputColumnName" : {
+            "type" : "string",
+            "title" : "Column name for molecules with conformers",
+            "description" : "The output column with the generated conformers."
+          },
+          "numberOfConformers" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Number of conformers",
+            "description" : "Number of conformers to be generated.",
+            "default" : 10
+          },
+          "onlyHeavyAtomsForRMS" : {
+            "type" : "boolean",
+            "title" : "Only use heavy atoms when calculating RMS values",
+            "description" : "When doing RMS pruning only heavy atoms will be used to calculate RMS.",
+            "default" : true
+          },
+          "pruneRmsThreshold" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "RMS threshold for keeping a conformer",
+            "description" : "The RMS threshold for keeping a conformer.",
+            "default" : -1.0
+          },
+          "randomSeed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Random seed",
+            "description" : "A random seed to initialize random number generator.",
+            "default" : -1
+          },
+          "referenceInputColumnName" : {
+            "type" : "object",
+            "properties" : {
+              "regularChoice" : {
+                "type" : "string"
+              },
+              "specialChoice" : {
+                "oneOf" : [ {
+                  "const" : "ROW_ID",
+                  "title" : "RowID"
+                } ]
+              }
+            },
+            "title" : "Reference column (e.g. an ID)",
+            "description" : "The input column with reference data to be assigned to conformer rows.",
+            "default" : {
+              "specialChoice" : "ROW_ID"
+            }
+          },
+          "referenceOutputColumnName" : {
+            "type" : "string",
+            "title" : "Column name for copied reference data",
+            "description" : "The output column with reference data taken from the input table."
+          },
+          "useBasicKnowledge" : {
+            "type" : "boolean",
+            "title" : "Use basic knowledge terms",
+            "description" : "Apply \"basic knowledge\" constraints to planarize atoms which should be planar (e.g. aromatic atoms, conjugated atoms). This uses the \"K\" method described in https://doi.org/10.1021/ci200159y .\n",
+            "default" : true
+          },
+          "useExpTorsionAngles" : {
+            "type" : "boolean",
+            "title" : "Use experimental torsion angle terms",
+            "description" : "Use data from experimental crystal structures to refine some torsion angles. This uses the \"ET\" method described in https://doi.org/10.1021/acs.jcim.5b00654 .\n",
+            "default" : true
+          },
+          "useMacrocycle14" : {
+            "type" : "boolean",
+            "title" : "Use 1-4 distance bound heuristics for macrocycles",
+            "description" : "Use empirical corrections to modify 1-4 distance bounds in macrocycles. This uses the method described in https://doi.org/10.1021/acs.jcim.0c00025 .\n",
+            "default" : true
+          },
+          "useMacrocycleTorsions" : {
+            "type" : "boolean",
+            "title" : "Use experimental torsion angle terms for macrocycles",
+            "description" : "Use data from experimental crystal structures to refine some torsion angles in macrocycles. This uses the method described in https://doi.org/10.1021/acs.jcim.0c00025 .\n",
+            "default" : true
+          },
+          "useRandomCoordinates" : {
+            "type" : "boolean",
+            "title" : "Use random coordinates as a starting point instead of distance geometry",
+            "description" : "Setting this flag will use random coordinates as a starting point instead of distance geometry.",
+            "default" : false
+          },
+          "useSmallRingTorsions" : {
+            "type" : "boolean",
+            "title" : "Use experimental torsion angle terms for small rings",
+            "description" : "Use data from experimental crystal structures to refine some torsion angles in small rings. This uses the \"srET\" method described in https://doi.org/10.1021/acs.jcim.2c00043 .\n",
+            "default" : false
+          },
+          "useSymmetryForPruning" : {
+            "type" : "boolean",
+            "title" : "Use molecular symmetry when pruning conformers",
+            "description" : "When doing RMS pruning molecular symmetry will be taken into account. Note that for reasons of computation efficiency, when this option is enabled only the atoms' indices will be used to compute their symmetry class.\n",
+            "default" : true
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/moleculeInputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/referenceInputColumnName",
+      "options" : {
+        "format" : "singleSelection",
+        "specialChoices" : [ {
+          "id" : "ROW_ID",
+          "text" : "RowID"
+        } ]
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/moleculeOutputColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/referenceOutputColumnName"
+    }, {
+      "label" : "Conformer Calculation",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/numberOfConformers",
+        "options" : {
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 2147483647.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 2.147483647E9
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least -2147483648.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : -2.147483648E9
+              }
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/maxIterations",
+        "options" : {
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 2147483647.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 2.147483647E9
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least 0.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : 0.0
+              }
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/randomSeed",
+        "options" : {
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 2147483647.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 2.147483647E9
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least -2147483648.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : -2.147483648E9
+              }
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/pruneRmsThreshold"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/enforceChirality",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/useExpTorsionAngles",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/etVersion",
+        "options" : {
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 2.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 2.0
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least 1.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : 1.0
+              }
+            }
+          },
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/useSmallRingTorsions",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/useMacrocycleTorsions",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/useMacrocycle14",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/useBasicKnowledge",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/forceTransAmides",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/onlyHeavyAtomsForRMS",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/useSymmetryForPruning",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/embedFragmentsSeparately",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/useRandomCoordinates",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/boxSizeMultiplier",
+        "options" : {
+          "isAdvanced" : true
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/cleanupWithUff",
+        "options" : {
+          "format" : "checkbox",
+          "isAdvanced" : true
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "moleculeInputColumnName" : {
+            "configKey" : "input_mol_column"
+          },
+          "referenceInputColumnName" : {
+            "configPaths" : [ [ "columnName" ], [ "useRowID" ] ],
+            "route" : [ "input_ref_column" ]
+          },
+          "moleculeOutputColumnName" : {
+            "configKey" : "output_mol_name"
+          },
+          "referenceOutputColumnName" : {
+            "configKey" : "output_ref_name"
+          },
+          "numberOfConformers" : {
+            "configKey" : "numberConformers"
+          },
+          "maxIterations" : {
+            "configKey" : "maxIterations"
+          },
+          "randomSeed" : {
+            "configKey" : "seed"
+          },
+          "pruneRmsThreshold" : {
+            "configKey" : "pruneRmsThreshold"
+          },
+          "enforceChirality" : {
+            "configKey" : "enforceChirality"
+          },
+          "useExpTorsionAngles" : {
+            "configKey" : "useExpTorsionAngles"
+          },
+          "etVersion" : {
+            "configKey" : "ETversion"
+          },
+          "useSmallRingTorsions" : {
+            "configKey" : "useSmallRingTorsions"
+          },
+          "useMacrocycleTorsions" : {
+            "configKey" : "useMacrocycleTorsions"
+          },
+          "useMacrocycle14" : {
+            "configKey" : "useMacrocycle14"
+          },
+          "useBasicKnowledge" : {
+            "configKey" : "useBasicKnowledge"
+          },
+          "forceTransAmides" : {
+            "configKey" : "forceTransAmides"
+          },
+          "onlyHeavyAtomsForRMS" : {
+            "configKey" : "onlyHeavyAtomsForRMS"
+          },
+          "useSymmetryForPruning" : {
+            "configKey" : "useSymmetryForPruning"
+          },
+          "embedFragmentsSeparately" : {
+            "configKey" : "embedFragmentsSeparately"
+          },
+          "useRandomCoordinates" : {
+            "configKey" : "useRandomCoordinates"
+          },
+          "boxSizeMultiplier" : {
+            "configKey" : "boxSizeMultiplier"
+          },
+          "cleanupWithUff" : {
+            "configKey" : "cleanup_with_uff"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/moleculeInputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/referenceInputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/moleculeInputColumnName"
+    },
+    "dependencies" : [ "#/properties/model/properties/moleculeInputColumnName", "#/properties/model/properties/moleculeOutputColumnName", "#/properties/model/properties/referenceOutputColumnName" ]
+  } ]
+}

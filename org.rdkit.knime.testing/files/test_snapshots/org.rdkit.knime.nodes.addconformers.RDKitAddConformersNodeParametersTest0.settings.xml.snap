@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_mol_column" type="xstring" value="Molecule"/>
+    <config key="input_ref_column">
+        <entry key="useRowID" type="xboolean" value="false"/>
+        <entry key="columnName" type="xstring" value="Molecule"/>
+    </config>
+    <entry key="output_mol_name" type="xstring" value="wetb"/>
+    <entry key="output_ref_name" type="xstring" value="etbetb"/>
+    <entry key="numberConformers" type="xint" value="13"/>
+    <entry key="maxIterations" type="xint" value="5"/>
+    <entry key="seed" type="xint" value="-1"/>
+    <entry key="pruneRmsThreshold" type="xdouble" value="-1.0"/>
+    <entry key="enforceChirality" type="xboolean" value="true"/>
+    <entry key="useExpTorsionAngles" type="xboolean" value="false"/>
+    <entry key="ETversion" type="xint" value="1"/>
+    <entry key="useSmallRingTorsions" type="xboolean" value="false"/>
+    <entry key="useMacrocycleTorsions" type="xboolean" value="false"/>
+    <entry key="useMacrocycle14" type="xboolean" value="true"/>
+    <entry key="useBasicKnowledge" type="xboolean" value="true"/>
+    <entry key="forceTransAmides" type="xboolean" value="false"/>
+    <entry key="onlyHeavyAtomsForRMS" type="xboolean" value="true"/>
+    <entry key="useSymmetryForPruning" type="xboolean" value="true"/>
+    <entry key="embedFragmentsSeparately" type="xboolean" value="false"/>
+    <entry key="useRandomCoordinates" type="xboolean" value="false"/>
+    <entry key="boxSizeMultiplier" type="xdouble" value="2.0"/>
+    <entry key="cleanup_with_uff" type="xboolean" value="false"/>
+</config>
