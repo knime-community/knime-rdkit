@@ -1,0 +1,124 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumn" : "Molecule",
+      "minPath" : 4,
+      "maxPath" : 7
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The column containing the molecules."
+          },
+          "maxPath" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Max path length",
+            "description" : "The maximum size (in bonds) of the subgraphs to be included.",
+            "default" : 7
+          },
+          "minPath" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Min path length",
+            "description" : "The minimum size (in bonds) of the subgraphs to be included.",
+            "default" : 4
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/minPath",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 10.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 10.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/maxPath",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 10.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 10.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "minPath" : {
+            "configKey" : "min_path"
+          },
+          "maxPath" : {
+            "configKey" : "max_path"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ]
+}
