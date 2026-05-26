@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="input_mol_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="input_mol_column" type="xstring" value="Molecule"/>
+        <config key="input_ref_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="input_ref_column">
+            <entry key="useRowID" type="xboolean" value="false"/>
+            <entry key="columnName" type="xstring" value="Molecule"/>
+        </config>
+        <config key="numberConformers_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="numberConformers" type="xint" value="13"/>
+        <config key="maxIterations_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="maxIterations" type="xint" value="5"/>
+        <config key="seed_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="seed" type="xint" value="-1"/>
+        <config key="pruneRmsThreshold_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="pruneRmsThreshold" type="xdouble" value="-1.0"/>
+        <config key="output_mol_name_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="output_mol_name" type="xstring" value="wetb"/>
+        <config key="output_ref_name_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="output_ref_name" type="xstring" value="etbetb"/>
+        <config key="enforceChirality_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="enforceChirality" type="xboolean" value="true"/>
+        <config key="useExpTorsionAngles_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="useExpTorsionAngles" type="xboolean" value="false"/>
+        <config key="ETversion_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="ETversion" type="xint" value="1"/>
+        <config key="useSmallRingTorsions_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="useSmallRingTorsions" type="xboolean" value="false"/>
+        <config key="useMacrocycleTorsions_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="useMacrocycleTorsions" type="xboolean" value="false"/>
+        <config key="useMacrocycle14_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="useMacrocycle14" type="xboolean" value="true"/>
+        <config key="useBasicKnowledge_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="useBasicKnowledge" type="xboolean" value="true"/>
+        <config key="forceTransAmides_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="forceTransAmides" type="xboolean" value="false"/>
+        <config key="onlyHeavyAtomsForRMS_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="onlyHeavyAtomsForRMS" type="xboolean" value="true"/>
+        <config key="useSymmetryForPruning_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="useSymmetryForPruning" type="xboolean" value="true"/>
+        <config key="embedFragmentsSeparately_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="embedFragmentsSeparately" type="xboolean" value="false"/>
+        <config key="useRandomCoordinates_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="useRandomCoordinates" type="xboolean" value="false"/>
+        <config key="boxSizeMultiplier_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="boxSizeMultiplier" type="xdouble" value="2.0"/>
+        <config key="cleanup_with_uff_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="cleanup_with_uff" type="xboolean" value="false"/>
+    </config>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="CONFIGURED"/>
+    <entry key="factory" type="xstring" value="org.rdkit.knime.nodes.addconformers.RDKitAddConformersNodeFactory"/>
+    <entry key="node-name" type="xstring" value="RDKit Add Conformers"/>
+    <entry key="node-bundle-name" type="xstring" value="RDKit Nodes"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="org.rdkit.knime.nodes"/>
+    <entry key="node-bundle-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-bundle-version" type="xstring" value="5.2.1.v202507231837"/>
+    <entry key="node-feature-name" type="xstring" value="RDKit Nodes Feature"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="org.rdkit.knime.feature.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-feature-version" type="xstring" value="5.2.1.v202507231837"/>
+    <config key="factory_settings"/>
+    <entry key="name" type="xstring" value="RDKit Add Conformers"/>
+    <entry key="hasContent" type="xboolean" value="false"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" isnull="true" value=""/>
+    </config>
+</config>
