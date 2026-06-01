@@ -55,6 +55,7 @@ import org.knime.node.parameters.updates.ValueReference;
 import org.knime.node.parameters.widget.choices.ChoicesProvider;
 import org.rdkit.knime.util.RDKitMoleculeColumnAutoGuessProvider;
 import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
+import org.rdkit.knime.util.RDKitResultColumnNameAutoGuessProvider;
 
 /**
  * Node parameters for RDKit Calculate Charges.
@@ -85,5 +86,19 @@ final class RDKitCalculateChargesNodeParameters implements NodeParameters {
     @Widget(title = "New column name",
         description = "The name of the new column, which will contain the calculation results.")
     @Persist(configKey = RDKitCalculateChargesNodeModel.CFG_NEW_COLUMN_NAME)
+    @ValueProvider(NewColumnNameProvider.class)
+    @ValueReference(NewColumnNameRef.class)
     String m_newColumnName;
+    
+    static final class NewColumnNameRef implements ParameterReference<String> {
+	}
+    
+    static final class NewColumnNameProvider extends RDKitResultColumnNameAutoGuessProvider {
+
+		protected NewColumnNameProvider() {
+			super(InputColumnRef.class, NewColumnNameRef.class, "(Charges)");
+		}
+    	
+    }
+    
 }
