@@ -50,6 +50,7 @@ package org.rdkit.knime.nodes.functionalgroupfilter;
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
+import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
@@ -77,12 +78,14 @@ import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentString;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.core.node.port.PortObjectSpec;
 import org.knime.filehandling.core.connections.FSLocationUtil;
 import org.knime.filehandling.core.data.location.variable.FSLocationVariableType;
 import org.knime.filehandling.core.defaultnodesettings.EnumConfig;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.reader.DialogComponentReaderFileChooser;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.reader.SettingsModelReaderFileChooser;
 import org.knime.filehandling.core.defaultnodesettings.filtermode.SettingsModelFilterMode;
+import org.knime.filehandling.core.defaultnodesettings.status.StatusMessage;
 import org.rdkit.knime.nodes.functionalgroupfilter.SettingsModelFunctionalGroupConditions.Qualifier;
 import org.rdkit.knime.types.RDKitMolValue;
 import org.rdkit.knime.util.DialogComponentColumnNameSelection;
@@ -460,4 +463,25 @@ public class FunctionalGroupFilterV2NodeDialog extends DefaultNodeSettingsPane {
 		result.setEnabled(modelRecordFailedPatterns.getBooleanValue());
 		return result;
 	}
+	
+    /**
+     * Configures the file chooser model.
+     * @param specs the input port specs
+     * @param statusMessageConsumer consumer for status messages during configuration
+     * @throws InvalidSettingsException if configuration fails
+     */
+    public void configureGroupConfigFileChooser(final PortObjectSpec[] specs,
+        final Consumer<StatusMessage> statusMessageConsumer) throws InvalidSettingsException {
+        m_modelGroupConfigPath.configureInModel(specs, statusMessageConsumer);
+    }
+    
+    /**
+     * Returns the model for the functional group definition file chooser.
+     * 
+     * @return Settings model for functional group definition file chooser.
+     */
+    public SettingsModelReaderFileChooser getGroupConfigFileChooserModel() {
+		return m_modelGroupConfigPath;
+	}
+    
 }

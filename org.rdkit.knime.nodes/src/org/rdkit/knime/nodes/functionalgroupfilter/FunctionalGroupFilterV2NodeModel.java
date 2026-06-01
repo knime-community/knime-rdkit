@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.RDKit.Match_Vect_Vect;
 import org.RDKit.ROMol;
@@ -69,14 +70,17 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.context.NodeCreationConfiguration;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.reader.SettingsModelReaderFileChooser;
+import org.knime.filehandling.core.defaultnodesettings.status.NodeModelStatusConsumer;
 import org.knime.filehandling.core.defaultnodesettings.status.StatusMessage;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
+import org.rdkit.knime.nodes.functionalgroupfilter.RDKitFunctionalGroupFilterNodeParameters.FileSwitch;
 import org.rdkit.knime.nodes.functionalgroupfilter.SettingsModelFunctionalGroupConditions.FunctionalGroupCondition;
 import org.rdkit.knime.nodes.functionalgroupfilter.SettingsModelFunctionalGroupConditions.Qualifier;
 import org.rdkit.knime.types.RDKitMolValue;
@@ -234,6 +238,14 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
             }
         }
     }
+	
+	@Override
+	protected void saveSettingsTo(NodeSettingsWO settings) {
+		super.saveSettingsTo(settings);
+		final var modelInputPath = m_modelInputPath.getPath();
+		settings.addString("definitionFileSwitch", modelInputPath == null || modelInputPath.isBlank() ? 
+				FileSwitch.DEFAULT_CONFIGURATION.name() : FileSwitch.FILE_SELECTION.name());
+	}
 
 	@Override
 	protected PortObjectSpec[] configure(final PortObjectSpec[] inSpecs)
@@ -694,5 +706,14 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
 					"The functional group definitions could not be read successfully.", exc);
 		}
 	}
+	
+	/**
+     * Retrieves the {@link NodeModelStatusConsumer} of the node model.
+     *
+     * @return The {@code Consumer<StatusMessage>} instance to handle status messages from KNIME File Handling API.
+     */
+    public Consumer<StatusMessage> getModelStatusConsumer() {
+        return this::onStatusMessage;
+    }
 
 }
