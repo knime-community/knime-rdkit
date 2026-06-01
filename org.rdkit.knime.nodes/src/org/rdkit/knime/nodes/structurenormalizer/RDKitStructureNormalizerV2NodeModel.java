@@ -82,6 +82,8 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.context.NodeCreationConfiguration;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
@@ -93,6 +95,8 @@ import org.knime.filehandling.core.defaultnodesettings.status.StatusMessage;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
 import org.rdkit.knime.nodes.functionalgroupfilter.FunctionalGroupDefinitions;
+import org.rdkit.knime.nodes.structurenormalizer.RDKitStructureNormalizerV2NodeParameters.FileSwitch;
+import org.rdkit.knime.nodes.structurenormalizer.RDKitStructureNormalizerV2NodeParameters.LogFileSwitch;
 import org.rdkit.knime.util.FileSystemsUtils;
 import org.rdkit.knime.util.FileUtils;
 import org.rdkit.knime.util.InputDataInfo;
@@ -148,11 +152,11 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 	protected static final String DEFAULT_ADVANCED_OPTIONS = "-cl 3\n-cn 999";
 
 	/** The resource name of the default transformation configuration file. */
-	protected static final String DEFAULT_TRANSFORMATION_CONFIGURATION_FILE =
+	public static final String DEFAULT_TRANSFORMATION_CONFIGURATION_FILE =
 			"/org/rdkit/knime/nodes/structurenormalizer/checkfgs-rdkit.trn";
 
 	/** The resource name of the default transformation configuration file. */
-	protected static final String DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE =
+	public static final String DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE =
 			"/org/rdkit/knime/nodes/structurenormalizer/checkfgs-rdkit.chk";
 
 	/** The lock to ensure that only one thread works with the structure checker at a time. */
@@ -245,7 +249,9 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 	/** Settings model to define additional codes that shall be treated as failures instead of warnings. */
 	private final SettingsModelEnumerationArray<StruCheckCode> m_modelAdditionalFailureCodesConfiguration =
 			registerSettings(RDKitStructureNormalizerV2NodeDialog.createAdditionalFailureCodesConfigurationModel());
-
+	
+	private LogFileSwitch m_logFileSwitch;
+	
 	// Intermediate results
 
 	/** Quick access to input type during processing. */
@@ -277,6 +283,8 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 				.createAugmentedAtomsConfigurationPathModel(nodeCreationConfig));
 		m_modelLogPath = registerSettings(RDKitStructureNormalizerV2NodeDialog
 				.createLogPathModel(nodeCreationConfig));
+		
+		m_logFileSwitch = LogFileSwitch.DISABLE_LOGGING;
 	}
 
 	//
@@ -299,6 +307,29 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 		}
 	}
 
+	@Override
+	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
+		super.loadValidatedSettingsFrom(settings);
+		m_logFileSwitch = LogFileSwitch.valueOf(settings.getString("logFileSwitch", 
+				LogFileSwitch.DISABLE_LOGGING.name()));
+	}
+
+	@Override
+	protected void saveSettingsTo(NodeSettingsWO settings) {
+		super.saveSettingsTo(settings);
+		final var modelLogPath = m_modelLogPath.getLocation().getPath();
+		settings.addString("logFileSwitch", modelLogPath == null || modelLogPath.isEmpty() ? 
+				LogFileSwitch.DISABLE_LOGGING.name() : LogFileSwitch.ENABLE_LOGGING.name());
+		final var transformationConfigPath = m_modelTransformationConfigurationPath.getPath();
+		settings.addString("transformationConfigFileSwitch", 
+				transformationConfigPath == null || transformationConfigPath.isEmpty() ?
+				FileSwitch.DEFAULT_CONFIGURATION.name() : FileSwitch.DEFAULT_CONFIGURATION.name());
+		final var augmentedAtomsConfigPath = m_modelAugmentedAtomsConfigurationPath.getPath();
+		settings.addString("augmentedAtomsConfigFileSwitch", 
+				augmentedAtomsConfigPath == null || augmentedAtomsConfigPath.isEmpty() ?
+				FileSwitch.DEFAULT_CONFIGURATION.name() : FileSwitch.DEFAULT_CONFIGURATION.name());
+	}
+	
 	@Override
 	protected PortObjectSpec[] configure(final PortObjectSpec[] inSpecs)
 			throws InvalidSettingsException
@@ -406,34 +437,36 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 					m_modelAugmentedAtomsConfigurationPath.getPath() + " is empty.");
 		}
 
-		// Perform checks on the specified log output file
-		try (final WritePathAccessor pathAccessor = m_modelLogPath.createWritePathAccessor()) {
-			final Path path = pathAccessor.getOutputPath(this::onStatusMessage);
-			if (path != null && !path.toString().isBlank()) {
-				if (Files.exists(path)) {
-					if (!FileOverwritePolicy.OVERWRITE.equals(m_modelLogPath.getFileOverwritePolicy())) {
-						throw new InvalidSettingsException("The specified log file exists already. " +
-								"You may remove the file or switch on the Overwrite option to grant execution.");
-					}
-				}
-				else {
-					final Path pathParent = path.getParent();
-					if (pathParent != null && !Files.exists(pathParent)) {
-						if (!m_modelLogPath.isCreateMissingFolders()) {
-							throw new InvalidSettingsException("Directory of specified log file does not exist.");
+		if (m_logFileSwitch == LogFileSwitch.ENABLE_LOGGING) {
+			// Perform checks on the specified log output file
+			try (final WritePathAccessor pathAccessor = m_modelLogPath.createWritePathAccessor()) {
+				final Path path = pathAccessor.getOutputPath(this::onStatusMessage);
+				if (path != null && !path.toString().isBlank()) {
+					if (Files.exists(path)) {
+						if (!FileOverwritePolicy.OVERWRITE.equals(m_modelLogPath.getFileOverwritePolicy())) {
+							throw new InvalidSettingsException("The specified log file exists already. " +
+									"You may remove the file or switch on the Overwrite option to grant execution.");
 						}
-
-						getWarningConsolidator().saveWarning(
-								"Directory of specified log file does not exist " +
-										"and will be created.");
+					}
+					else {
+						final Path pathParent = path.getParent();
+						if (pathParent != null && !Files.exists(pathParent)) {
+							if (!m_modelLogPath.isCreateMissingFolders()) {
+								throw new InvalidSettingsException("Directory of specified log file does not exist.");
+							}
+							
+							getWarningConsolidator().saveWarning(
+									"Directory of specified log file does not exist " +
+									"and will be created.");
+						}
 					}
 				}
 			}
+			catch (IOException e) {
+				getWarningConsolidator().saveWarning("Failed to access log file: " + e.getMessage());
+			}
 		}
-		catch (IOException e) {
-			getWarningConsolidator().saveWarning("Failed to access log file: " + e.getMessage());
-		}
-
+		
 		// Consolidate all warnings and make them available to the user
 		generateWarnings();
 

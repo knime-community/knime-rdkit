@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="input_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="input_column" type="xstring" value="Molecule"/>
+        <config key="passed_corrected_structure_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="passed_corrected_structure_column" type="xstring" value="abc1"/>
+        <config key="passed_flags_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="passed_flags_column" type="xstring" value="abc2"/>
+        <config key="passed_warning_messages_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="passed_warning_messages_column" type="xstring" value="abc3"/>
+        <config key="failed_error_flags_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="failed_error_flags_column" type="xstring" value="abc4"/>
+        <config key="failed_error_messages_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="failed_error_messages_column" type="xstring" value="abc5"/>
+        <config key="log_file_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_WriterFileChooser"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="log_file">
+            <config key="file_system_chooser__Internals">
+                <entry key="has_fs_port" type="xboolean" value="false"/>
+                <entry key="overwritten_by_variable" type="xboolean" value="false"/>
+                <entry key="convenience_fs_category" type="xstring" value="LOCAL"/>
+                <entry key="relative_to" type="xstring" value="knime.workflow.data"/>
+                <entry key="mountpoint" type="xstring" value="knime-temp-space"/>
+                <entry key="spaceId" type="xstring" value=""/>
+                <entry key="spaceName" type="xstring" value=""/>
+                <entry key="custom_url_timeout" type="xint" value="10000"/>
+                <entry key="connected_fs" type="xboolean" value="true"/>
+            </config>
+            <config key="path">
+                <entry key="location_present" type="xboolean" value="true"/>
+                <entry key="file_system_type" type="xstring" value="LOCAL"/>
+                <entry key="path" type="xstring" value="test.log"/>
+            </config>
+            <config key="filter_mode_Internals">
+                <entry key="SettingsModelID" type="xstring" value="SMID_FilterMode"/>
+                <entry key="EnabledStatus" type="xboolean" value="true"/>
+            </config>
+            <entry key="create_missing_folders" type="xboolean" value="false"/>
+            <entry key="if_path_exists" type="xstring" value="fail"/>
+        </config>
+        <config key="switches_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="switches">
+            <entry key="array-size" type="xint" value="5"/>
+            <entry key="0" type="xstring" value="cc"/>
+            <entry key="1" type="xstring" value="cs"/>
+            <entry key="2" type="xstring" value="ds"/>
+            <entry key="3" type="xstring" value="dz"/>
+            <entry key="4" type="xstring" value="tm"/>
+        </config>
+        <config key="advanced_options_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="advanced_options" type="xstring" value="-cl 3%%00010-cn 999"/>
+        <config key="transformation_configuration_file_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_ReaderFileChooser"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="transformation_configuration_file">
+            <config key="file_system_chooser__Internals">
+                <entry key="has_fs_port" type="xboolean" value="false"/>
+                <entry key="overwritten_by_variable" type="xboolean" value="false"/>
+                <entry key="convenience_fs_category" type="xstring" value="LOCAL"/>
+                <entry key="relative_to" type="xstring" value="knime.workflow.data"/>
+                <entry key="mountpoint" type="xstring" value="knime-temp-space"/>
+                <entry key="spaceId" type="xstring" value=""/>
+                <entry key="spaceName" type="xstring" value=""/>
+                <entry key="custom_url_timeout" type="xint" value="10000"/>
+                <entry key="connected_fs" type="xboolean" value="true"/>
+            </config>
+            <config key="path">
+                <entry key="location_present" type="xboolean" value="true"/>
+                <entry key="file_system_type" type="xstring" value="LOCAL"/>
+                <entry key="path" type="xstring" value=""/>
+            </config>
+            <config key="filter_mode_Internals">
+                <entry key="SettingsModelID" type="xstring" value="SMID_FilterMode"/>
+                <entry key="EnabledStatus" type="xboolean" value="true"/>
+            </config>
+        </config>
+        <config key="augmented_atoms_configuration_file_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_ReaderFileChooser"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="augmented_atoms_configuration_file">
+            <config key="file_system_chooser__Internals">
+                <entry key="has_fs_port" type="xboolean" value="false"/>
+                <entry key="overwritten_by_variable" type="xboolean" value="false"/>
+                <entry key="convenience_fs_category" type="xstring" value="LOCAL"/>
+                <entry key="relative_to" type="xstring" value="knime.workflow.data"/>
+                <entry key="mountpoint" type="xstring" value="knime-temp-space"/>
+                <entry key="spaceId" type="xstring" value=""/>
+                <entry key="spaceName" type="xstring" value=""/>
+                <entry key="custom_url_timeout" type="xint" value="10000"/>
+                <entry key="connected_fs" type="xboolean" value="true"/>
+            </config>
+            <config key="path">
+                <entry key="location_present" type="xboolean" value="true"/>
+                <entry key="file_system_type" type="xstring" value="LOCAL"/>
+                <entry key="path" type="xstring" value="test.chk"/>
+            </config>
+            <config key="filter_mode_Internals">
+                <entry key="SettingsModelID" type="xstring" value="SMID_FilterMode"/>
+                <entry key="EnabledStatus" type="xboolean" value="true"/>
+            </config>
+        </config>
+        <config key="additional_failure_codes_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_stringarray"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="additional_failure_codes">
+            <entry key="array-size" type="xint" value="2"/>
+            <entry key="0" type="xstring" value="DUBIOUS_STEREO_REMOVED"/>
+            <entry key="1" type="xstring" value="STEREO_TRANSFORMED"/>
+        </config>
+    </config>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="IDLE"/>
+    <config key="nodecontainer_message">
+        <entry key="type" type="xstring" value="WARNING"/>
+        <entry key="message" type="xstring" value="The specified file test.chk does not exist."/>
+    </config>
+    <entry key="factory" type="xstring" value="org.rdkit.knime.nodes.structurenormalizer.RDKitStructureNormalizerV2NodeFactory"/>
+    <entry key="node-name" type="xstring" value="RDKit Structure Normalizer"/>
+    <entry key="node-bundle-name" type="xstring" value="RDKit Nodes"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="org.rdkit.knime.nodes"/>
+    <entry key="node-bundle-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-bundle-version" type="xstring" value="5.2.1.v202507231837"/>
+    <entry key="node-feature-name" type="xstring" value="RDKit Nodes Feature"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="org.rdkit.knime.feature.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-feature-version" type="xstring" value="5.2.1.v202507231837"/>
+    <config key="factory_settings"/>
+    <config key="node_creation_config">
+        <config key="File System Connection"/>
+        <config key="Input table with Molecules"/>
+        <config key="Passed Molecules"/>
+        <config key="Failed Molecules"/>
+    </config>
+    <entry key="name" type="xstring" value="RDKit Structure Normalizer"/>
+    <entry key="hasContent" type="xboolean" value="false"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+        <config key="port_2">
+            <entry key="index" type="xint" value="2"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" isnull="true" value=""/>
+    </config>
+</config>
