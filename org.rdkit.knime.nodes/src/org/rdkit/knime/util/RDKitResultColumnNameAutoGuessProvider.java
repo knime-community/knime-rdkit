@@ -105,7 +105,7 @@ public abstract class RDKitResultColumnNameAutoGuessProvider implements StatePro
 	}
 	
 	/**
-	 * Override this method to provide to provide an array of column names to exclude from the uniqueness check, 
+	 * Override this method to provide an array of column names to exclude from the uniqueness check, 
 	 * e.g. because these columns will be removed. Can be null.
 	 * 
 	 * @param parametersInput the parameters input
