@@ -78,6 +78,9 @@ public abstract class RDKitResultColumnNameAutoGuessProvider implements StatePro
 	@Override
 	public String computeState(NodeParametersInput parametersInput) throws StateComputationAbortException {
 		final String strInputColumnName = m_inputColumnNameSupplier.get();
+		if (strInputColumnName == null || strInputColumnName.isEmpty()) {
+			throw new StateComputationAbortException();
+		}
 		return autoGuessColumnName(parametersInput.getInTableSpec(m_tableInputIndex).orElse(null), 
 				m_resultColumnNameSupplier.get(),
 				getAdditionalColumnNames(parametersInput, strInputColumnName),
@@ -102,8 +105,8 @@ public abstract class RDKitResultColumnNameAutoGuessProvider implements StatePro
 	}
 	
 	/**
-	 * Override this method to provide column names to exclude from the auto-guess e.g. columns which are part of the 
-	 * input table spec.
+	 * Override this method to provide to provide an array of column names to exclude from the uniqueness check, 
+	 * e.g. because these columns will be removed. Can be null.
 	 * 
 	 * @param parametersInput the parameters input
 	 * @param currentInputColumnName the current input column name, which can be 
