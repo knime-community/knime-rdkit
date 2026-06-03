@@ -68,5 +68,11 @@
         }
       } ]
     } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumn", "#/properties/model/properties/newColumnName" ]
   } ]
 }

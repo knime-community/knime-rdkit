@@ -82,5 +82,11 @@
         }
       } ]
     } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumnName"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumnName", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns" ]
   } ]
 }

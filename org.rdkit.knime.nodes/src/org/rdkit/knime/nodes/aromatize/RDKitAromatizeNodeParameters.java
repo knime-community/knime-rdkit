@@ -48,7 +48,10 @@
  */
 package org.rdkit.knime.nodes.aromatize;
 
+import java.util.function.Supplier;
+
 import org.knime.node.parameters.NodeParameters;
+import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
 import org.knime.node.parameters.persistence.Persist;
@@ -58,6 +61,7 @@ import org.knime.node.parameters.updates.ValueReference;
 import org.knime.node.parameters.widget.choices.ChoicesProvider;
 import org.rdkit.knime.util.RDKitMoleculeColumnAutoGuessProvider;
 import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
+import org.rdkit.knime.util.RDKitResultColumnNameAutoGuessProvider;
 
 /**
  * Node parameters for RDKit Aromatizer.
@@ -87,10 +91,42 @@ final class RDKitAromatizeNodeParameters implements NodeParameters {
     @Widget(title = "New column name",
         description = "The name of the new column, which will contain the aromatized RDKit molecules.")
     @Persist(configKey = RDKitAromatizeNodeModel.CFG_NEW_COLUMN_NAME)
+    @ValueProvider(NewColumnNameProvider.class)
+    @ValueReference(NewColumnNameRef.class)
     String m_newColumnName;
+    
+    static final class NewColumnNameRef implements ParameterReference<String> {
+	}
+    
+    static final class NewColumnNameProvider extends RDKitResultColumnNameAutoGuessProvider {
+
+		protected NewColumnNameProvider() {
+			super(InputColumnRef.class, NewColumnNameRef.class, "(Aromatized)");
+		}
+		
+		private Supplier<Boolean> m_removeSourceColumn;
+		
+		@Override
+		public void init(StateProviderInitializer initializer) {
+			super.init(initializer);
+			m_removeSourceColumn = initializer.getValueSupplier(RemoveSourceColumnsRef.class);
+		}
+
+		@Override
+		protected String[] getExcludedColumnNames(NodeParametersInput parametersInput, 
+			final String currentInputColumnName) {
+			return (m_removeSourceColumn.get() ? new String[] { currentInputColumnName } : null);
+		}
+    	
+    }
 
     @Widget(title = "Remove source column",
         description = "If checked, the source column is removed from the result table.")
     @Persist(configKey = RDKitAromatizeNodeModel.CFG_REMOVE_SOURCE_COLUMNS)
+    @ValueReference(RemoveSourceColumnsRef.class)
     boolean m_removeSourceColumns;
+    
+    static final class RemoveSourceColumnsRef implements ParameterReference<Boolean> {
+	}
+    
 }
