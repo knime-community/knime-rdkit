@@ -58,6 +58,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.RDKit.RDKFuncs;
 import org.RDKit.StringInt_Pair;
@@ -82,9 +83,12 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.context.NodeCreationConfiguration;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
+import org.knime.core.node.util.CheckUtils;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.reader.SettingsModelReaderFileChooser;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.FileOverwritePolicy;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.SettingsModelWriterFileChooser;
@@ -93,6 +97,8 @@ import org.knime.filehandling.core.defaultnodesettings.status.StatusMessage;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
 import org.rdkit.knime.nodes.functionalgroupfilter.FunctionalGroupDefinitions;
+import org.rdkit.knime.nodes.structurenormalizer.RDKitStructureNormalizerV2NodeParameters.FileSwitch;
+import org.rdkit.knime.nodes.structurenormalizer.RDKitStructureNormalizerV2NodeParameters.LogFileSwitch;
 import org.rdkit.knime.util.FileSystemsUtils;
 import org.rdkit.knime.util.FileUtils;
 import org.rdkit.knime.util.InputDataInfo;
@@ -148,11 +154,11 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 	protected static final String DEFAULT_ADVANCED_OPTIONS = "-cl 3\n-cn 999";
 
 	/** The resource name of the default transformation configuration file. */
-	protected static final String DEFAULT_TRANSFORMATION_CONFIGURATION_FILE =
+	public static final String DEFAULT_TRANSFORMATION_CONFIGURATION_FILE =
 			"/org/rdkit/knime/nodes/structurenormalizer/checkfgs-rdkit.trn";
 
 	/** The resource name of the default transformation configuration file. */
-	protected static final String DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE =
+	public static final String DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE =
 			"/org/rdkit/knime/nodes/structurenormalizer/checkfgs-rdkit.chk";
 
 	/** The lock to ensure that only one thread works with the structure checker at a time. */
@@ -187,6 +193,18 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 
 	/** Internally used factory column id for the error messages. */
 	private static final int COL_ID_ERRORS = 3;
+	
+	private static final String CONFIG_KEY_LOG_FILE = "log_file";
+
+	private static final String CONFIG_KEY_LOG_FILE_SWITCH = "logFileSwitch";
+
+	private static final String CONFIG_KEY_TRANSFORMATION_CONFIG_FILE = "transformation_configuration_file";
+
+	private static final String CONFIG_KEY_TRANSFORMATION_CONFIG_FILE_SWITCH = "transformationConfigFileSwitch";
+
+	private static final String CONFIG_KEY_AUGMENTED_ATOMS_CONFIG_FILE = "augmented_atoms_configuration_file";
+
+	private static final String CONFIG_KEY_AUGMENTED_ATOMS_CONFIG_FILE_SWITCH = "augmentedAtomsConfigFileSwitch";
 
 	//
 	// Members
@@ -245,7 +263,13 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 	/** Settings model to define additional codes that shall be treated as failures instead of warnings. */
 	private final SettingsModelEnumerationArray<StruCheckCode> m_modelAdditionalFailureCodesConfiguration =
 			registerSettings(RDKitStructureNormalizerV2NodeDialog.createAdditionalFailureCodesConfigurationModel());
-
+	
+	private LogFileSwitch m_logFileSwitch = LogFileSwitch.DISABLE_LOGGING;
+	
+	private FileSwitch m_transformationConfigFileSwitch = FileSwitch.DEFAULT_CONFIGURATION;
+	
+	private FileSwitch m_augmentedAtomsConfigFileSwitch = FileSwitch.DEFAULT_CONFIGURATION;
+	
 	// Intermediate results
 
 	/** Quick access to input type during processing. */
@@ -299,6 +323,47 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 		}
 	}
 
+	@Override
+	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
+		super.loadValidatedSettingsFrom(settings);
+		m_logFileSwitch = loadConfigFileSwitches(settings, CONFIG_KEY_LOG_FILE, 
+				LogFileSwitch.DISABLE_LOGGING, LogFileSwitch.ENABLE_LOGGING);
+		m_transformationConfigFileSwitch = loadConfigFileSwitches(settings, CONFIG_KEY_TRANSFORMATION_CONFIG_FILE, 
+				FileSwitch.DEFAULT_CONFIGURATION, FileSwitch.FILE_SELECTION);
+		m_augmentedAtomsConfigFileSwitch = loadConfigFileSwitches(settings, CONFIG_KEY_AUGMENTED_ATOMS_CONFIG_FILE, 
+				FileSwitch.DEFAULT_CONFIGURATION, FileSwitch.FILE_SELECTION);
+	}
+	
+	private <E extends Enum<E>> E loadConfigFileSwitches(final NodeSettingsRO settings, final String fileIOConfigKey, 
+		final E defaultValue, final E customValue) {
+		String path;
+		try {
+			final var logFileSettings = settings.getNodeSettings(fileIOConfigKey);
+			final var pathSettings = logFileSettings.getNodeSettings("path");
+			path = pathSettings.getString("path");
+			return path == null || path.isEmpty() ? 
+					defaultValue : customValue;
+		} catch (InvalidSettingsException e) {
+			return defaultValue;
+		}
+	}
+	
+	@Override
+	protected void saveSettingsTo(NodeSettingsWO settings) {
+		super.saveSettingsTo(settings);
+		final var modelLogPath = m_modelLogPath.getLocation().getPath();
+		settings.addString(CONFIG_KEY_LOG_FILE_SWITCH, modelLogPath == null || modelLogPath.isEmpty() ? 
+				LogFileSwitch.DISABLE_LOGGING.name() : LogFileSwitch.ENABLE_LOGGING.name());
+		final var transformationConfigPath = m_modelTransformationConfigurationPath.getPath();
+		settings.addString(CONFIG_KEY_TRANSFORMATION_CONFIG_FILE_SWITCH, 
+				transformationConfigPath == null || transformationConfigPath.isEmpty() ?
+				FileSwitch.DEFAULT_CONFIGURATION.name() : FileSwitch.DEFAULT_CONFIGURATION.name());
+		final var augmentedAtomsConfigPath = m_modelAugmentedAtomsConfigurationPath.getPath();
+		settings.addString(CONFIG_KEY_AUGMENTED_ATOMS_CONFIG_FILE_SWITCH, 
+				augmentedAtomsConfigPath == null || augmentedAtomsConfigPath.isEmpty() ?
+				FileSwitch.DEFAULT_CONFIGURATION.name() : FileSwitch.DEFAULT_CONFIGURATION.name());
+	}
+	
 	@Override
 	protected PortObjectSpec[] configure(final PortObjectSpec[] inSpecs)
 			throws InvalidSettingsException
@@ -393,47 +458,53 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 				"The name %COLUMN_NAME% of the new errors column (table 2) exists already in the input.");
 
 		// Check if the transformation configuration files can be read
-		final String strTransformationConfiguration = getConfiguration(m_modelTransformationConfigurationPath, DEFAULT_TRANSFORMATION_CONFIGURATION_FILE);
+		final String strTransformationConfiguration = getConfiguration(m_modelTransformationConfigurationPath, 
+				path -> m_transformationConfigFileSwitch == FileSwitch.DEFAULT_CONFIGURATION, 
+				DEFAULT_TRANSFORMATION_CONFIGURATION_FILE);
 		if (StringUtils.isEmptyAfterTrimming(strTransformationConfiguration)) {
 			throw new InvalidSettingsException("Transformation configuration defined in " +
 					m_modelTransformationConfigurationPath.getPath() + " is empty.");
 		}
 
 		// Check if the augmented atoms configuration files can be read
-		final String strAugmentedAtomsConfiguration = getConfiguration(m_modelAugmentedAtomsConfigurationPath, DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE);
+		final String strAugmentedAtomsConfiguration = getConfiguration(m_modelAugmentedAtomsConfigurationPath, 
+				path -> m_augmentedAtomsConfigFileSwitch == FileSwitch.DEFAULT_CONFIGURATION, 
+				DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE);
 		if (StringUtils.isEmptyAfterTrimming(strAugmentedAtomsConfiguration)) {
 			throw new InvalidSettingsException("Augmented atoms configuration defined in " +
 					m_modelAugmentedAtomsConfigurationPath.getPath() + " is empty.");
 		}
 
-		// Perform checks on the specified log output file
-		try (final WritePathAccessor pathAccessor = m_modelLogPath.createWritePathAccessor()) {
-			final Path path = pathAccessor.getOutputPath(this::onStatusMessage);
-			if (path != null && !path.toString().isBlank()) {
-				if (Files.exists(path)) {
-					if (!FileOverwritePolicy.OVERWRITE.equals(m_modelLogPath.getFileOverwritePolicy())) {
-						throw new InvalidSettingsException("The specified log file exists already. " +
-								"You may remove the file or switch on the Overwrite option to grant execution.");
-					}
-				}
-				else {
-					final Path pathParent = path.getParent();
-					if (pathParent != null && !Files.exists(pathParent)) {
-						if (!m_modelLogPath.isCreateMissingFolders()) {
-							throw new InvalidSettingsException("Directory of specified log file does not exist.");
+		if (m_logFileSwitch == LogFileSwitch.ENABLE_LOGGING) {
+			// Perform checks on the specified log output file
+			try (final WritePathAccessor pathAccessor = m_modelLogPath.createWritePathAccessor()) {
+				final Path path = pathAccessor.getOutputPath(this::onStatusMessage);
+				if (path != null && !path.toString().isBlank()) {
+					if (Files.exists(path)) {
+						if (!FileOverwritePolicy.OVERWRITE.equals(m_modelLogPath.getFileOverwritePolicy())) {
+							throw new InvalidSettingsException("The specified log file exists already. " +
+									"You may remove the file or switch on the Overwrite option to grant execution.");
 						}
-
-						getWarningConsolidator().saveWarning(
-								"Directory of specified log file does not exist " +
-										"and will be created.");
+					}
+					else {
+						final Path pathParent = path.getParent();
+						if (pathParent != null && !Files.exists(pathParent)) {
+							if (!m_modelLogPath.isCreateMissingFolders()) {
+								throw new InvalidSettingsException("Directory of specified log file does not exist.");
+							}
+							
+							getWarningConsolidator().saveWarning(
+									"Directory of specified log file does not exist " +
+									"and will be created.");
+						}
 					}
 				}
 			}
+			catch (IOException e) {
+				getWarningConsolidator().saveWarning("Failed to access log file: " + e.getMessage());
+			}
 		}
-		catch (IOException e) {
-			getWarningConsolidator().saveWarning("Failed to access log file: " + e.getMessage());
-		}
-
+		
 		// Consolidate all warnings and make them available to the user
 		generateWarnings();
 
@@ -701,6 +772,7 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 							DEFAULT_TRANSFORMATION_CONFIGURATION_FILE :
 								m_modelTransformationConfigurationPath.getPath());
 			String strTransformationConfiguration = getConfiguration(m_modelTransformationConfigurationPath,
+					path -> m_transformationConfigFileSwitch == FileSwitch.DEFAULT_CONFIGURATION,
 					DEFAULT_TRANSFORMATION_CONFIGURATION_FILE);
 			strTransformationConfiguration = strTransformationConfiguration.replace("\r\n", "\n");
 			final File fileTempTransformationConfigFile = File.createTempFile("checkfgs", ".trn");
@@ -723,7 +795,8 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 					(isDefaultConfigurationFile(m_modelAugmentedAtomsConfigurationPath.getPath()) ?
 							DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE :
 								m_modelAugmentedAtomsConfigurationPath.getPath());
-			String strAugmentedAtomsConfiguration = getConfiguration(m_modelAugmentedAtomsConfigurationPath,
+			String strAugmentedAtomsConfiguration = getConfiguration(m_modelAugmentedAtomsConfigurationPath, 
+					path -> m_augmentedAtomsConfigFileSwitch == FileSwitch.DEFAULT_CONFIGURATION,
 					DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE);
 			strAugmentedAtomsConfiguration = strAugmentedAtomsConfiguration.replace("\r\n", "\n");
 			final File fileTempAugmentedAtomsConfigFile = File.createTempFile("checkfgs", ".chk");
@@ -866,20 +939,26 @@ public class RDKitStructureNormalizerV2NodeModel extends AbstractRDKitNodeModel 
 	 * @param modelFilePath      {@code SettingsModelReaderFileChooser} instance specifying the file to be read
 	 *                           or empty to use the default resource.
 	 *                           Can be null.
+	 * @param isDefaultFile Function to determine if the default file should be used based on the file path specified 
+	 * 		  				in the model. Must not be null.
 	 * @param strDefaultResource The path the default resource (in JAR file).
 	 * @return Configuration string (content of the file).
 	 * @throws InvalidSettingsException Thrown, if configuration could not be read.
 	 */
-	public static String getConfiguration(final SettingsModelReaderFileChooser modelFilePath, final String strDefaultResource) throws InvalidSettingsException {
+	public static String getConfiguration(final SettingsModelReaderFileChooser modelFilePath, 
+		final Function<String, Boolean> isDefaultFile, final String strDefaultResource) 
+		throws InvalidSettingsException {
+		CheckUtils.checkArgumentNotNull(isDefaultFile);
 		final String strConfiguration;
 		String strErrorMsgStart = null;
 
 		try {
 			// Check for default and use it
-			if (modelFilePath == null || isDefaultConfigurationFile(modelFilePath.getPath())) {
+			if (modelFilePath == null || isDefaultFile.apply(modelFilePath.getPath())) {
 				strErrorMsgStart = "The default configuration file resource '" +
 						strDefaultResource + "' ";
-				try (final InputStream inputStream = FunctionalGroupDefinitions.class.getClassLoader().getResourceAsStream(strDefaultResource)) {
+				try (final InputStream inputStream = 
+					FunctionalGroupDefinitions.class.getClassLoader().getResourceAsStream(strDefaultResource)) {
 					strErrorMsgStart = "The default configuration file resource '" +
 							strDefaultResource + "' ";
 

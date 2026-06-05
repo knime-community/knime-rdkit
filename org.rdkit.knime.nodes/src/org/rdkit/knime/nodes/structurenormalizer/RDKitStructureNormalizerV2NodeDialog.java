@@ -316,7 +316,8 @@ public class RDKitStructureNormalizerV2NodeDialog extends DefaultNodeSettingsPan
 		m_compTransformationConfigurationPath = new DialogComponentConfigFileSelection(
 				compTransformationsConfigurationFileChooser,
 				"Transformation Configuration",
-				modelFileChooser -> RDKitStructureNormalizerV2NodeModel.getConfiguration(modelFileChooser,
+				modelFileChooser -> RDKitStructureNormalizerV2NodeModel.getConfiguration(modelFileChooser, 
+						path -> RDKitStructureNormalizerV2NodeModel.isDefaultConfigurationFile(path),
 						RDKitStructureNormalizerV2NodeModel.DEFAULT_TRANSFORMATION_CONFIGURATION_FILE)
 		);
 		super.addDialogComponent(m_compTransformationConfigurationPath);
@@ -342,6 +343,7 @@ public class RDKitStructureNormalizerV2NodeDialog extends DefaultNodeSettingsPan
 				compAugmentedAtomsConfigurationFileChooser,
 				"Augmented Atoms Configuration",
 				modelFileChooser -> RDKitStructureNormalizerV2NodeModel.getConfiguration(modelFileChooser,
+						path -> RDKitStructureNormalizerV2NodeModel.isDefaultConfigurationFile(path),
 						RDKitStructureNormalizerV2NodeModel.DEFAULT_AUGMENTED_ATOMS_CONFIGURATION_FILE)
 		);
 		super.addDialogComponent(m_compAugmentedAtomsConfigurationPath);
@@ -495,6 +497,7 @@ public class RDKitStructureNormalizerV2NodeDialog extends DefaultNodeSettingsPan
 			final DialogComponentConfigFileSelection compFileInput) {
 		try {
 			RDKitStructureNormalizerV2NodeModel.getConfiguration(modelFile,
+					path -> RDKitStructureNormalizerV2NodeModel.isDefaultConfigurationFile(path),
 					strDefaultResource);
 			compFileInput.setFileError(false);
 		}
