@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_column" type="xstring" value="Molecule"/>
+    <entry key="passed_corrected_structure_column" type="xstring" value="abc1"/>
+    <entry key="passed_flags_column" type="xstring" value="abc2"/>
+    <entry key="passed_warning_messages_column" type="xstring" value="abc3"/>
+    <entry key="failed_error_flags_column" type="xstring" value="abc4"/>
+    <entry key="failed_error_messages_column" type="xstring" value="abc5"/>
+    <entry key="logFileSwitch" type="xstring" value="ENABLE_LOGGING"/>
+    <config key="log_file">
+        <config key="path">
+            <entry key="location_present" type="xboolean" value="true"/>
+            <entry key="file_system_type" type="xstring" value="LOCAL"/>
+            <entry key="path" type="xstring" value="test.log"/>
+        </config>
+        <config key="file_system_chooser__Internals">
+            <entry key="has_fs_port" type="xboolean" value="false"/>
+            <entry key="overwritten_by_variable" type="xboolean" value="false"/>
+            <entry key="convenience_fs_category" type="xstring" value="LOCAL"/>
+            <entry key="relative_to" type="xstring" value="knime.workflow"/>
+            <entry key="mountpoint" type="xstring" value="LOCAL"/>
+            <entry key="spaceId" type="xstring" value=""/>
+            <entry key="spaceName" type="xstring" value=""/>
+            <entry key="custom_url_timeout" type="xint" value="1000"/>
+            <entry key="connected_fs" type="xboolean" value="true"/>
+        </config>
+        <entry key="create_missing_folders" type="xboolean" value="false"/>
+        <entry key="if_path_exists" type="xstring" value="fail"/>
+    </config>
+    <config key="additional_failure_codes">
+        <entry key="array-size" type="xint" value="2"/>
+        <entry key="0" type="xstring" value="DUBIOUS_STEREO_REMOVED"/>
+        <entry key="1" type="xstring" value="STEREO_TRANSFORMED"/>
+    </config>
+    <entry key="transformationConfigFileSwitch" type="xstring" value="DEFAULT_CONFIGURATION"/>
+    <config key="transformation_configuration_file">
+        <config key="path">
+            <entry key="location_present" type="xboolean" value="true"/>
+            <entry key="file_system_type" type="xstring" value="LOCAL"/>
+            <entry key="path" type="xstring" value=""/>
+        </config>
+        <config key="filter_mode">
+            <entry key="filter_mode" type="xstring" value="FILE"/>
+            <entry key="include_subfolders" type="xboolean" value="false"/>
+            <config key="filter_options">
+                <entry key="filter_files_extension" type="xboolean" value="false"/>
+                <entry key="files_extension_expression" type="xstring" value=""/>
+                <entry key="files_extension_case_sensitive" type="xboolean" value="false"/>
+                <entry key="filter_files_name" type="xboolean" value="false"/>
+                <entry key="files_name_expression" type="xstring" value="*"/>
+                <entry key="files_name_case_sensitive" type="xboolean" value="false"/>
+                <entry key="files_name_filter_type" type="xstring" value="WILDCARD"/>
+                <entry key="include_hidden_files" type="xboolean" value="false"/>
+                <entry key="include_special_files" type="xboolean" value="true"/>
+                <entry key="filter_folders_name" type="xboolean" value="false"/>
+                <entry key="folders_name_expression" type="xstring" value="*"/>
+                <entry key="folders_name_case_sensitive" type="xboolean" value="false"/>
+                <entry key="folders_name_filter_type" type="xstring" value="WILDCARD"/>
+                <entry key="include_hidden_folders" type="xboolean" value="false"/>
+                <entry key="follow_links" type="xboolean" value="true"/>
+            </config>
+        </config>
+        <config key="file_system_chooser__Internals">
+            <entry key="has_fs_port" type="xboolean" value="false"/>
+            <entry key="overwritten_by_variable" type="xboolean" value="false"/>
+            <entry key="convenience_fs_category" type="xstring" value="RELATIVE"/>
+            <entry key="relative_to" type="xstring" value="knime.workflow"/>
+            <entry key="mountpoint" type="xstring" value="LOCAL"/>
+            <entry key="spaceId" type="xstring" value=""/>
+            <entry key="spaceName" type="xstring" value=""/>
+            <entry key="custom_url_timeout" type="xint" value="1000"/>
+            <entry key="connected_fs" type="xboolean" value="true"/>
+        </config>
+    </config>
+    <entry key="augmentedAtomsConfigFileSwitch" type="xstring" value="FILE_SELECTION"/>
+    <config key="augmented_atoms_configuration_file">
+        <config key="path">
+            <entry key="location_present" type="xboolean" value="true"/>
+            <entry key="file_system_type" type="xstring" value="LOCAL"/>
+            <entry key="path" type="xstring" value="test.chk"/>
+        </config>
+        <config key="filter_mode">
+            <entry key="filter_mode" type="xstring" value="FILE"/>
+            <entry key="include_subfolders" type="xboolean" value="false"/>
+            <config key="filter_options">
+                <entry key="filter_files_extension" type="xboolean" value="false"/>
+                <entry key="files_extension_expression" type="xstring" value=""/>
+                <entry key="files_extension_case_sensitive" type="xboolean" value="false"/>
+                <entry key="filter_files_name" type="xboolean" value="false"/>
+                <entry key="files_name_expression" type="xstring" value="*"/>
+                <entry key="files_name_case_sensitive" type="xboolean" value="false"/>
+                <entry key="files_name_filter_type" type="xstring" value="WILDCARD"/>
+                <entry key="include_hidden_files" type="xboolean" value="false"/>
+                <entry key="include_special_files" type="xboolean" value="true"/>
+                <entry key="filter_folders_name" type="xboolean" value="false"/>
+                <entry key="folders_name_expression" type="xstring" value="*"/>
+                <entry key="folders_name_case_sensitive" type="xboolean" value="false"/>
+                <entry key="folders_name_filter_type" type="xstring" value="WILDCARD"/>
+                <entry key="include_hidden_folders" type="xboolean" value="false"/>
+                <entry key="follow_links" type="xboolean" value="true"/>
+            </config>
+        </config>
+        <config key="file_system_chooser__Internals">
+            <entry key="has_fs_port" type="xboolean" value="false"/>
+            <entry key="overwritten_by_variable" type="xboolean" value="false"/>
+            <entry key="convenience_fs_category" type="xstring" value="RELATIVE"/>
+            <entry key="relative_to" type="xstring" value="knime.workflow"/>
+            <entry key="mountpoint" type="xstring" value="LOCAL"/>
+            <entry key="spaceId" type="xstring" value=""/>
+            <entry key="spaceName" type="xstring" value=""/>
+            <entry key="custom_url_timeout" type="xint" value="1000"/>
+            <entry key="connected_fs" type="xboolean" value="true"/>
+        </config>
+    </config>
+    <config key="switches">
+        <entry key="array-size" type="xint" value="5"/>
+        <entry key="0" type="xstring" value="cc"/>
+        <entry key="1" type="xstring" value="cs"/>
+        <entry key="2" type="xstring" value="ds"/>
+        <entry key="3" type="xstring" value="dz"/>
+        <entry key="4" type="xstring" value="tm"/>
+    </config>
+    <entry key="advanced_options" type="xstring" value="-cl 3%%00010-cn 999"/>
+</config>

@@ -1,0 +1,636 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumn" : "Molecule",
+      "passedCorrectedStructureColumn" : "abc1",
+      "passedFlagsColumn" : "abc2",
+      "passedWarningMessagesColumn" : "abc3",
+      "failedFlagsColumn" : "abc4",
+      "failedErrorMessagesColumn" : "abc5",
+      "logFileSwitch" : "ENABLE_LOGGING",
+      "logFile" : {
+        "file" : {
+          "path" : {
+            "fsCategory" : "LOCAL",
+            "path" : "test.log",
+            "timeout" : 10000,
+            "context" : {
+              "fsToString" : "(LOCAL, test.log)"
+            }
+          }
+        },
+        "createMissingFolders" : false,
+        "overwritePolicy" : "fail"
+      },
+      "additionalFailureCodes" : [ "DUBIOUS_STEREO_REMOVED", "STEREO_TRANSFORMED" ],
+      "transformationConfigFileSwitch" : "DEFAULT_CONFIGURATION",
+      "transformationConfigFile" : {
+        "path" : {
+          "fsCategory" : "LOCAL",
+          "path" : "",
+          "timeout" : 10000,
+          "context" : {
+            "fsToString" : "(LOCAL, )"
+          }
+        }
+      },
+      "augmentedAtomsConfigFileSwitch" : "FILE_SELECTION",
+      "augmentedAtomsConfigFile" : {
+        "path" : {
+          "fsCategory" : "LOCAL",
+          "path" : "test.chk",
+          "timeout" : 10000,
+          "context" : {
+            "fsToString" : "(LOCAL, test.chk)"
+          }
+        }
+      },
+      "switches" : [ "cc", "cs", "ds", "dz", "tm" ],
+      "advancedOptions" : "-cl 3\n-cn 999"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "additionalFailureCodes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Warning codes to treat as failures",
+            "description" : "Define here which warning flags should be treated as errors. If defined as an error, the rows will appear in the second output table (\"Failed Molecules\" table). Hover over a code to see its description and value.\n",
+            "default" : [ ]
+          },
+          "advancedOptions" : {
+            "type" : "string",
+            "title" : "Additional options",
+            "description" : "Normally, there is no need to change these settings. However, if you are familiar with the underlying StruChk tool, you may define here manually options to be passed to it. These options come in addition to the switches defined above.\n",
+            "default" : "-cl 3\n-cn 999"
+          },
+          "augmentedAtomsConfigFile" : {
+            "type" : "object",
+            "properties" : {
+              "path" : {
+                "type" : "object",
+                "default" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              }
+            },
+            "title" : "Selected augmented atoms config file",
+            "description" : " \t\tSpecify a custom augmented atoms configuration file to use. The file must have the .chk extension.\n",
+            "default" : {
+              "path" : {
+                "fsCategory" : "LOCAL",
+                "path" : "",
+                "timeout" : 10000,
+                "context" : {
+                  "fsToString" : "(LOCAL, )"
+                }
+              }
+            }
+          },
+          "augmentedAtomsConfigFileSwitch" : {
+            "oneOf" : [ {
+              "const" : "DEFAULT_CONFIGURATION",
+              "title" : "Default configuration"
+            }, {
+              "const" : "FILE_SELECTION",
+              "title" : "File selection"
+            } ],
+            "title" : "Augmented atoms configuration file (.chk) (optional)",
+            "description" : "Lets the user define a customized augmented atoms configuration file. The default built-in\n<a href=\"https://github.com/rdkit/rdkit/blob/master/Data/struchk/checkfgs.chk\">configuration file</a> will\nbe used when no file is specified. The file must have the .chk extension.\n\n<ul>\n<li><b>Default configuration</b>: Loads the default configuration file.</li>\n<li><b>File selection</b>: Specify a configuration file.</li>\n</ul>",
+            "default" : "DEFAULT_CONFIGURATION"
+          },
+          "failedErrorMessagesColumn" : {
+            "type" : "string",
+            "title" : "Error messages column name",
+            "description" : "The name of the column that will contain the error messages associated with the flags. The \"Failed Molecules\" table contains only errors that prevented successful normalization.\n"
+          },
+          "failedFlagsColumn" : {
+            "type" : "string",
+            "title" : "Flags column name",
+            "description" : "The name of the column that will contain the error flags. This is a bit mask where each bit has a certain meaning as described in the node description.\n"
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "Mol column",
+            "description" : "The input column with SDF, SMILES or RDKit Molecules. The latter ones are treated as SDF values. SMILES input will be converted internally into mol blocks before the normalization is done.\n"
+          },
+          "logFile" : {
+            "type" : "object",
+            "properties" : {
+              "createMissingFolders" : {
+                "type" : "boolean",
+                "title" : "Create missing folders",
+                "description" : "Select if the folders of the selected output location should be created if they do not already exist. If this option is unchecked, the node will fail if a folder does not exist.\n",
+                "default" : false
+              },
+              "file" : {
+                "type" : "object",
+                "properties" : {
+                  "path" : {
+                    "type" : "object",
+                    "default" : {
+                      "fsCategory" : "LOCAL",
+                      "path" : "",
+                      "timeout" : 10000,
+                      "context" : {
+                        "fsToString" : "(LOCAL, )"
+                      }
+                    }
+                  }
+                },
+                "title" : "Selected log file",
+                "description" : "Select the file to which the log output of the node will be written. If the file already\nexists, the behavior depends on the selected overwrite policy. If no file is selected, no\nlog output will be produced.\n",
+                "default" : {
+                  "path" : {
+                    "fsCategory" : "LOCAL",
+                    "path" : "",
+                    "timeout" : 10000,
+                    "context" : {
+                      "fsToString" : "(LOCAL, )"
+                    }
+                  }
+                }
+              },
+              "overwritePolicy" : {
+                "oneOf" : [ {
+                  "const" : "fail",
+                  "title" : "Fail"
+                }, {
+                  "const" : "overwrite",
+                  "title" : "Overwrite"
+                }, {
+                  "const" : "ignore",
+                  "title" : "Ignore"
+                }, {
+                  "const" : "append",
+                  "title" : "Append"
+                } ],
+                "title" : "If exists",
+                "description" : "Specify the behavior of the node in case the output file already exists.<ul><li><b>Fail</b>: Will issue an error during the node's execution (to prevent unintentional overwrite).</li><li><b>Overwrite</b>: Will replace any existing file.</li></ul>",
+                "default" : "overwrite"
+              }
+            },
+            "default" : {
+              "file" : {
+                "path" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              },
+              "createMissingFolders" : false,
+              "overwritePolicy" : "overwrite"
+            }
+          },
+          "logFileSwitch" : {
+            "oneOf" : [ {
+              "const" : "DISABLE_LOGGING",
+              "title" : "Disable logging"
+            }, {
+              "const" : "ENABLE_LOGGING",
+              "title" : "Enable logging"
+            } ],
+            "title" : "Logfile output (optional)",
+            "description" : "A logfile can be specified here which logs additional output in case of normalizations of    structures. It can be used for informal purposes only. There is no need to define a logfile    for the node to work correctly. Leave this field empty to disable logging.\n\n<ul>\n<li><b>Disable logging</b>: No log file will be created and no log output will be produced.</li>\n<li><b>Enable logging</b>: A log file will be created and log output will be produced according to the selected options.\n</li>\n</ul>",
+            "default" : "DISABLE_LOGGING"
+          },
+          "passedCorrectedStructureColumn" : {
+            "type" : "string",
+            "title" : "Corrected structure column name",
+            "description" : "The name of the column that will contain the original or corrected structure, in case that any normalization has been applied.\n"
+          },
+          "passedFlagsColumn" : {
+            "type" : "string",
+            "title" : "Flags column name",
+            "description" : "The name of the column that will contain the warning flags. This is a bit mask where each bit has a certain meaning as described in the node description.\n"
+          },
+          "passedWarningMessagesColumn" : {
+            "type" : "string",
+            "title" : "Warning messages column name",
+            "description" : "The name of the column that will contain the warning messages associated with the flags. The \"Passed Molecules\" table contains only warnings, which are not classified as errors.\n"
+          },
+          "switches" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Advanced switches (optional)",
+            "description" : "Configure here certain switches that influence how the Structure Normalizer performs its work:\n",
+            "default" : [ ]
+          },
+          "transformationConfigFile" : {
+            "type" : "object",
+            "properties" : {
+              "path" : {
+                "type" : "object",
+                "default" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              }
+            },
+            "title" : "Selected transformation config file",
+            "description" : "Specify a custom transformation configuration file to use. The file must have the\n.trn extension.\n",
+            "default" : {
+              "path" : {
+                "fsCategory" : "LOCAL",
+                "path" : "",
+                "timeout" : 10000,
+                "context" : {
+                  "fsToString" : "(LOCAL, )"
+                }
+              }
+            }
+          },
+          "transformationConfigFileSwitch" : {
+            "oneOf" : [ {
+              "const" : "DEFAULT_CONFIGURATION",
+              "title" : "Default configuration"
+            }, {
+              "const" : "FILE_SELECTION",
+              "title" : "File selection"
+            } ],
+            "title" : "Transformation configuration file (.trn) (optional)",
+            "description" : "Lets the user define a customized transformation configuration file. The default built-in\n<a href=\"https://github.com/rdkit/rdkit/blob/master/Data/struchk/checkfgs.trn\">configuration file</a> will\nbe used when no file is specified. The file must have the .trn extension.\n\n<ul>\n<li><b>Default configuration</b>: Loads the default configuration file.</li>\n<li><b>File selection</b>: Specify a configuration file.</li>\n</ul>",
+            "default" : "DEFAULT_CONFIGURATION"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "label" : "Passed Output",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/passedCorrectedStructureColumn"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/passedFlagsColumn"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/passedWarningMessagesColumn"
+      } ]
+    }, {
+      "label" : "Failed Output",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/failedFlagsColumn"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/failedErrorMessagesColumn"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/logFileSwitch",
+        "options" : {
+          "format" : "valueSwitch"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/logFile/properties/file",
+        "options" : {
+          "fileExtension" : "log",
+          "isLocal" : true,
+          "isWriter" : true,
+          "spaceFSOptions" : {
+            "mountId" : "Local space"
+          },
+          "format" : "fileChooser"
+        },
+        "rule" : {
+          "effect" : "SHOW",
+          "condition" : {
+            "scope" : "#/properties/model/properties/logFileSwitch",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "ENABLE_LOGGING"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/logFile/properties/createMissingFolders",
+        "options" : {
+          "format" : "checkbox"
+        },
+        "rule" : {
+          "effect" : "SHOW",
+          "condition" : {
+            "scope" : "#/properties/model/properties/logFileSwitch",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "ENABLE_LOGGING"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/logFile/properties/overwritePolicy",
+        "options" : {
+          "format" : "valueSwitch"
+        },
+        "providedOptions" : [ "possibleValues" ],
+        "rule" : {
+          "effect" : "SHOW",
+          "condition" : {
+            "scope" : "#/properties/model/properties/logFileSwitch",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "ENABLE_LOGGING"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/additionalFailureCodes",
+        "options" : {
+          "format" : "twinList",
+          "includedLabel" : "Treat as Failure",
+          "excludedLabel" : "Treat as Warning"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      } ]
+    }, {
+      "label" : "Advanced",
+      "type" : "Section",
+      "options" : {
+        "isAdvanced" : true
+      },
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/transformationConfigFileSwitch",
+        "options" : {
+          "isAdvanced" : true,
+          "format" : "valueSwitch"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/transformationConfigFile",
+        "options" : {
+          "fileExtensions" : [ "trn" ],
+          "isLocal" : true,
+          "spaceFSOptions" : {
+            "mountId" : "Local space"
+          },
+          "format" : "fileChooser",
+          "isAdvanced" : true
+        },
+        "rule" : {
+          "effect" : "SHOW",
+          "condition" : {
+            "scope" : "#/properties/model/properties/transformationConfigFileSwitch",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "FILE_SELECTION"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/augmentedAtomsConfigFileSwitch",
+        "options" : {
+          "isAdvanced" : true,
+          "format" : "valueSwitch"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/augmentedAtomsConfigFile",
+        "options" : {
+          "fileExtensions" : [ "chk" ],
+          "isLocal" : true,
+          "spaceFSOptions" : {
+            "mountId" : "Local space"
+          },
+          "format" : "fileChooser",
+          "isAdvanced" : true
+        },
+        "rule" : {
+          "effect" : "SHOW",
+          "condition" : {
+            "scope" : "#/properties/model/properties/augmentedAtomsConfigFileSwitch",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "FILE_SELECTION"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/switches",
+        "options" : {
+          "format" : "twinList",
+          "isAdvanced" : true,
+          "includedLabel" : "To Be Used",
+          "excludedLabel" : "Not Used"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/advancedOptions",
+        "options" : {
+          "rows" : 5,
+          "format" : "textArea",
+          "isAdvanced" : true
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "passedCorrectedStructureColumn" : {
+            "configKey" : "passed_corrected_structure_column"
+          },
+          "passedFlagsColumn" : {
+            "configKey" : "passed_flags_column"
+          },
+          "passedWarningMessagesColumn" : {
+            "configKey" : "passed_warning_messages_column"
+          },
+          "failedFlagsColumn" : {
+            "configKey" : "failed_error_flags_column"
+          },
+          "failedErrorMessagesColumn" : {
+            "configKey" : "failed_error_messages_column"
+          },
+          "logFileSwitch" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "logFile" : {
+            "type" : "object",
+            "properties" : {
+              "file" : {
+                "configPaths" : [ [ "path" ] ]
+              },
+              "createMissingFolders" : {
+                "configKey" : "create_missing_folders"
+              },
+              "overwritePolicy" : {
+                "configKey" : "if_path_exists"
+              }
+            },
+            "configKey" : "log_file"
+          },
+          "additionalFailureCodes" : {
+            "configKey" : "additional_failure_codes"
+          },
+          "transformationConfigFileSwitch" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "transformationConfigFile" : {
+            "configPaths" : [ [ "transformation_configuration_file", "path" ] ]
+          },
+          "augmentedAtomsConfigFileSwitch" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "augmentedAtomsConfigFile" : {
+            "configPaths" : [ [ "augmented_atoms_configuration_file", "path" ] ]
+          },
+          "switches" : {
+            "configKey" : "switches"
+          },
+          "advancedOptions" : {
+            "configKey" : "advanced_options"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/additionalFailureCodes",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "TRANSFORMED",
+        "text" : "TRANSFORMED (4)"
+      }, {
+        "id" : "FRAGMENTS_FOUND",
+        "text" : "FRAGMENTS_FOUND (8)"
+      }, {
+        "id" : "EITHER_WARNING",
+        "text" : "EITHER_WARNING (16)"
+      }, {
+        "id" : "DUBIOUS_STEREO_REMOVED",
+        "text" : "DUBIOUS_STEREO_REMOVED (64)"
+      }, {
+        "id" : "RECHARGED",
+        "text" : "RECHARGED (1024)"
+      }, {
+        "id" : "STEREO_TRANSFORMED",
+        "text" : "STEREO_TRANSFORMED (4096)"
+      }, {
+        "id" : "TEMPLATE_TRANSFORMED",
+        "text" : "TEMPLATE_TRANSFORMED (8192)"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/logFile/properties/overwritePolicy",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "fail",
+        "text" : "Fail"
+      }, {
+        "id" : "overwrite",
+        "text" : "Overwrite"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/switches",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "cc",
+        "text" : "cc - Check for collisions"
+      }, {
+        "id" : "cs",
+        "text" : "cs - Check stereo conventions"
+      }, {
+        "id" : "da",
+        "text" : "da - Convert atom text strings to properties"
+      }, {
+        "id" : "dg",
+        "text" : "dg - Convert ISIS groups to S-Groups"
+      }, {
+        "id" : "ds",
+        "text" : "ds - Convert CPSS STEXT to data fields"
+      }, {
+        "id" : "dw",
+        "text" : "dw - Squeeze whitespace out of identifiers"
+      }, {
+        "id" : "dz",
+        "text" : "dz - Strip most of the trailing zeros"
+      }, {
+        "id" : "tm",
+        "text" : "tm - Split off minor fragments"
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/failedErrorMessagesColumn", "#/properties/model/properties/failedFlagsColumn", "#/properties/model/properties/inputColumn", "#/properties/model/properties/passedCorrectedStructureColumn", "#/properties/model/properties/passedFlagsColumn", "#/properties/model/properties/passedWarningMessagesColumn" ]
+  } ]
+}

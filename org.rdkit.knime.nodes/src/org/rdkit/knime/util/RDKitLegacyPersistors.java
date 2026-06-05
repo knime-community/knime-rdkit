@@ -3,6 +3,11 @@ package org.rdkit.knime.util;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import java.util.List;
+import java.util.function.Supplier;
+
+import org.knime.node.parameters.migration.ConfigMigration;
+import org.knime.node.parameters.migration.NodeParametersMigration;
 import org.knime.node.parameters.persistence.NodeParametersPersistor;
 
 /**
@@ -53,5 +58,61 @@ public class RDKitLegacyPersistors {
         }
         
     }
+	
+	/**
+	 * Abstract base class for file switch migrations that set a default value for a parameter if the path to the file 
+	 * is empty. This is used to migrate old configurations where the file path was not set, but the parameter should 
+	 * now have a default value.
+	 * 
+	 * @param <E> the type of the enum choices for the parameter that should be set to a default value if the file 
+	 * path is empty
+	 * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+	 */
+	public abstract static class DefaultFileSwitchMigration<E extends Enum<E>> implements NodeParametersMigration<E> {
+
+		private String m_fileSwitchConfigKey;
+		
+		private String m_fileIOConfigKey;
+		
+		private E m_defaultValue;
+		
+		private E m_customValue;
+		
+		/**
+		 * Constructor for the DefaultFileSwitchMigration.
+		 * 
+		 * @param fileSwitchConfigKey the configuration key for the file switch parameter
+		 * @param fileIOConfigKey the configuration key for the file path that should be checked for emptiness
+		 * @param defaultValue the default value to set if the file path is empty
+		 * @param customValue the value to set if the file path is not empty
+		 */
+		protected DefaultFileSwitchMigration(final String fileSwitchConfigKey, final String fileIOConfigKey, 
+			final E defaultValue, final E customValue) {
+			m_fileSwitchConfigKey = fileSwitchConfigKey;
+			m_fileIOConfigKey = fileIOConfigKey;
+			m_defaultValue = defaultValue;
+			m_customValue = customValue;
+		}
+		
+		@Override
+		public List<ConfigMigration<E>> getConfigMigrations() {
+			return List.of(ConfigMigration.builder(settings -> loadFileSwitchValue(settings))
+					.withMatcher(s -> !s.containsKey(m_fileSwitchConfigKey)).build());
+		}
+		
+		private E loadFileSwitchValue(final NodeSettingsRO settings) {
+			String path;
+			try {
+				final var logFileSettings = settings.getNodeSettings(m_fileIOConfigKey);
+				final var pathSettings = logFileSettings.getNodeSettings("path");
+				path = pathSettings.getString("path");
+			} catch (InvalidSettingsException e) {
+				return m_defaultValue;
+			}
+			
+			return path == null || path.isEmpty() ? m_defaultValue : m_customValue;
+		}
+		
+	}
 	
 }
