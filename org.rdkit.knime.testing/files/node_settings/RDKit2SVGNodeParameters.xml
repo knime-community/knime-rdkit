@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="input_column_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="input_column" type="xstring" value="Molecule"/>
+        <config key="new_column_name_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="new_column_name" type="xstring" value="sdvqe"/>
+        <config key="remove_source_columns_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="remove_source_columns" type="xboolean" value="true"/>
+        <config key="prepare_before_drawing_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="prepare_before_drawing" type="xboolean" value="true"/>
+        <config key="center_before_drawing_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="center_before_drawing" type="xboolean" value="false"/>
+        <config key="clear_background_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="clear_background" type="xboolean" value="true"/>
+        <config key="add_atom_indices_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="add_atom_indices" type="xboolean" value="false"/>
+        <config key="add_bond_indices_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="add_bond_indices" type="xboolean" value="false"/>
+        <config key="add_stereo_annotation_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="add_stereo_annotation" type="xboolean" value="true"/>
+        <config key="include_chiral_flag_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="include_chiral_flag" type="xboolean" value="false"/>
+        <config key="simplified_stereo_groups_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="simplified_stereo_groups" type="xboolean" value="false"/>
+        <config key="single_color_wedge_bonds_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="single_color_wedge_bonds" type="xboolean" value="true"/>
+        <config key="explicit_methyl_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="explicit_methyl" type="xboolean" value="false"/>
+        <config key="dummies_are_attachments_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="dummies_are_attachments" type="xboolean" value="true"/>
+        <config key="include_radicals_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="include_radicals" type="xboolean" value="false"/>
+        <config key="no_atom_labels_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="no_atom_labels" type="xboolean" value="false"/>
+        <config key="isotope_labels_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="isotope_labels" type="xboolean" value="false"/>
+        <config key="dummy_isotope_labels_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="dummy_isotope_labels" type="xboolean" value="true"/>
+        <config key="comic_mode_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="comic_mode" type="xboolean" value="false"/>
+        <config key="bw_mode_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="bw_mode" type="xboolean" value="false"/>
+        <config key="bond_line_width_double_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="bond_line_width_double" type="xdouble" value="0.05"/>
+        <config key="min_font_size_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="min_font_size" type="xint" value="10"/>
+        <config key="max_font_size_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="max_font_size" type="xint" value="33"/>
+        <config key="annotation_font_scale_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="annotation_font_scale" type="xdouble" value="0.75"/>
+    </config>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="CONFIGURED"/>
+    <entry key="factory" type="xstring" value="org.rdkit.knime.nodes.rdkit2svg.RDKit2SVGNodeFactory"/>
+    <entry key="node-name" type="xstring" value="RDKit Molecule to SVG"/>
+    <entry key="node-bundle-name" type="xstring" value="RDKit Nodes"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="org.rdkit.knime.nodes"/>
+    <entry key="node-bundle-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-bundle-version" type="xstring" value="5.2.1.v202507231837"/>
+    <entry key="node-feature-name" type="xstring" value="RDKit Nodes Feature"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="org.rdkit.knime.feature.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="Novartis"/>
+    <entry key="node-feature-version" type="xstring" value="5.2.1.v202507231837"/>
+    <config key="factory_settings"/>
+    <entry key="name" type="xstring" value="RDKit Molecule to SVG"/>
+    <entry key="hasContent" type="xboolean" value="false"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" isnull="true" value=""/>
+    </config>
+</config>

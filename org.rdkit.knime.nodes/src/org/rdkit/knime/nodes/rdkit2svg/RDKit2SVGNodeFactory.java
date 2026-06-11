@@ -51,6 +51,16 @@ package org.rdkit.knime.nodes.rdkit2svg;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKit2SVG" Node.
@@ -58,9 +68,35 @@ import org.knime.core.node.NodeView;
  * A molecule column needs to be provided.
  *
  * @author Manuel Schwarze
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKit2SVGNodeFactory extends NodeFactory<RDKit2SVGNodeModel> {
+public class RDKit2SVGNodeFactory extends NodeFactory<RDKit2SVGNodeModel> implements NodeDialogFactory {
 
+    private static final String NODE_NAME = "RDKit Molecule to SVG";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Creates an SVG column showing a molecule
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            Creates an SVG column showing a molecule A molecule column needs to be provided.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Table with RDKit molecules", """
+                Table with an RDKit Molecules.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Table with SVGs", """
+                The input table with an additional column that shows the SVG molecule graphic.
+                """)
+    );
+	
 	/**
 	 * Creates a model for the RDKit2SVG functionality
 	 * of the RDKit library. The model is derived from the
@@ -107,12 +143,33 @@ public class RDKit2SVGNodeFactory extends NodeFactory<RDKit2SVGNodeModel> {
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKit2SVGNodeDialog();
-	}
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKit2SVGNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKit2SVGNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
