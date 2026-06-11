@@ -1,0 +1,500 @@
+{
+  "data" : {
+    "model" : {
+      "removeSourceColumns" : false,
+      "prepareBeforeDrawing" : true,
+      "centerBeforeDrawing" : false,
+      "clearBackground" : true,
+      "addAtomIndices" : false,
+      "addBondIndices" : false,
+      "addStereoAnnotation" : true,
+      "includeChiralFlag" : false,
+      "simplifiedStereoGroups" : false,
+      "singleColorWedgeBonds" : false,
+      "explicitMethyl" : false,
+      "dummiesAreAttachments" : false,
+      "includeRadicals" : true,
+      "noAtomLabels" : false,
+      "isotopeLabels" : true,
+      "dummyIsotopeLabels" : true,
+      "comicMode" : false,
+      "bwMode" : false,
+      "bondLineWidthDouble" : 2.0,
+      "minFontSize" : 6,
+      "maxFontSize" : 40,
+      "annotationFontScale" : 0.5
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "addAtomIndices" : {
+            "type" : "boolean",
+            "title" : "Add atom indices",
+            "description" : "Includes atom indices in the drawing.",
+            "default" : false
+          },
+          "addBondIndices" : {
+            "type" : "boolean",
+            "title" : "Add bond indices",
+            "description" : "Includes bond indices in the drawing.",
+            "default" : false
+          },
+          "addStereoAnnotation" : {
+            "type" : "boolean",
+            "title" : "Add stereo annotations",
+            "description" : "Adds R/S labels and enhanced stereo annotations to the drawing.",
+            "default" : true
+          },
+          "annotationFontScale" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Annotation font scale",
+            "description" : "The annotation font size is set as a fraction of the symbol font size. This determines that fraction.\n",
+            "default" : 0.5
+          },
+          "bondLineWidthDouble" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Line width for bonds",
+            "description" : "The line width to be used when drawing bonds.",
+            "default" : 2.0
+          },
+          "bwMode" : {
+            "type" : "boolean",
+            "title" : "Black & white mode",
+            "description" : "Activates black and white mode. No atom/bond coloring is used.",
+            "default" : false
+          },
+          "centerBeforeDrawing" : {
+            "type" : "boolean",
+            "title" : "Center before drawing",
+            "description" : "Centers the molecule at the origin before drawing.",
+            "default" : false
+          },
+          "clearBackground" : {
+            "type" : "boolean",
+            "title" : "Clear background",
+            "description" : "Clears the background with the current background color before drawing.",
+            "default" : true
+          },
+          "comicMode" : {
+            "type" : "boolean",
+            "title" : "Comic mode",
+            "description" : "Activates \"comic mode\" - this simulates hand-drawn structures.",
+            "default" : false
+          },
+          "dummiesAreAttachments" : {
+            "type" : "boolean",
+            "title" : "Dummies are attachment points",
+            "description" : "Draws dummies as attachment points - wavy lines perpendicular to the bond.",
+            "default" : false
+          },
+          "dummyIsotopeLabels" : {
+            "type" : "boolean",
+            "title" : "Include isotope labels on dummies",
+            "description" : "Includes information about isotopes on dummy atoms.",
+            "default" : true
+          },
+          "explicitMethyl" : {
+            "type" : "boolean",
+            "title" : "Draw explicit methyl groups",
+            "description" : "Draws terminal methyl groups as CH3.",
+            "default" : false
+          },
+          "includeChiralFlag" : {
+            "type" : "boolean",
+            "title" : "Include chiral flag",
+            "description" : "Adds the chiral flag if set on the molecule.",
+            "default" : false
+          },
+          "includeRadicals" : {
+            "type" : "boolean",
+            "title" : "Draw radicals",
+            "description" : "Draws radical dots.",
+            "default" : true
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The input column with RDKit Molecules."
+          },
+          "isotopeLabels" : {
+            "type" : "boolean",
+            "title" : "Include isotope labels",
+            "description" : "Includes information about isotopes.",
+            "default" : true
+          },
+          "maxFontSize" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Max font size",
+            "description" : "The maximum font size.",
+            "default" : 40
+          },
+          "minFontSize" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Min font size",
+            "description" : "The minimum font size.",
+            "default" : 6
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name",
+            "description" : "The name of the new column which will contain the SVG."
+          },
+          "noAtomLabels" : {
+            "type" : "boolean",
+            "title" : "No atom labels",
+            "description" : "If set, no atom labels will be drawn.",
+            "default" : false
+          },
+          "prepareBeforeDrawing" : {
+            "type" : "boolean",
+            "title" : "Prepare before drawing",
+            "description" : "Perform a number of cleanup operations on the molecule before drawing it. The operations performed are: <ol> <li>Kekulization</li> <li>Adding chiral Hs</li> <li>Generating 2D coordinates (if necessary)</li> <li>Wedging bonds around chiral centers</li> <li>Adding wavy bonds around chiral centers which have been marked as unspecified</li> </ol>\n",
+            "default" : true
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Set to true to remove the specified source column from the result table.",
+            "default" : false
+          },
+          "simplifiedStereoGroups" : {
+            "type" : "boolean",
+            "title" : "Use simplified stereo groups",
+            "description" : "Simplifies the drawing of molecules where all specified chiral centers are in one stereo group.",
+            "default" : false
+          },
+          "singleColorWedgeBonds" : {
+            "type" : "boolean",
+            "title" : "Single color wedge bonds",
+            "description" : "Draws wedge bonds as single color.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "label" : "Drawing Options",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/prepareBeforeDrawing",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/centerBeforeDrawing",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/clearBackground",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/addAtomIndices",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/addBondIndices",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/addStereoAnnotation",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/includeChiralFlag",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/simplifiedStereoGroups",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/singleColorWedgeBonds",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/explicitMethyl",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/dummiesAreAttachments",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/includeRadicals",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/noAtomLabels",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/isotopeLabels",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/dummyIsotopeLabels",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/comicMode",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/bwMode",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/bondLineWidthDouble",
+        "options" : {
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 100.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 100.0
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least 0.05.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : 0.05
+              }
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/minFontSize",
+        "options" : {
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 100.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 100.0
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least 0.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : 0.0
+              }
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/maxFontSize",
+        "options" : {
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 100.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 100.0
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least 0.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : 0.0
+              }
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/annotationFontScale",
+        "options" : {
+          "stepSize" : 0.05,
+          "validation" : {
+            "max" : {
+              "errorMessage" : "The value must not exceed 2.",
+              "parameters" : {
+                "isExclusive" : false,
+                "max" : 2.0
+              }
+            },
+            "min" : {
+              "errorMessage" : "The value must be at least 0.",
+              "parameters" : {
+                "isExclusive" : false,
+                "min" : 0.0
+              }
+            }
+          }
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "prepareBeforeDrawing" : {
+            "configKey" : "prepare_before_drawing"
+          },
+          "centerBeforeDrawing" : {
+            "configKey" : "center_before_drawing"
+          },
+          "clearBackground" : {
+            "configKey" : "clear_background"
+          },
+          "addAtomIndices" : {
+            "configKey" : "add_atom_indices"
+          },
+          "addBondIndices" : {
+            "configKey" : "add_bond_indices"
+          },
+          "addStereoAnnotation" : {
+            "configKey" : "add_stereo_annotation"
+          },
+          "includeChiralFlag" : {
+            "configKey" : "include_chiral_flag"
+          },
+          "simplifiedStereoGroups" : {
+            "configKey" : "simplified_stereo_groups"
+          },
+          "singleColorWedgeBonds" : {
+            "configKey" : "single_color_wedge_bonds"
+          },
+          "explicitMethyl" : {
+            "configKey" : "explicit_methyl"
+          },
+          "dummiesAreAttachments" : {
+            "configKey" : "dummies_are_attachments"
+          },
+          "includeRadicals" : {
+            "configKey" : "include_radicals"
+          },
+          "noAtomLabels" : {
+            "configKey" : "no_atom_labels"
+          },
+          "isotopeLabels" : {
+            "configKey" : "isotope_labels"
+          },
+          "dummyIsotopeLabels" : {
+            "configKey" : "dummy_isotope_labels"
+          },
+          "comicMode" : {
+            "configKey" : "comic_mode"
+          },
+          "bwMode" : {
+            "configKey" : "bw_mode"
+          },
+          "bondLineWidthDouble" : {
+            "configKey" : "bond_line_width_double",
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ [ "bond_line_width" ] ]
+            } ]
+          },
+          "minFontSize" : {
+            "configKey" : "min_font_size"
+          },
+          "maxFontSize" : {
+            "configKey" : "max_font_size"
+          },
+          "annotationFontScale" : {
+            "configKey" : "annotation_font_scale"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumn", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}
