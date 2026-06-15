@@ -48,14 +48,19 @@
  */
 package org.rdkit.knime.nodes.moleculecatalogfilter;
 
+import org.knime.node.parameters.widget.choices.Label;
+
 /**
  * Defines the filter matching atom list handling handling types.
  * 
  * @author Manuel Schwarze
  */
 public enum AtomListHandling {
+	@Label(value = "Do not generate atom lists for matching filters")
 	None("Do not generate atom lists for matching filters"),
+	@Label(value = "Generate one combined atom list for all matching filters")
 	Combined("Generate one combined atom list for all matching filters"),
+	@Label(value = "Generate separate atom list columns for matching filters")
 	Separate("Generate separate atom list columns for matching filters");
 
 	//

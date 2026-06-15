@@ -1,0 +1,171 @@
+{
+  "data" : {
+    "model" : {
+      "filterCatalogs" : [ ],
+      "outputColumnPrefix" : "",
+      "atomListHandling" : "None"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "atomListHandling" : {
+            "oneOf" : [ {
+              "const" : "None",
+              "title" : "Do not generate atom lists for matching filters"
+            }, {
+              "const" : "Combined",
+              "title" : "Generate one combined atom list for all matching filters"
+            }, {
+              "const" : "Separate",
+              "title" : "Generate separate atom list columns for matching filters"
+            } ],
+            "title" : "Atom list handling",
+            "description" : "Controls whether or not lists of atoms matching the filters are generated. This also controls whether all matching atoms are in a single list or if there is a column per filter catalog.",
+            "default" : "None"
+          },
+          "filterCatalogs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Filter catalogs to apply",
+            "description" : "Define which filter catalogs shall be used for filtering.",
+            "default" : [ ]
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The input column with RDKit Molecules."
+          },
+          "outputColumnPrefix" : {
+            "type" : "string",
+            "title" : "Prefix for result columns",
+            "description" : "Column names for the second (filtered out) table are automatically assigned, but a prefix can be assigned, which makes it possible to run this node sub-sequentially with different filters.",
+            "default" : ""
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/filterCatalogs",
+      "options" : {
+        "format" : "twinList",
+        "includedLabel" : " Apply ",
+        "excludedLabel" : " Do not apply "
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/outputColumnPrefix"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/atomListHandling"
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "filterCatalogs" : {
+            "configKey" : "catalogs"
+          },
+          "outputColumnPrefix" : {
+            "configKey" : "output_column_prefix"
+          },
+          "atomListHandling" : {
+            "configKey" : "generate_atom_list"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/filterCatalogs",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "PAINS_A",
+        "text" : "PAINS_A"
+      }, {
+        "id" : "PAINS_B",
+        "text" : "PAINS_B"
+      }, {
+        "id" : "PAINS_C",
+        "text" : "PAINS_C"
+      }, {
+        "id" : "PAINS",
+        "text" : "PAINS"
+      }, {
+        "id" : "BRENK",
+        "text" : "BRENK"
+      }, {
+        "id" : "NIH",
+        "text" : "NIH"
+      }, {
+        "id" : "ZINC",
+        "text" : "ZINC"
+      }, {
+        "id" : "CHEMBL_Glaxo",
+        "text" : "CHEMBL_Glaxo"
+      }, {
+        "id" : "CHEMBL_Dundee",
+        "text" : "CHEMBL_Dundee"
+      }, {
+        "id" : "CHEMBL_BMS",
+        "text" : "CHEMBL_BMS"
+      }, {
+        "id" : "CHEMBL_SureChEMBL",
+        "text" : "CHEMBL_SureChEMBL"
+      }, {
+        "id" : "CHEMBL_MLSMR",
+        "text" : "CHEMBL_MLSMR"
+      }, {
+        "id" : "CHEMBL_Inpharmatica",
+        "text" : "CHEMBL_Inpharmatica"
+      }, {
+        "id" : "CHEMBL_LINT",
+        "text" : "CHEMBL_LINT"
+      }, {
+        "id" : "CHEMBL",
+        "text" : "CHEMBL"
+      }, {
+        "id" : "ALL",
+        "text" : "ALL"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ]
+}
