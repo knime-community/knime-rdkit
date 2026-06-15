@@ -113,6 +113,33 @@ public class RDKitInChI2MoleculeNodeModel extends AbstractRDKitCalculatorNodeMod
 	/** Postfix for the column name for extra InChI generation information: log. */
 	public static final String POSTFIX_LOG = " - Log";
 
+	/** Config key for the input column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the new RDKit molecule column name. */
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
+
+	/** Config key for the remove source columns option. */
+	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
+
+	/** Config key for the sanitize option. */
+	static final String CFG_SANITIZE = "sanitize";
+
+	/** Config key for the remove hydrogens option. */
+	static final String CFG_REMOVE_HYDROGENS = "remove_hydrogens";
+
+	/** Config key for the extra information column name prefix. */
+	static final String CFG_NEW_EXTRA_INFO_COLUMN_NAME_PREFIX = "new_extra_info_column_name_prefix";
+
+	/** Config key for the generate return code option. */
+	static final String CFG_GENERATE_RETURN_CODE = "generate_return_code";
+
+	/** Config key for the generate message option. */
+	static final String CFG_GENERATE_MESSAGE = "generate_message";
+
+	/** Config key for the generate log option. */
+	static final String CFG_GENERATE_LOG = "generate_log";
+
 
 	//
 	// Members
