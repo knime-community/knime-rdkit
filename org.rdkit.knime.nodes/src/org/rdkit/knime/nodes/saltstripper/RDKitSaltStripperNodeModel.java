@@ -116,6 +116,21 @@ public class RDKitSaltStripperNodeModel extends AbstractRDKitCalculatorNodeModel
 	 */
 	protected static final String SALT_DEFINITION_FILE = "/org/rdkit/knime/nodes/saltstripper/Salts.txt";
 
+	/** Config key for the input molecule column name. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the output (salt-stripped) column name. */
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
+
+	/** Config key for the remove-source-column option. */
+	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
+
+	/** Config key for the optional salt-definition column name. */
+	static final String CFG_SALT_INPUT = "salt_input";
+
+	/** Config key for the keep-only-largest-fragment option. */
+	static final String CFG_KEEP_ONLY_LARGEST_FRAGMENT = "keep_only_largest_fragment";
+
 	/** Warning context for salts. */
 	protected static final WarningConsolidator.Context SALT_CONTEXT =
 			new WarningConsolidator.Context("Salt", "salt", "salts", true);
