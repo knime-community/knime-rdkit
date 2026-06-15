@@ -47,6 +47,7 @@
  */
 package org.rdkit.knime.nodes.addcoordinates;
 
+import org.knime.node.parameters.widget.choices.Label;
 import org.RDKit.DistanceGeom;
 import org.RDKit.EmbedParameters;
 import org.RDKit.RDKFuncs;
@@ -93,11 +94,14 @@ public class RDKitAddCoordinatesNodeModel extends AbstractRDKitCalculatorNodeMod
 
 	/** Defines dimensions for coordinate generation. */
 	public enum CoordinateDimension {
-		/** 2D Coordinates */
-		Coord_2D,
-
 		/** 3D Coordinates */
-		Coord_3D;
+		@Label("3D")
+		Coord_3D, //
+
+		/** 2D Coordinates */
+		@Label("2D")
+		Coord_2D;
+
 
 		/**
 		 * {@inheritDoc}
