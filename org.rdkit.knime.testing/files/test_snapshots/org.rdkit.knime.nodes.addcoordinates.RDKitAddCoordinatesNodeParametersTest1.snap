@@ -1,0 +1,140 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumnName" : "Molecule",
+      "newColumnName" : "Molecule test (with coord.)",
+      "removeSourceColumns" : true,
+      "dimension" : "Coord_2D",
+      "templateSmarts" : "test"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "dimension" : {
+            "oneOf" : [ {
+              "const" : "Coord_3D",
+              "title" : "3D"
+            }, {
+              "const" : "Coord_2D",
+              "title" : "2D"
+            } ],
+            "title" : "Dimension",
+            "description" : "Define whether 2D or 3D coordinates will be generated. 2D coordinates are useful for displaying molecules\nin tables.\n",
+            "default" : "Coord_3D"
+          },
+          "inputColumnName" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The column containing molecules to be processed."
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name",
+            "description" : "Name of the new column in the output table."
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Toggles removal of the input RDKit Mol column in the output table.",
+            "default" : false
+          },
+          "templateSmarts" : {
+            "type" : "string",
+            "title" : "Template smarts",
+            "description" : "If provided and 2D coordinates are being generated, the coordinates will be generated so that the piece of\neach molecule that corresponds to the template will be drawn in the same way.\n",
+            "default" : ""
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumnName",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/dimension",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/templateSmarts",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/dimension",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "Coord_2D"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumnName" : {
+            "configPaths" : [ [ "input_column" ] ]
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "dimension" : {
+            "configKey" : "dimension"
+          },
+          "templateSmarts" : {
+            "configKey" : "template_smarts_value"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumnName",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumnName"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumnName", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}
