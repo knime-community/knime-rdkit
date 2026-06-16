@@ -1,0 +1,266 @@
+{
+  "data" : {
+    "model" : {
+      "useChirality" : false,
+      "useEnhancedStereo" : false,
+      "matchingCriteria" : "All",
+      "minimumMatches" : 1,
+      "fingerprintScreeningThreshold" : 10,
+      "rowKeyMatchInfo" : true
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "fingerprintScreeningThreshold" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Fingerprint screening threshold",
+            "description" : "Substructure search performance can be improved using fingerprints. This makes sense when there are many different query molecules and a lot of input molecules. Enter here the minimum number of query molecules that must be present to enable fingerprint screening. A value of 0 disables fingerprint screening. A value of -1 uses the current default threshold.",
+            "default" : 10
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "Select the column from the first input table that contains the RDKit molecules."
+          },
+          "matchingCriteria" : {
+            "oneOf" : [ {
+              "const" : "All",
+              "title" : "All"
+            }, {
+              "const" : "Exact",
+              "title" : "Exact"
+            }, {
+              "const" : "AtLeast",
+              "title" : "At least"
+            } ],
+            "title" : "Matches",
+            "description" : "Select the minimum number of patterns that must match for each molecule so that it is included in the first output table.",
+            "default" : "All"
+          },
+          "minimumMatches" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Minimum number of matches",
+            "description" : "The minimum number of patterns that must match when 'At least' is selected.",
+            "default" : 1
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name for matching substructures",
+            "description" : "Enter here the name of the new column that will contain a list of all matching substructure row indices."
+          },
+          "queryColumn" : {
+            "type" : "string",
+            "title" : "Query mol column",
+            "description" : "Select the column from the second input table that contains the query molecules. Acceptable types are SMARTS, SMILES, SDF and RDKit Mol."
+          },
+          "rowKeyMatchInfo" : {
+            "type" : "boolean",
+            "title" : "Use row keys as substructure match information",
+            "description" : "The column for matching substructure indices contained (for historic reasons) the row index, which turned out not to be too useful. Click this flag to use row keys instead.",
+            "default" : true
+          },
+          "useChirality" : {
+            "type" : "boolean",
+            "title" : "Use stereochemistry",
+            "description" : "If this is set, information about stereochemistry will be used in the substructure search.",
+            "default" : false
+          },
+          "useEnhancedStereo" : {
+            "type" : "boolean",
+            "title" : "Use enhanced stereochemistry when matching",
+            "description" : "If this is set, information about enhanced stereochemistry will be used in the substructure search.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/queryColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useChirality",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useEnhancedStereo",
+      "options" : {
+        "format" : "checkbox"
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/useChirality",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/matchingCriteria",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/minimumMatches",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 999.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 999.0
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        }
+      },
+      "rule" : {
+        "effect" : "DISABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/matchingCriteria",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "All"
+            }, {
+              "const" : "Exact"
+            } ]
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/fingerprintScreeningThreshold",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least -1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : -1.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/rowKeyMatchInfo",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "queryColumn" : {
+            "configKey" : "query_column"
+          },
+          "useChirality" : {
+            "configKey" : "use_chirality"
+          },
+          "useEnhancedStereo" : {
+            "configKey" : "useEnhancedStereo"
+          },
+          "matchingCriteria" : {
+            "configKey" : "matching"
+          },
+          "minimumMatches" : {
+            "configKey" : "minimumMatches"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "fingerprintScreeningThreshold" : {
+            "configKey" : "fp_screening_threshold"
+          },
+          "rowKeyMatchInfo" : {
+            "configKey" : "row_key_match_info"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/queryColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Query",
+        "text" : "Query",
+        "type" : {
+          "id" : "org.knime.chem.types.SmartsValue",
+          "text" : "SMARTS"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumn", "#/properties/model/properties/newColumnName" ]
+  } ]
+}

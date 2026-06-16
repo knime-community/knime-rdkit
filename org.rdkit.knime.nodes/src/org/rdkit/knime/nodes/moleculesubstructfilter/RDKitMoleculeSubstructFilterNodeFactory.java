@@ -51,6 +51,16 @@ package org.rdkit.knime.nodes.moleculesubstructfilter;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitMoleculeSubstructFilter" Node.
@@ -58,9 +68,11 @@ import org.knime.core.node.NodeView;
  * @author Greg Landrum, Novartis
  * @author Thorsten Meinl, University of Konstanz
  * @author Manuel Schwarze, Novartis
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitMoleculeSubstructFilterNodeFactory
-extends NodeFactory<RDKitMoleculeSubstructFilterNodeModel> {
+extends NodeFactory<RDKitMoleculeSubstructFilterNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the RDKitMoleculeSubstructFilter functionality
@@ -108,12 +120,60 @@ extends NodeFactory<RDKitMoleculeSubstructFilterNodeModel> {
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new RDKitMoleculeSubstructFilterNodeDialog();
-	}
+    private static final String NODE_NAME = "RDKit Molecule Substructure Filter";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Applies a number of substructure filters to an input RDKit Mol column.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Applies a substructure filter to an input RDKit Mol column. The patterns are given as SMARTS,
+                SMILES, SDF or RDKit molecules in the second input table. You can choose either a minimum number of
+                patterns to match or to require that all match.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Molecules", """
+                Table with RDKit molecules.
+                """),
+            fixedPort("Query molecules", """
+                Table with SMARTS, SMILES, SDF or RDKit Mol molecules to use as queries.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Molecules matching filter", """
+                Molecules matching the substructure query.
+                """),
+            fixedPort("Molecules not matching filter", """
+                Molecules not matching the substructure query.
+                """)
+    );
+
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitMoleculeSubstructFilterNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitMoleculeSubstructFilterNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
