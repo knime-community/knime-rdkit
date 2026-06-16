@@ -51,15 +51,27 @@ package org.rdkit.knime.nodes.molextractor;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitMoleculeExtractor" Node.
  * Splits up fragment molecules contained in a single RDKit molecule cell and extracts these molecules into separate cells.
  *
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitMoleculeExtractorNodeFactory 
-        extends NodeFactory<RDKitMoleculeExtractorNodeModel> {
+        extends NodeFactory<RDKitMoleculeExtractorNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitMoleculeExtractor functionality
@@ -107,12 +119,65 @@ public class RDKitMoleculeExtractorNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    private static final String NODE_NAME = "RDKit Molecule Extractor";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Splits up fragment molecules contained in a single RDKit molecule cell and extracts these molecules
+                into separate cells.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Splits up disconnected fragment molecules contained in a single RDKit molecule cell and extracts
+                these molecules into separate cells, also sanitizing these molecules if desired. If the input cell
+                is empty (missing), the input cell will be used as result with the appropriate reference column. If
+                the input molecule contains only one fragment it will result in a single row. The node can either be
+                used with an input table or based on flow variable input for the molecules and their format.
+                Supported molecule formats are RDKit Mol cells (when connecting an input table), SMILES, MOL and
+                SDF. <br /> Please be aware that auto-conversion (e.g for SMILES input) may fail when connecting an
+                input table. <br /> The Advanced Tab offers different options to treat conversion failures, empty
+                input cells and zero-atom molecules (empty molecules). You may configure the node to fail, to
+                generate empty cells with or without warning, or to skip the input with or without warning.<br />
+                The node can be used for instance after a Quickform Molecule Input node, which brings up a sketcher
+                in the KNIME Web Portal. When the user draws multiple molecules at once this node will split up the
+                users input into multiple molecules.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit molecules", """
+                Input table with RDKit Molecules, which may contain disconnected fragment molecules.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Result table with extracted RDKit molecules", """
+                Output table with extracted fragment molecules.
+                """)
+    );
+
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitMoleculeExtractorNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitMoleculeExtractorNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitMoleculeExtractorNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 

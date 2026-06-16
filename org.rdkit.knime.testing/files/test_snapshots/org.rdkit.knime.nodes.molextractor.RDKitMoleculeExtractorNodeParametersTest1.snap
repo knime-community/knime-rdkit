@@ -1,0 +1,319 @@
+{
+  "data" : {
+    "model" : {
+      "referenceInputColumn" : {
+        "specialChoice" : "ROW_ID"
+      },
+      "moleculeOutputColumnName" : "Molecules",
+      "sanitizeFragments" : false,
+      "errorHandling" : "MissingCellWithWarning",
+      "emptyCellHandling" : "MissingCellWithoutWarning",
+      "emptyMoleculeHandling" : "SkipWithoutWarning"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "emptyCellHandling" : {
+            "oneOf" : [ {
+              "const" : "Fail",
+              "title" : "Let the node fail"
+            }, {
+              "const" : "MissingCellWithWarning",
+              "title" : "Create a missing cell, generate warning"
+            }, {
+              "const" : "MissingCellWithoutWarning",
+              "title" : "Create a missing cell, no warning"
+            }, {
+              "const" : "SkipWithWarning",
+              "title" : "Skip result, generate warning"
+            }, {
+              "const" : "SkipWithoutWarning",
+              "title" : "Skip result, no warning"
+            } ],
+            "title" : "How to react on empty (missing) cells",
+            "description" : "Define here, how the node shall behave, if an empty (missing) cell is used as input. By default, the node will generate a missing cell and no warning.",
+            "default" : "MissingCellWithoutWarning"
+          },
+          "emptyMoleculeHandling" : {
+            "oneOf" : [ {
+              "const" : "Fail",
+              "title" : "Let the node fail"
+            }, {
+              "const" : "MissingCellWithWarning",
+              "title" : "Create a missing cell, generate warning"
+            }, {
+              "const" : "MissingCellWithoutWarning",
+              "title" : "Create a missing cell, no warning"
+            }, {
+              "const" : "SkipWithWarning",
+              "title" : "Skip result, generate warning"
+            }, {
+              "const" : "SkipWithoutWarning",
+              "title" : "Skip result, no warning"
+            } ],
+            "title" : "How to react on empty (zero atom) molecules",
+            "description" : "Define here, how the node shall behave, if an empty molecule is used as input. This means that the molecule has zero atoms. By default, the node will generate a missing cell and no warning.",
+            "default" : "SkipWithoutWarning"
+          },
+          "errorHandling" : {
+            "oneOf" : [ {
+              "const" : "Fail",
+              "title" : "Let the node fail"
+            }, {
+              "const" : "MissingCellWithWarning",
+              "title" : "Create a missing cell, generate warning"
+            }, {
+              "const" : "MissingCellWithoutWarning",
+              "title" : "Create a missing cell, no warning"
+            }, {
+              "const" : "SkipWithWarning",
+              "title" : "Skip result, generate warning"
+            }, {
+              "const" : "SkipWithoutWarning",
+              "title" : "Skip result, no warning"
+            } ],
+            "title" : "How to react on conversion errors",
+            "description" : "Define here, how the node shall behave, if an input molecule to be processed could not be converted into an RDKit molecule. Usually, this is the case if the molecule is invalid. By default, the node will generate a missing cell and no warning. If conversion requires special treatment, you may use the RDKit From Molecule node to perform the conversion before executing this node. It offers different options for conversion.",
+            "default" : "MissingCellWithWarning"
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The input column with RDKit Molecules, which may contain multiple disconnected fragments to be extracted."
+          },
+          "inputMolecules" : {
+            "type" : "string",
+            "title" : "Molecules",
+            "description" : "A textual representation of the molecules to be split. Usually, you will attach a flow variable to control this setting, e.g. coming from a Molecule Sketcher. This setting will only be used, if no table is connected."
+          },
+          "inputMoleculesFormat" : {
+            "type" : "string",
+            "title" : "Format",
+            "description" : "The format of the molecules: MOL, SDF or SMILES are supported. This setting will only be used, if no table is connected."
+          },
+          "moleculeOutputColumnName" : {
+            "type" : "string",
+            "title" : "Column name for extracted molecules",
+            "description" : "The name to be used for the new column used to store extracted molecules."
+          },
+          "referenceInputColumn" : {
+            "type" : "object",
+            "properties" : {
+              "regularChoice" : {
+                "type" : "string"
+              },
+              "specialChoice" : {
+                "oneOf" : [ {
+                  "const" : "ROW_ID",
+                  "title" : "Row id"
+                }, {
+                  "const" : "NONE",
+                  "title" : "None"
+                } ]
+              }
+            },
+            "title" : "Reference column (e.g. an ID)",
+            "description" : "The column to be used as reference column. Its values are assigned to the cells with the extracted molecules. You may use the Row ID here or set it to None, in which case the reference column will not be added.",
+            "default" : {
+              "specialChoice" : "ROW_ID"
+            }
+          },
+          "referenceOutputColumnName" : {
+            "type" : "string",
+            "title" : "Column name for copied reference data",
+            "description" : "The name to be used for the new reference column used to store the reference values."
+          },
+          "sanitizeFragments" : {
+            "type" : "boolean",
+            "title" : "Sanitize fragments",
+            "description" : "Flag to determine, if fragments shall be sanitized when being extracted. Selecting this option may lead to additional fragmentation errors. Default is false.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputMolecules",
+      "rule" : {
+        "effect" : "HIDE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputMoleculesFormat",
+      "rule" : {
+        "effect" : "HIDE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/referenceInputColumn",
+      "options" : {
+        "format" : "singleSelection",
+        "specialChoices" : [ {
+          "id" : "ROW_ID",
+          "text" : "Row id"
+        }, {
+          "id" : "NONE",
+          "text" : "None"
+        } ]
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/moleculeOutputColumnName"
+    }, {
+      "type" : "MultiRuleWrapper",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "schema" : { }
+        }
+      },
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/referenceOutputColumnName",
+        "rule" : {
+          "effect" : "DISABLE",
+          "condition" : {
+            "scope" : "#/properties/model/properties/referenceInputColumn",
+            "schema" : {
+              "properties" : {
+                "specialChoice" : {
+                  "oneOf" : [ {
+                    "const" : "NONE"
+                  } ]
+                }
+              },
+              "required" : [ "specialChoice" ]
+            }
+          }
+        }
+      } ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/sanitizeFragments",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/errorHandling",
+      "options" : {
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/emptyCellHandling",
+      "options" : {
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/emptyMoleculeHandling",
+      "options" : {
+        "isAdvanced" : true
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputMolecules" : {
+            "configKey" : "input_molecules"
+          },
+          "inputMoleculesFormat" : {
+            "configKey" : "input_molecules_format"
+          },
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "referenceInputColumn" : {
+            "configPaths" : [ [ "input_ref_column", "useRowID" ], [ "input_ref_column", "columnName" ] ]
+          },
+          "moleculeOutputColumnName" : {
+            "configKey" : "output_mol_name"
+          },
+          "referenceOutputColumnName" : {
+            "configKey" : "output_ref_name"
+          },
+          "sanitizeFragments" : {
+            "configKey" : "sanitize_fragments"
+          },
+          "errorHandling" : {
+            "configKey" : "error_handling"
+          },
+          "emptyCellHandling" : {
+            "configKey" : "empty_cell_handling"
+          },
+          "emptyMoleculeHandling" : {
+            "configKey" : "empty_molecule_handling"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "RDKit Mol",
+        "text" : "RDKit Mol",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/referenceInputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "RDKit Mol",
+        "text" : "RDKit Mol",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ]
+}

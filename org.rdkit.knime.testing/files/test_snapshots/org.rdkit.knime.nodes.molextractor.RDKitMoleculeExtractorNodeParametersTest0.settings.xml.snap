@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_molecules" type="xstring" isnull="true" value=""/>
+    <entry key="input_molecules_format" type="xstring" isnull="true" value=""/>
+    <entry key="input_column" type="xstring" isnull="true" value=""/>
+    <config key="input_ref_column">
+        <entry key="useRowID" type="xboolean" value="true"/>
+        <entry key="columnName" type="xstring" isnull="true" value=""/>
+    </config>
+    <entry key="output_mol_name" type="xstring" value="Molecules"/>
+    <entry key="output_ref_name" type="xstring" isnull="true" value=""/>
+    <entry key="sanitize_fragments" type="xboolean" value="false"/>
+    <entry key="error_handling" type="xstring" value="MissingCellWithWarning"/>
+    <entry key="empty_cell_handling" type="xstring" value="MissingCellWithoutWarning"/>
+    <entry key="empty_molecule_handling" type="xstring" value="SkipWithoutWarning"/>
+</config>

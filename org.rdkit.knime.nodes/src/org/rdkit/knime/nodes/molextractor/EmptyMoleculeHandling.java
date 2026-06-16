@@ -48,16 +48,23 @@
  */
 package org.rdkit.knime.nodes.molextractor;
 
+import org.knime.node.parameters.widget.choices.Label;
+
 /**
  * Defines the empty molecule handling type.
  * 
  * @author Manuel Schwarze
  */
 public enum EmptyMoleculeHandling {
+	@Label("Let the node fail")
 	Fail("Let the node fail"),
+	@Label("Create a missing cell, generate warning")
 	MissingCellWithWarning("Create a missing cell, generate warning"),
+	@Label("Create a missing cell, no warning")
 	MissingCellWithoutWarning("Create a missing cell, no warning"),
+	@Label("Skip result, generate warning")
 	SkipWithWarning("Skip result, generate warning"),
+	@Label("Skip result, no warning")
 	SkipWithoutWarning("Skip result, no warning");
 
 	//
