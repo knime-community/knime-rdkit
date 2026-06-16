@@ -98,6 +98,54 @@ public abstract class AbstractRDKitFingerprintNodeModel extends AbstractRDKitCal
 	/** Input data info index for an optional atom list (used for rooted fingerprints only). */
 	protected static final int INPUT_COLUMN_ATOM_LIST = 1;
 
+	/** Config key for the input molecule column name. */
+	static final String CFG_SMILES_COLUMN = "smiles_column";
+
+	/** Config key for the new output column name. */
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
+
+	/** Config key for the remove source column option. */
+	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
+
+	/** Config key for the fingerprint type. */
+	static final String CFG_FP_TYPE = "fp_type";
+
+	/** Config key for the number of bits. */
+	static final String CFG_NUM_BITS = "num_bits";
+
+	/** Config key for the radius. */
+	static final String CFG_RADIUS = "radius";
+
+	/** Config key for the layer flags. */
+	static final String CFG_LAYER_FLAGS = "layer_flags";
+
+	/** Config key for the torsion path length. */
+	static final String CFG_TORSION_PATH_LENGTH = "torsion_path_length";
+
+	/** Config key for the minimum path length. */
+	static final String CFG_MIN_PATH = "min_path";
+
+	/** Config key for the maximum path length. */
+	static final String CFG_MAX_PATH = "max_path";
+
+	/** Config key for the AtomPair minimum path length. */
+	static final String CFG_ATOMPAIRS_MIN_PATH = "atompairs_min_path";
+
+	/** Config key for the AtomPair maximum path length. */
+	static final String CFG_ATOMPAIRS_MAX_PATH = "atompairs_max_path";
+
+	/** Config key for the use chirality option. */
+	static final String CFG_USE_CHIRALITY = "use_chirality";
+
+	/** Config key for the rooted fingerprint option. */
+	static final String CFG_IS_ROOTED = "is_rooted";
+
+	/** Config key for the atom list column name. */
+	static final String CFG_ATOM_LIST_COLUMN = "atom_list_column";
+
+	/** Config key for the include atoms option. */
+	static final String CFG_INCLUDE_ATOMS = "include_atoms";
+
 	/** Empty atom list to be used if an empty atom list cell is encountered. */
 	protected static final UInt_Vect EMPTY_ATOM_LIST = new UInt_Vect(0);
 
