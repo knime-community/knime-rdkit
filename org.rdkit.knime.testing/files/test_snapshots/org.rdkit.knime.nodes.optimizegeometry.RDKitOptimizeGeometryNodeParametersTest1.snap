@@ -1,0 +1,190 @@
+{
+  "data" : {
+    "model" : {
+      "forceField" : "MMFF94",
+      "removeSourceColumns" : false,
+      "iterations" : 1000,
+      "removeStartingCoordinates" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "forceField" : {
+            "oneOf" : [ {
+              "const" : "MMFF94",
+              "title" : "MMFF94"
+            }, {
+              "const" : "MMFF94S",
+              "title" : "MMFF94S"
+            }, {
+              "const" : "UFF",
+              "title" : "UFF"
+            } ],
+            "title" : "Force field",
+            "description" : "The force field type that shall be used for optimization.\n<ul>\n<li><b>MMFF94</b>: Merck molecular force field 94.</li>\n<li><b>MMFF94S</b>: Static variant of MMFF94. Incorporates altered out-of-plane bending parameters that yield planar energy-minimized geometries at unstrained delocalized trigonal nitrogen centers.</li>\n<li><b>UFF</b>: Universal force field. An all-atom potential containing parameters for every atom, estimated using general rules based on element, hybridization, and connectivity.</li>\n</ul>",
+            "default" : "MMFF94"
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "The input column with RDKit Molecules."
+          },
+          "iterations" : {
+            "type" : "integer",
+            "format" : "int32",
+            "title" : "Iterations",
+            "description" : "Number of iterations to use for optimization. If the number is set too small, molecules will not be fully converged. Set it to 0 iterations to skip optimizing and only calculate the energy value.",
+            "default" : 1000
+          },
+          "newConvergeColumnName" : {
+            "type" : "string",
+            "title" : "New column name for converge information",
+            "description" : "The name of the new column, which will contain a flag to tell whether the optimized molecule is converged. If iterations were set to 0 (no optimization) this value will always be false."
+          },
+          "newEnergyColumnName" : {
+            "type" : "string",
+            "title" : "New column name for energy information",
+            "description" : "The name of the new column, which will contain the energy value of the optimized molecule in kcal/mol."
+          },
+          "newMoleculeColumnName" : {
+            "type" : "string",
+            "title" : "New column name for optimized molecule",
+            "description" : "The name of the new column, which will contain the optimized molecule."
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Set to true to remove the specified source column from the result table.",
+            "default" : false
+          },
+          "removeStartingCoordinates" : {
+            "type" : "boolean",
+            "title" : "Remove starting coordinates before optimizing the molecule",
+            "description" : "Set to true to remove coordinates before starting the optimization process. This may affect the results in a positive way.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/forceField"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/iterations",
+      "options" : {
+        "validation" : {
+          "max" : {
+            "errorMessage" : "The value must not exceed 2147483647.",
+            "parameters" : {
+              "isExclusive" : false,
+              "max" : 2.147483647E9
+            }
+          },
+          "min" : {
+            "errorMessage" : "The value must be at least 1.",
+            "parameters" : {
+              "isExclusive" : false,
+              "min" : 1.0
+            }
+          }
+        },
+        "isAdvanced" : true
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeStartingCoordinates",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      }
+    }, {
+      "label" : "Output",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/newMoleculeColumnName"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/removeSourceColumns",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/newConvergeColumnName"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/newEnergyColumnName"
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "forceField" : {
+            "configKey" : "forceField"
+          },
+          "newMoleculeColumnName" : {
+            "configKey" : "new_molecule_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "newConvergeColumnName" : {
+            "configKey" : "new_converge_column_name"
+          },
+          "newEnergyColumnName" : {
+            "configKey" : "new_energy_column_name"
+          },
+          "iterations" : {
+            "configKey" : "iterations"
+          },
+          "removeStartingCoordinates" : {
+            "configKey" : "remove_starting_coordinates"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumn", "#/properties/model/properties/newConvergeColumnName", "#/properties/model/properties/newEnergyColumnName", "#/properties/model/properties/newMoleculeColumnName", "#/properties/model/properties/removeSourceColumns" ]
+  } ]
+}

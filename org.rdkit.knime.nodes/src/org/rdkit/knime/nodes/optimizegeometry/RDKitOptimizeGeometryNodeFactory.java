@@ -51,15 +51,27 @@ package org.rdkit.knime.nodes.optimizegeometry;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "RDKitOptimizeGeometry" Node.
  * 
  *
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
 public class RDKitOptimizeGeometryNodeFactory 
-        extends NodeFactory<RDKitOptimizeGeometryNodeModel> {
+        extends NodeFactory<RDKitOptimizeGeometryNodeModel> implements NodeDialogFactory {
 
     /**
      * Creates a model for the RDKitOptimizeGeometry functionality
@@ -107,12 +119,68 @@ public class RDKitOptimizeGeometryNodeFactory
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    private static final String NODE_NAME = "RDKit Optimize Geometry";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Optimizes the geometry for an input RDKit Mol column and calculates the molecule's energy in
+                kcal/mol.
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Optimizes the geometry for an input RDKit Mol column and calculates the molecule's energy in
+                kcal/mol. If the passed in molecules have no conformation, it will be calculated. The optimization
+                is based on a particular force field and a number of iterations. It is also possible to turn off
+                optimization completely by iterating 0 times. Optionally already available coordinates can be
+                removed in order to calculate new ones from scratch. The following force fields are supported: <ul>
+                <li>UFF: Universal force field is an all atom potential containing parameters for every atom. The
+                force field parameters are estimated using general rules based only on the element, its
+                hybridization, and its connectivity. Published in: UFF, a Full Periodic Table Force Field for
+                Molecular Mechanics and Molecular Dynamics Simulations by A.K. Rappe, C.J. Casewit, K.S. Colwell,
+                W.A. Goddard III, W.M. Skiff, J.Am. Chem. Soc. 114 (1992) 10024–10035 </li> <li>MMFF94: Merck
+                molecular force field. Published in: Basis, form, scope, parameterization, and performance of
+                MMFF94, Thomas A. Halgren, J. Comp. Chem.; 1996; 490-519 </li> <li>MMFF94S: Static variant of
+                MMFF94. MMFF94S incorporates altered out of plane bending parameters that yield planar (or nearly
+                planar) energy-minimized geometries at unstrained delocalized trigonal nitrogen centers. Published
+                in: MMFF VI. MMFF94s option for energy minimization studies, Thomas A. Halgren; 1999; J. Comput.
+                Chem., 20: 720–729 </li> </ul>
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Input table with RDKit molecules", """
+                The molecules to optimize the geometry for.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Result table", """
+                Optimized molecules with converge and energy information (kcal/mol).
+                """)
+    );
+
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new RDKitOptimizeGeometryNodeDialog();
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
     }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitOptimizeGeometryNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitOptimizeGeometryNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 }
 
