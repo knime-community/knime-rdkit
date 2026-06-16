@@ -85,6 +85,7 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.node.parameters.widget.choices.Label;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory.RowFailurePolicy;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
@@ -117,7 +118,12 @@ public class RDKitMoleculeSubstructFilterNodeModel extends AbstractRDKitNodeMode
 
 	/** Defines supported matching criteria. */
 	public enum MatchingCriteria {
-		All, Exact, AtLeast;
+		@Label(value = "All")
+		All,
+		@Label(value = "Exact")
+		Exact,
+		@Label(value = "At least")
+		AtLeast;
 
 		/**
 		 * {@inheritDoc}
@@ -145,6 +151,16 @@ public class RDKitMoleculeSubstructFilterNodeModel extends AbstractRDKitNodeMode
 	/** The logger instance. */
 	protected static final NodeLogger LOGGER = NodeLogger
 			.getLogger(RDKitSubstructFilterNodeModel.class);
+
+	static final String CFG_INPUT_COLUMN = "input_column";
+	static final String CFG_QUERY_COLUMN = "query_column";
+	static final String CFG_USE_CHIRALITY = "use_chirality";
+	static final String CFG_USE_ENHANCED_STEREO = "useEnhancedStereo";
+	static final String CFG_MATCHING = "matching";
+	static final String CFG_MINIMUM_MATCHES = "minimumMatches";
+	static final String CFG_NEW_COLUMN_NAME = "new_column_name";
+	static final String CFG_FP_SCREENING_THRESHOLD = "fp_screening_threshold";
+	static final String CFG_ROW_KEY_MATCH_INFO = "row_key_match_info";
 
 	/** Input data info index for Mol value. */
 	private static final int INPUT_COLUMN_MOL = 0;

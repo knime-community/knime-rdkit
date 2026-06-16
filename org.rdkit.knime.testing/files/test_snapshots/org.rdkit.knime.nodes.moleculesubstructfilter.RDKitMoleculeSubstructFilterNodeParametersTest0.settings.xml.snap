@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_column" type="xstring" isnull="true" value=""/>
+    <entry key="query_column" type="xstring" isnull="true" value=""/>
+    <entry key="use_chirality" type="xboolean" value="false"/>
+    <entry key="useEnhancedStereo" type="xboolean" value="false"/>
+    <entry key="matching" type="xstring" value="All"/>
+    <entry key="minimumMatches" type="xint" value="1"/>
+    <entry key="new_column_name" type="xstring" isnull="true" value=""/>
+    <entry key="fp_screening_threshold" type="xint" value="10"/>
+    <entry key="row_key_match_info" type="xboolean" value="true"/>
+</config>
