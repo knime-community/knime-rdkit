@@ -1,0 +1,466 @@
+{
+  "data" : {
+    "model" : {
+      "treatAsQuery" : false,
+      "removeSourceColumns" : false,
+      "separateRows" : "SPLIT_ROWS",
+      "generateErrorInfo" : false,
+      "errorInfoColumnName" : "",
+      "generateCoordinates" : false,
+      "forceGenerateCoordinates" : false,
+      "keepHs" : false,
+      "partialSanitization" : false,
+      "strictParsing" : true,
+      "doAromaticity" : true,
+      "doStereochem" : true,
+      "enableTreatAsQuery" : false,
+      "enableSanitizationOption" : false,
+      "enableKeepHsOption" : false,
+      "enableStrictParsingOption" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "doAromaticity" : {
+            "type" : "boolean",
+            "title" : "Reperceive aromaticity",
+            "description" : "If enabled (the default) all molecules are converted to a Kekule form and then Hueckel's rules are applied to determine aromaticity. If disabled, whatever aromaticity information is present in the input will be used. NOTE: SDF/MOL data contains no information about aromaticity.",
+            "default" : true
+          },
+          "doStereochem" : {
+            "type" : "boolean",
+            "title" : "Correct stereochemistry",
+            "description" : "If enabled (the default) all stereochemistry specifications will be checked to ensure that they are not redundant or that stereochemistry markers are not set on either atoms or double bonds that should not have them.",
+            "default" : true
+          },
+          "enableKeepHsOption" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "enableSanitizationOption" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "enableStrictParsingOption" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "enableTreatAsQuery" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "errorInfoColumnName" : {
+            "type" : "string",
+            "title" : "Error information column name",
+            "description" : "Name of the column that will contain error information for structures that failed conversion.",
+            "default" : ""
+          },
+          "forceGenerateCoordinates" : {
+            "type" : "boolean",
+            "title" : "Force generation",
+            "description" : "Select this box to enforce 2D coordinate generation. Coordinates may already be available in the (SDF) input, so this option allows you to discard the original coordinates and recompute from scratch.",
+            "default" : false
+          },
+          "generateCoordinates" : {
+            "type" : "boolean",
+            "title" : "Generate 2D coordinates",
+            "description" : "Select this option to generate 2D coordinates for the molecules. The coordinates are used for, among other things, 2D renderings of the structures. If not selected, the renderer will (re-)compute coordinates on demand.",
+            "default" : false
+          },
+          "generateErrorInfo" : {
+            "type" : "boolean",
+            "title" : "Generate error information column",
+            "description" : "If checked, an additional column will be added that contains error information for all structures that failed conversion.",
+            "default" : false
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "Molecule column",
+            "description" : "The column that contains the molecules (SMILES, SDF or SMARTS type column). If the input column type supports multiple molecule types, the node will take SMILES before SDF before SMARTS."
+          },
+          "keepHs" : {
+            "type" : "boolean",
+            "title" : "Keep hydrogens",
+            "description" : "Switch this option on to prevent the RDKit from removing hydrogens from molecules constructed from SDF. This option has no effect for SMILES or SMARTS input.",
+            "default" : false
+          },
+          "newColumnName" : {
+            "type" : "string",
+            "title" : "New column name",
+            "description" : "Name of the new column in the output table."
+          },
+          "partialSanitization" : {
+            "type" : "boolean",
+            "title" : "Partial sanitization",
+            "description" : "The RDKit does a fair amount of work when compounds are loaded to make sure that they are chemically reasonable and correct. This is called sanitization. When switching on partial sanitization the following options allow specific aspects of the sanitization to be turned off.",
+            "default" : false
+          },
+          "removeSourceColumns" : {
+            "type" : "boolean",
+            "title" : "Remove source column",
+            "description" : "Toggles removal of the input molecule column in the output table.",
+            "default" : false
+          },
+          "separateRows" : {
+            "oneOf" : [ {
+              "const" : "SPLIT_ROWS",
+              "title" : "Send error rows to second output"
+            }, {
+              "const" : "MISS_VAL",
+              "title" : "Insert missing values"
+            } ],
+            "title" : "Error handling",
+            "description" : "If the molecule in an input row cannot be converted, you can select if this row should be separated from the output table and be delivered at the second port, or if a missing value should be inserted instead of the RDKit molecule in the result table.\n<ul>\n<li><b>Send error rows to second output</b>: The table at the second port contains the input rows with problematic structures.</li>\n<li><b>Insert missing values</b>: If the input structure can't be translated, a missing value is inserted.</li>\n</ul>",
+            "default" : "SPLIT_ROWS"
+          },
+          "strictParsing" : {
+            "type" : "boolean",
+            "title" : "Strict parsing of mol blocks",
+            "description" : "When SDF molecules are converted into RDKit molecules, this option sets the tolerance level for parsing mol blocks. The default value for new nodes is defined in RDKit Nodes / RDKit Types preferences. (Introduced in December 2022)",
+            "default" : true
+          },
+          "treatAsQuery" : {
+            "type" : "boolean",
+            "title" : "Treat as query",
+            "description" : "Flag that can be used for SMILES and SDF input columns. Select it to prepare the resulting RDKit molecules as queries. This forces a full sanitization, keeps hydrogens in the molecule and merges query hydrogens.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/treatAsQuery",
+      "options" : {
+        "format" : "checkbox"
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/enableTreatAsQuery",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/newColumnName"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/removeSourceColumns",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/separateRows",
+      "options" : {
+        "format" : "radio",
+        "radioLayout" : "vertical"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/generateErrorInfo",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/errorInfoColumnName",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/generateErrorInfo",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/generateCoordinates",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/forceGenerateCoordinates",
+      "options" : {
+        "format" : "checkbox"
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/generateCoordinates",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/keepHs",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/enableKeepHsOption",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/partialSanitization",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/enableSanitizationOption",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/strictParsing",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/enableStrictParsingOption",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/doAromaticity",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "DISABLE",
+        "condition" : {
+          "type" : "AND",
+          "conditions" : [ {
+            "type" : "OR",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/partialSanitization",
+              "schema" : {
+                "const" : true
+              }
+            }, {
+              "scope" : "#/properties/model/properties/enableSanitizationOption",
+              "schema" : {
+                "const" : true
+              }
+            } ]
+          }, {
+            "type" : "OR",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/partialSanitization",
+              "schema" : {
+                "not" : {
+                  "const" : true
+                }
+              }
+            }, {
+              "scope" : "#/properties/model/properties/enableSanitizationOption",
+              "schema" : {
+                "not" : {
+                  "const" : true
+                }
+              }
+            } ]
+          } ]
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/doStereochem",
+      "options" : {
+        "format" : "checkbox",
+        "isAdvanced" : true
+      },
+      "rule" : {
+        "effect" : "DISABLE",
+        "condition" : {
+          "type" : "AND",
+          "conditions" : [ {
+            "type" : "OR",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/partialSanitization",
+              "schema" : {
+                "const" : true
+              }
+            }, {
+              "scope" : "#/properties/model/properties/enableSanitizationOption",
+              "schema" : {
+                "const" : true
+              }
+            } ]
+          }, {
+            "type" : "OR",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/partialSanitization",
+              "schema" : {
+                "not" : {
+                  "const" : true
+                }
+              }
+            }, {
+              "scope" : "#/properties/model/properties/enableSanitizationOption",
+              "schema" : {
+                "not" : {
+                  "const" : true
+                }
+              }
+            } ]
+          } ]
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configKey" : "input_column"
+          },
+          "treatAsQuery" : {
+            "configKey" : "treat_as_query"
+          },
+          "newColumnName" : {
+            "configKey" : "new_column_name"
+          },
+          "removeSourceColumns" : {
+            "configKey" : "remove_source_columns"
+          },
+          "separateRows" : {
+            "configKey" : "bad_rows_to_port1"
+          },
+          "generateErrorInfo" : {
+            "configKey" : "generateErrorInfo"
+          },
+          "errorInfoColumnName" : {
+            "configKey" : "errorInfoColumnName"
+          },
+          "generateCoordinates" : {
+            "configKey" : "generateCoordinates"
+          },
+          "forceGenerateCoordinates" : {
+            "configKey" : "forceGenerateCoordinates"
+          },
+          "keepHs" : {
+            "configKey" : "keepHs"
+          },
+          "partialSanitization" : {
+            "configKey" : "skip_sanitization"
+          },
+          "strictParsing" : {
+            "configKey" : "strict_parsing"
+          },
+          "doAromaticity" : {
+            "configKey" : "do_aromaticity"
+          },
+          "doStereochem" : {
+            "configKey" : "do_stereochem"
+          },
+          "enableTreatAsQuery" : {
+            "configPaths" : [ ]
+          },
+          "enableSanitizationOption" : {
+            "configPaths" : [ ]
+          },
+          "enableKeepHsOption" : {
+            "configPaths" : [ ]
+          },
+          "enableStrictParsingOption" : {
+            "configPaths" : [ ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/enableKeepHsOption",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : false
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/enableSanitizationOption",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/enableStrictParsingOption",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : false
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/enableTreatAsQuery",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "SMILES",
+        "text" : "SMILES",
+        "type" : {
+          "id" : "org.knime.chem.types.SmilesValue",
+          "text" : "SMILES"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/inputColumn"
+    },
+    "dependencies" : [ "#/properties/model/properties/errorInfoColumnName", "#/properties/model/properties/inputColumn", "#/properties/model/properties/newColumnName", "#/properties/model/properties/removeSourceColumns", "#/properties/model/properties/separateRows", "#/properties/model/properties/treatAsQuery" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/treatAsQuery"
+    },
+    "dependencies" : [ "#/properties/model/properties/inputColumn", "#/properties/model/properties/treatAsQuery" ]
+  } ]
+}

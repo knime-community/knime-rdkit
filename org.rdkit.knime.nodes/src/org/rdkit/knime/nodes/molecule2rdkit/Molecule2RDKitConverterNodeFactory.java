@@ -50,22 +50,26 @@ package org.rdkit.knime.nodes.molecule2rdkit;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
 /**
  * <code>NodeFactory</code> for the RDKit based "Molecule2RDKitConverter" Node.
  * 
  * @author Greg Landrum
  * @author Manuel Schwarze
+ * @author Jannik Semperowitsch, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class Molecule2RDKitConverterNodeFactory extends NodeFactory<Molecule2RDKitConverterNodeModel> {
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected NodeDialogPane createNodeDialogPane() {
-		return new Molecule2RDKitConverterNodeDialog();
-	}
+public class Molecule2RDKitConverterNodeFactory extends NodeFactory<Molecule2RDKitConverterNodeModel> implements NodeDialogFactory {
 
 	/**
 	 * Creates a model for the Molecule2RDKitConverter functionality
@@ -112,5 +116,58 @@ public class Molecule2RDKitConverterNodeFactory extends NodeFactory<Molecule2RDK
 	protected boolean hasDialog() {
 		return true;
 	}
+    private static final String NODE_NAME = "RDKit From Molecule";
+    private static final String NODE_ICON = "default.png";
+    private static final String SHORT_DESCRIPTION = """
+            Generates RDKit molecules from a molecule string representation (SMILES, SDF or SMARTS).
+            """;
+    private static final String FULL_DESCRIPTION = """
+            Generates RDKit molecule column from a molecule string representation (SMILES, SDF or SMARTS) and
+                appends it to the table. Depending on the input format of the molecule the usage of some options is
+                not possible. All grayed out options are not taken into account when the RDKit molecule gets
+                generated, regardless if flagged or not.
+            """;
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Data", """
+                Data with Smiles or SDF representation of molecules.
+                """)
+    );
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Output data", """
+                Data with RDKit molecule column.
+                """),
+            fixedPort("Erroneous input data", """
+                Rows that could not be converted to a RDKit molecule.
+                """)
+    );
+
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, Molecule2RDKitConverterNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            Molecule2RDKitConverterNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
 
 }

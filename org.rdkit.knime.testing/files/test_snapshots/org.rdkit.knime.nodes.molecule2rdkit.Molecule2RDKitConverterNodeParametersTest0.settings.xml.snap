@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="input_column" type="xstring" isnull="true" value=""/>
+    <entry key="treat_as_query" type="xboolean" value="false"/>
+    <entry key="new_column_name" type="xstring" isnull="true" value=""/>
+    <entry key="remove_source_columns" type="xboolean" value="false"/>
+    <entry key="bad_rows_to_port1" type="xstring" value="SPLIT_ROWS"/>
+    <entry key="generateErrorInfo" type="xboolean" value="false"/>
+    <entry key="errorInfoColumnName" type="xstring" value=""/>
+    <entry key="generateCoordinates" type="xboolean" value="false"/>
+    <entry key="forceGenerateCoordinates" type="xboolean" value="false"/>
+    <entry key="keepHs" type="xboolean" value="false"/>
+    <entry key="skip_sanitization" type="xboolean" value="false"/>
+    <entry key="strict_parsing" type="xboolean" value="true"/>
+    <entry key="do_aromaticity" type="xboolean" value="true"/>
+    <entry key="do_stereochem" type="xboolean" value="true"/>
+</config>
