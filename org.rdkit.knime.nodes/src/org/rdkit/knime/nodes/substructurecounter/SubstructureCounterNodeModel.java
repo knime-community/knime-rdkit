@@ -121,6 +121,39 @@ public class SubstructureCounterNodeModel extends AbstractRDKitCalculatorNodeMod
 	/** Default value for query tags column (optional). */
 	protected static final String DEFAULT_QUERY_TAGS_COLUMN = "Query tags";
 
+	/** Config key for the input molecule column. */
+	static final String CFG_INPUT_COLUMN = "input_column";
+
+	/** Config key for the query molecule column. */
+	static final String CFG_INPUT_QUERY_COLUMN = "inputQueryCol";
+
+	/** Config key for the unique matches only option. */
+	static final String CFG_COUNT_UNIQUE_MATCHES = "countUniqueMatches";
+
+	/** Config key for the use chirality option. */
+	static final String CFG_USE_CHIRALITY = "useChirality";
+
+	/** Config key for the use enhanced stereo option. */
+	static final String CFG_USE_ENHANCED_STEREO = "useEnhancedStereo";
+
+	/** Config key for the use query name column option. */
+	static final String CFG_USE_QUERY_NAME_COLUMN = "useQueryNameColumn";
+
+	/** Config key for the query name column. */
+	static final String CFG_QUERY_NAME_COLUMN = "queryNameColumn";
+
+	/** Config key for the count total hits option. */
+	static final String CFG_COUNT_TOTAL_HITS = "countTotalHits";
+
+	/** Config key for the total hits count column name. */
+	static final String CFG_COUNT_TOTAL_HITS_COLUMN = "countTotalHitsColumn";
+
+	/** Config key for the track query tags option. */
+	static final String CFG_TRACK_QUERY_TAGS = "trackQueryTags";
+
+	/** Config key for the query tags column name. */
+	static final String CFG_TRACK_QUERY_TAGS_COLUMN = "trackQueryTagsColumn";
+
 	//
 	// Members
 	//
