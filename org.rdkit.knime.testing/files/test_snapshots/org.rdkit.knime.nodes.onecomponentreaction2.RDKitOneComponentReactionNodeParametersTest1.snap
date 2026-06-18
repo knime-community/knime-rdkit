@@ -298,8 +298,7 @@
       "type" : "Control",
       "scope" : "#/properties/model/properties/additionalColumnsEnabled",
       "options" : {
-        "format" : "checkbox",
-        "isAdvanced" : true
+        "format" : "checkbox"
       }
     }, {
       "type" : "Control",
@@ -307,8 +306,7 @@
       "options" : {
         "format" : "typedStringFilter",
         "unknownValuesText" : "Any unknown column",
-        "emptyStateLabel" : "No columns in this list.",
-        "isAdvanced" : true
+        "emptyStateLabel" : "No columns in this list."
       },
       "providedOptions" : [ "possibleValues" ],
       "rule" : {

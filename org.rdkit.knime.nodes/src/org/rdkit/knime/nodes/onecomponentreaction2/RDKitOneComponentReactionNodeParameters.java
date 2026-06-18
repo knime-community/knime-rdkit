@@ -155,7 +155,6 @@ final class RDKitOneComponentReactionNodeParameters implements NodeParameters {
     @Persist(configKey = "uniquifyProducts")
     boolean m_uniquifyProducts;
 
-    @Advanced
     @Widget(title = "Include additional columns from reactant input table into product output table",
         description = "Enable this option in order to select additional data columns from reactant input table "
             + "to be included into the result table.")
@@ -166,7 +165,6 @@ final class RDKitOneComponentReactionNodeParameters implements NodeParameters {
     static final class IsAdditionalColumnsEnabled implements BooleanReference {
     }
 
-    @Advanced
     @Widget(title = "Additional columns from reactant table",
         description = "Selection of additional data columns from reactant input table.")
     @Persistor(AdditionalColumnsFilterPersistor.class)
