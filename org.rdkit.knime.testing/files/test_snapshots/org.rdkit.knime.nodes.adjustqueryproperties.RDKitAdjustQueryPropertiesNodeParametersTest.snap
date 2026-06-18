@@ -315,37 +315,25 @@
             "configKey" : "adjust_degree"
           },
           "adjustDegreeFlags" : {
-            "configKey" : "adjust_degree_flags",
-            "deprecatedConfigKeys" : [ {
-              "deprecated" : [ ]
-            } ]
+            "configPaths" : [ [ "adjust_degree_flags" ] ]
           },
           "adjustRingCount" : {
             "configKey" : "adjust_ring_count"
           },
           "adjustRingCountFlags" : {
-            "configKey" : "adjust_ring_count_flags",
-            "deprecatedConfigKeys" : [ {
-              "deprecated" : [ ]
-            } ]
+            "configPaths" : [ [ "adjust_ring_count_flags" ] ]
           },
           "makeAtomsGeneric" : {
             "configKey" : "make_atoms_generic"
           },
           "makeAtomsGenericFlags" : {
-            "configKey" : "make_atoms_generic_flags",
-            "deprecatedConfigKeys" : [ {
-              "deprecated" : [ ]
-            } ]
+            "configPaths" : [ [ "make_atoms_generic_flags" ] ]
           },
           "makeBondsGeneric" : {
             "configKey" : "make_bonds_generic"
           },
           "makeBondsGenericFlags" : {
-            "configKey" : "make_bonds_generic_flags",
-            "deprecatedConfigKeys" : [ {
-              "deprecated" : [ ]
-            } ]
+            "configPaths" : [ [ "make_bonds_generic_flags" ] ]
           },
           "makeDummiesQueries" : {
             "configKey" : "make_dummies_queries"
