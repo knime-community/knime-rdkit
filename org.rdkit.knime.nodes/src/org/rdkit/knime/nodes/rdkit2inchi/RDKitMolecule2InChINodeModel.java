@@ -109,39 +109,6 @@ public class RDKitMolecule2InChINodeModel extends AbstractRDKitCalculatorNodeMod
 	/** Postfix for the column name for extra InChI generation information: log. */
 	public static final String POSTFIX_LOG = " - Log";
 
-	/** Config key for the input column name. */
-	static final String CFG_INPUT_COLUMN = "input_column";
-
-	/** Config key for the new InChI code column name. */
-	static final String CFG_NEW_INCHI_CODE_COLUMN_NAME = "new_inchi_code_column_name";
-
-	/** Config key for the remove source columns option. */
-	static final String CFG_REMOVE_SOURCE_COLUMNS = "remove_source_columns";
-
-	/** Config key for the generate InChI keys option. */
-	static final String CFG_GENERATE_INCHI_KEYS = "generate_inchi_keys";
-
-	/** Config key for the new InChI key column name. */
-	static final String CFG_NEW_INCHI_KEY_COLUMN_NAME = "new_inchi_key_column_name";
-
-	/** Config key for the extra information column name prefix. */
-	static final String CFG_NEW_EXTRA_INFO_COLUMN_NAME_PREFIX = "new_extra_info_column_name_prefix";
-
-	/** Config key for the extra return code option. */
-	static final String CFG_GENERATE_RETURN_CODE = "generate_return_code";
-
-	/** Config key for the extra aux info option. */
-	static final String CFG_GENERATE_AUX_INFO = "generate_aux_info";
-
-	/** Config key for the extra message option. */
-	static final String CFG_GENERATE_MESSAGE = "generate_message";
-
-	/** Config key for the extra log option. */
-	static final String CFG_GENERATE_LOG = "generate_log";
-
-	/** Config key for the advanced InChI code generation options (note: intentional typo from legacy). */
-	static final String CFG_ADVANCED_OPTIONS = "advanced_opions";
-
 
 	//
 	// Members
