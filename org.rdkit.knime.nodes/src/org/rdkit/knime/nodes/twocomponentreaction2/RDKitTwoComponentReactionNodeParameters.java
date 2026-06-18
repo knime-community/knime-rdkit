@@ -175,7 +175,6 @@ final class RDKitTwoComponentReactionNodeParameters implements NodeParameters {
     @Persist(configKey = "matrixExpansion")
     boolean m_matrixExpansion;
 
-    @Advanced
     @Widget(title = "Include additional columns from reactant input tables into product output table",
         description = "Enable this option in order to select additional data columns from reactant input tables "
             + "to be included into the result table.")
@@ -186,7 +185,6 @@ final class RDKitTwoComponentReactionNodeParameters implements NodeParameters {
     static final class IsAdditionalColumnsEnabled implements BooleanReference {
     }
 
-    @Advanced
     @Widget(title = "Additional columns from Reactant #1 table",
         description = "Selection of additional data columns from reactant #1 input table.")
     @Persistor(AdditionalColumnsFilter1Persistor.class)
@@ -194,7 +192,6 @@ final class RDKitTwoComponentReactionNodeParameters implements NodeParameters {
     @Effect(predicate = IsAdditionalColumnsEnabled.class, type = EffectType.SHOW)
     ColumnFilter m_additionalColumnsFilter1 = new ColumnFilter();
 
-    @Advanced
     @Widget(title = "Additional columns from Reactant #2 table",
         description = "Selection of additional data columns from reactant #2 input table.")
     @Persistor(AdditionalColumnsFilter2Persistor.class)
