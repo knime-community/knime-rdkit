@@ -52,15 +52,16 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.RDKit.AdjustQueryWhichFlags;
+import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
-import org.knime.node.parameters.migration.ConfigMigration;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
-import org.knime.node.parameters.migration.Migration;
-import org.knime.node.parameters.migration.NodeParametersMigration;
+import org.knime.node.parameters.persistence.NodeParametersPersistor;
 import org.knime.node.parameters.persistence.Persist;
+import org.knime.node.parameters.persistence.Persistor;
 import org.knime.node.parameters.updates.Effect;
 import org.knime.node.parameters.updates.Effect.EffectType;
 import org.knime.node.parameters.updates.ParameterReference;
@@ -126,16 +127,15 @@ final class RDKitAdjustQueryPropertiesNodeParameters implements NodeParameters {
     }
 
     @Widget(title = "Flags to adjust degree queries", description = "Control which atoms have a degree query added.")
-    @Persist(configKey = "adjust_degree_flags")
+    @Persistor(AdjustedDegreeFlagsPersistor.class)
     @ChoicesProvider(AdjustQueryWhichFlagsProvider.class)
     @Effect(predicate = AdjustDegreeRef.class, type = EffectType.ENABLE)
-    @Migration(AdjustedDegreeFlagsMigration.class)
     String[] m_adjustDegreeFlags = flagNames(
     		RDKitAdjustQueryPropertiesNodeDialog.DEFAULT_ADJUST_QUERY_PARAMETERS.getAdjustDegreeFlags());
     
-    static final class AdjustedDegreeFlagsMigration extends RedcuedFlagsMigration {
+    static final class AdjustedDegreeFlagsPersistor extends ReducedFlagsPersistor {
 		
-		protected AdjustedDegreeFlagsMigration() {
+		protected AdjustedDegreeFlagsPersistor() {
 			super("adjust_degree_flags");
 		}
 
@@ -153,16 +153,15 @@ final class RDKitAdjustQueryPropertiesNodeParameters implements NodeParameters {
     }
 
     @Widget(title = "Flags to adjust ring-count queries", description = "Control which atoms have a ring-count query added.")
-    @Persist(configKey = "adjust_ring_count_flags")
+    @Persistor(AdjustedRingCountFlagsPersistor.class)
     @ChoicesProvider(AdjustQueryWhichFlagsProvider.class)
     @Effect(predicate = AdjustRingCountRef.class, type = EffectType.ENABLE)
-    @Migration(AdjustedRingCountFlagsMigration.class)
     String[] m_adjustRingCountFlags = flagNames(
 			RDKitAdjustQueryPropertiesNodeDialog.DEFAULT_ADJUST_QUERY_PARAMETERS.getAdjustRingCountFlags());
 
-	static final class AdjustedRingCountFlagsMigration extends RedcuedFlagsMigration {
+	static final class AdjustedRingCountFlagsPersistor extends ReducedFlagsPersistor {
 
-		protected AdjustedRingCountFlagsMigration() {
+		protected AdjustedRingCountFlagsPersistor() {
 			super("adjust_ring_count_flags");
 		}
 		
@@ -179,16 +178,15 @@ final class RDKitAdjustQueryPropertiesNodeParameters implements NodeParameters {
 
     @Widget(title = "Flags to adjust any-atom queries", 
     	description = "Control which atoms are converted to any-atom queries.")
-    @Persist(configKey = "make_atoms_generic_flags")
+    @Persistor(MakeAtomsGenericFlagsPersistor.class)
     @ChoicesProvider(AdjustQueryWhichFlagsProvider.class)
     @Effect(predicate = MakeAtomsGenericRef.class, type = EffectType.ENABLE)
-    @Migration(MakeAtomsGenericFlagsMigration.class)
     String[] m_makeAtomsGenericFlags = flagNames(
     		RDKitAdjustQueryPropertiesNodeDialog.DEFAULT_ADJUST_QUERY_PARAMETERS.getMakeAtomsGenericFlags());
     
-	static final class MakeAtomsGenericFlagsMigration extends RedcuedFlagsMigration {
+	static final class MakeAtomsGenericFlagsPersistor extends ReducedFlagsPersistor {
 
-		protected MakeAtomsGenericFlagsMigration() {
+		protected MakeAtomsGenericFlagsPersistor() {
 			super("make_atoms_generic_flags");
 		}
 		
@@ -205,16 +203,15 @@ final class RDKitAdjustQueryPropertiesNodeParameters implements NodeParameters {
 
     @Widget(title = "Flags to adjust any-bond queries", 
     	description = "Control which bonds are converted to any-bond queries.")
-    @Persist(configKey = "make_bonds_generic_flags")
+    @Persistor(MakeBondsGenericFlagsPersistor.class)
     @ChoicesProvider(AdjustQueryWhichFlagsProvider.class)
     @Effect(predicate = MakeBondsGenericRef.class, type = EffectType.ENABLE)
-    @Migration(MakeBondsGenericFlagsMigration.class)
     String[] m_makeBondsGenericFlags = flagNames(
 			RDKitAdjustQueryPropertiesNodeDialog.DEFAULT_ADJUST_QUERY_PARAMETERS.getMakeBondsGenericFlags());
     
-	static final class MakeBondsGenericFlagsMigration extends RedcuedFlagsMigration {
+	static final class MakeBondsGenericFlagsPersistor extends ReducedFlagsPersistor {
 
-		protected MakeBondsGenericFlagsMigration() {
+		protected MakeBondsGenericFlagsPersistor() {
 			super("make_bonds_generic_flags");
 		}
 		
@@ -322,28 +319,33 @@ final class RDKitAdjustQueryPropertiesNodeParameters implements NodeParameters {
     	return reducedFlags;
 	}
     
-    abstract static class RedcuedFlagsMigration implements NodeParametersMigration<String[]> {
+	abstract static class ReducedFlagsPersistor implements NodeParametersPersistor<String[]> {
+
+		private String m_configKey;
     	
-    	private String m_configKey;
-    	
-    	protected RedcuedFlagsMigration(final String configKey) {
+    	protected ReducedFlagsPersistor(final String configKey) {
 			m_configKey = configKey;
 		}
-    	
+		
 		@Override
-		public List<ConfigMigration<String[]>> getConfigMigrations() {
-			return List.of(ConfigMigration.builder(settings -> getReducedFlags(settings))
-					.withMatcher(s -> s.containsKey(m_configKey)).build());
-		}
-    	
-    	private String[] getReducedFlags(final NodeSettingsRO settings) {
-    		ArrayList<String> flags = 
+		public String[] load(NodeSettingsRO settings) throws InvalidSettingsException {
+			ArrayList<String> flags = 
     				new ArrayList<>(Arrays.asList(settings.getStringArray(m_configKey, new String[0])));
 			flags.remove(AdjustQueryWhichFlags.ADJUST_IGNORENONE.name());
 			flags.remove(AdjustQueryWhichFlags.ADJUST_IGNOREALL.name());
 			return flags.toArray(new String[0]);
 		}
-    	
-    }
+
+		@Override
+		public void save(String[] param, NodeSettingsWO settings) {
+			settings.addStringArray(m_configKey, param);
+		}
+
+		@Override
+		public String[][] getConfigPaths() {
+			return new String[][] {{m_configKey}};
+		}
+		
+	}
     
 }
