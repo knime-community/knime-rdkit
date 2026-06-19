@@ -57,19 +57,54 @@ import org.knime.core.node.context.NodeCreationConfiguration;
 import org.knime.filehandling.core.port.FileSystemPortObject;
 
 import java.util.Optional;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
+import static org.knime.node.impl.description.PortDescription.dynamicPort;
 
 /**
  * {@code NodeFactory} for the RDKit based "RDKitFingerprintReader" Node.
  * 
  * @author Manuel Schwarze
  * @author Roman Balabanov
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class RDKitFingerprintReaderV2NodeFactory extends ConfigurableNodeFactory<RDKitFingerprintReaderV2NodeModel> {
+public class RDKitFingerprintReaderV2NodeFactory extends ConfigurableNodeFactory<RDKitFingerprintReaderV2NodeModel> 
+	implements NodeDialogFactory {
 
-	//
-	// Constants
-	//
-
+    private static final String NODE_NAME = "RDKit Fingerprint Reader";
+    
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Node to read fingerprints from a FPS file into an output table.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            This node reads an FPS file with its fingerprint records into a KNIME table. The format of the .fps
+            file is mentioned here: https://jcheminf.springeropen.com/articles/10.1186/1758-2946-5-S1-P36
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            dynamicPort("File System Connection", "File system connection", """
+                The file system connection.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Fingerprint table", """
+                Table containing fingerprints.
+                """)
+    );
+	
 	/**
 	 * The file system input ports group id.
 	 */
@@ -79,10 +114,6 @@ public class RDKitFingerprintReaderV2NodeFactory extends ConfigurableNodeFactory
 	 * The fingerprint table output ports group id.
 	 */
 	protected static final String OUTPUT_PORT_GRP_ID_FINGERPRINT_TABLE = "Fingerprint table";
-
-	//
-	// Public methods
-	//
 
     /**
      * This node does not have any views.
@@ -95,10 +126,6 @@ public class RDKitFingerprintReaderV2NodeFactory extends ConfigurableNodeFactory
             final RDKitFingerprintReaderV2NodeModel nodeModel) {
         return null;
     }
-
-    //
-	// Protected Methods
-	//
 
 	@Override
 	protected Optional<PortsConfigurationBuilder> createPortsConfigBuilder() {
@@ -143,9 +170,33 @@ public class RDKitFingerprintReaderV2NodeFactory extends ConfigurableNodeFactory
 		return true;
 	}
 
-	@Override
-	protected NodeDialogPane createNodeDialogPane(NodeCreationConfiguration creationConfig) {
-		return new RDKitFingerprintReaderV2NodeDialog(creationConfig);
-	}
+    @Override
+    public NodeDialogPane createNodeDialogPane(NodeCreationConfiguration creationConfig) {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, RDKitFingerprintReaderV2NodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            RDKitFingerprintReaderV2NodeParameters.class, //
+            null, //
+            NodeType.Source, //
+            List.of(), //
+            null //
+        );
+    }
+
 }
 

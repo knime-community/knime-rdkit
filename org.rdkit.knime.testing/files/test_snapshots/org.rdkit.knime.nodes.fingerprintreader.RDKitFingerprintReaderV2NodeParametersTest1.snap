@@ -1,0 +1,97 @@
+{
+  "data" : {
+    "model" : {
+      "inputFile" : {
+        "path" : {
+          "fsCategory" : "LOCAL",
+          "path" : "test.fps",
+          "timeout" : 10000,
+          "context" : {
+            "fsToString" : "(LOCAL, test.fps)"
+          }
+        }
+      },
+      "useIdsFromFileAsRowIds" : true
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputFile" : {
+            "type" : "object",
+            "properties" : {
+              "path" : {
+                "type" : "object",
+                "default" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              }
+            },
+            "title" : "Input file",
+            "description" : "The location of the FPS file containing fingerprint records to be read into KNIME. Supports both uncompressed <tt>.fps</tt> and gzip-compressed <tt>.fps.gz</tt> files. If a File System Connection port is connected, the file will be read from that file system.",
+            "default" : {
+              "path" : {
+                "fsCategory" : "LOCAL",
+                "path" : "",
+                "timeout" : 10000,
+                "context" : {
+                  "fsToString" : "(LOCAL, )"
+                }
+              }
+            }
+          },
+          "useIdsFromFileAsRowIds" : {
+            "type" : "boolean",
+            "title" : "Use IDs from file as row IDs (Requires unique IDs!)",
+            "description" : "If checked, the IDs read from each fingerprint record in the FPS file are used as row IDs. This will fail if the FPS file does not contain unique fingerprint IDs. If unchecked, auto-generated row IDs (<i>Row0</i>, <i>Row1</i>, &hellip;) are used instead.",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputFile",
+      "options" : {
+        "fileExtensions" : [ "fps", "fps.gz" ],
+        "isLocal" : true,
+        "spaceFSOptions" : {
+          "mountId" : "Local space"
+        },
+        "format" : "fileChooser"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/useIdsFromFileAsRowIds",
+      "options" : {
+        "format" : "checkbox"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputFile" : {
+            "configPaths" : [ [ "input_file", "path" ] ]
+          },
+          "useIdsFromFileAsRowIds" : {
+            "configKey" : "use_file_ids_as_row_ids"
+          }
+        }
+      }
+    }
+  }
+}

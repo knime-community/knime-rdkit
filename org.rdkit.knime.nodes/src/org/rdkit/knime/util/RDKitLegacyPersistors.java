@@ -1,14 +1,24 @@
 package org.rdkit.knime.util;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import org.knime.core.data.DataColumnSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import java.util.List;
-import java.util.function.Supplier;
 
 import org.knime.node.parameters.migration.ConfigMigration;
 import org.knime.node.parameters.migration.NodeParametersMigration;
+import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.persistence.NodeParametersPersistor;
+import org.knime.node.parameters.updates.ParameterReference;
+import org.knime.node.parameters.updates.StateComputationAbortException;
+import org.knime.node.parameters.updates.StateProvider;
+import org.knime.node.parameters.updates.internal.StateProviderInitializerInternal;
+import org.knime.node.parameters.widget.choices.RowIDChoice;
+import org.knime.node.parameters.widget.choices.StringOrEnum;
 
 /**
  * Utility class for legacy persistors related to RDKit nodes. This includes persistors for molecule column settings that
@@ -57,7 +67,107 @@ public class RDKitLegacyPersistors {
             return new String[][]{{m_primaryKey}};
         }
         
-    }
+	}
+
+    /**
+     * Abstract base class for auto-guessing column name providers that support both string and enum choices.
+     * 
+     * @param <E> the type of the enum choices
+     */
+	public abstract static class StringOrEnumColumnNameAutoGuessProvider<E extends Enum<E>>
+			implements StateProvider<StringOrEnum<E>> {
+
+		protected Class<? extends ParameterReference<StringOrEnum<E>>> m_selfReference;
+		
+		protected StringOrEnumColumnNameAutoGuessProvider(
+				final Class<? extends ParameterReference<StringOrEnum<E>>> selfReference) {
+			m_selfReference = selfReference;
+		}
+		
+		Supplier<StringOrEnum<E>> m_currentValueSupplier;
+		
+	    @Override
+	    public void init(final StateProviderInitializer initializer) {
+	        ((StateProviderInitializerInternal)initializer).computeOnParametersLoaded();
+	        m_currentValueSupplier = initializer.getValueSupplier(m_selfReference);
+	    }
+
+		protected abstract Optional<DataColumnSpec> autoGuessColumn(final NodeParametersInput parametersInput);
+
+	    @Override
+	    public StringOrEnum<E> computeState(final NodeParametersInput parametersInput) 
+	    	throws StateComputationAbortException {
+	    	if (isEmpty(parametersInput, m_currentValueSupplier.get())) {
+	            return autoGuessValue(parametersInput);
+	        }
+	        throw new StateComputationAbortException();
+	    }
+	    
+	    private boolean isEmpty(final NodeParametersInput parametersInput, final StringOrEnum<E> currentValue) {
+			final var autoGuessColumn = autoGuessColumn(parametersInput);
+	    	if (currentValue.getEnumChoice().isPresent() && autoGuessColumn.isEmpty()) {
+				return false;
+			}
+	    	if (currentValue.getEnumChoice().isPresent() && !autoGuessColumn.isEmpty()) {
+				return true;
+			}
+			final var valueString = currentValue.getStringChoice();
+			return valueString == null || valueString.isEmpty();
+		}
+		
+		private final StringOrEnum<E> autoGuessValue(final NodeParametersInput parametersInput)
+				throws StateComputationAbortException {
+			return autoGuessColumn(parametersInput).map(spec -> new StringOrEnum<E>(spec.getName()))
+					.orElseThrow(StateComputationAbortException::new);
+		}
+
+	}
+
+	/**
+	 * Abstract base class for legacy column name persistors that support both string and RowID choices.
+	 */
+	public abstract static class LegacyColumnNamePersistor 
+		implements NodeParametersPersistor<StringOrEnum<RowIDChoice>> {
+
+		private static final String CFG_KEY_USE_ROWID = "useRowID";
+		private static final String CFG_KEY_COLUMN_NAME = "columnName";
+
+		private String m_columnNameDefault;
+
+		protected LegacyColumnNamePersistor() {
+			m_columnNameDefault = null;
+		}
+
+		protected LegacyColumnNamePersistor(final String columnNameDefault) {
+			m_columnNameDefault = columnNameDefault;
+		}
+
+		@Override
+		public StringOrEnum<RowIDChoice> load(final NodeSettingsRO settings) throws InvalidSettingsException {
+			if (settings.getBoolean(CFG_KEY_USE_ROWID, false)) {
+				return new StringOrEnum<>(RowIDChoice.ROW_ID);
+			}
+			return new StringOrEnum<>(settings.getString(CFG_KEY_COLUMN_NAME, m_columnNameDefault));
+		}
+
+		@Override
+		public void save(final StringOrEnum<RowIDChoice> param, final NodeSettingsWO settings) {
+			if (param.getEnumChoice().isPresent()) {
+				settings.addBoolean(CFG_KEY_USE_ROWID, true);
+				settings.addString(CFG_KEY_COLUMN_NAME, null);
+			} else {
+				settings.addBoolean(CFG_KEY_USE_ROWID, false);
+				final var columnName = param.getStringChoice();
+				settings.addString(CFG_KEY_COLUMN_NAME, columnName == null ? m_columnNameDefault : columnName);
+			}
+		}
+
+		@Override
+		public String[][] getConfigPaths() {
+			return new String[][] {{CFG_KEY_COLUMN_NAME, CFG_KEY_USE_ROWID}};
+		}
+
+	}
 	
 	/**
 	 * Abstract base class for file switch migrations that set a default value for a parameter if the path to the file 
