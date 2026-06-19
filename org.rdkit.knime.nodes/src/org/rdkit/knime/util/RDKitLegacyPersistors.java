@@ -164,7 +164,7 @@ public class RDKitLegacyPersistors {
 
 		@Override
 		public String[][] getConfigPaths() {
-			return new String[][] {{CFG_KEY_COLUMN_NAME, CFG_KEY_USE_ROWID}};
+			return new String[][] {{CFG_KEY_COLUMN_NAME}, {CFG_KEY_USE_ROWID}};
 		}
 
 	}
