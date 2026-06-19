@@ -17,7 +17,7 @@
       },
       "fingerprintColumn" : "BitVector",
       "idColumn" : {
-        "specialChoice" : "ROW_ID"
+        "regularChoice" : "Cluster Membership"
       },
       "suppressTime" : 0
     }
@@ -212,7 +212,7 @@
             "configKey" : "fps_column"
           },
           "idColumn" : {
-            "configPaths" : [ [ "columnName", "useRowID" ] ],
+            "configPaths" : [ [ "columnName" ], [ "useRowID" ] ],
             "route" : [ "id_column" ]
           },
           "suppressTime" : {

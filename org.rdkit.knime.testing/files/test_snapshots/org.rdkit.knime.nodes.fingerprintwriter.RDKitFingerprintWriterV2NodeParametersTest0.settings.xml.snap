@@ -22,8 +22,8 @@
     </config>
     <entry key="fps_column" type="xstring" value="BitVector"/>
     <config key="id_column">
-        <entry key="useRowID" type="xboolean" value="true"/>
-        <entry key="columnName" type="xstring" isnull="true" value=""/>
+        <entry key="useRowID" type="xboolean" value="false"/>
+        <entry key="columnName" type="xstring" value="Cluster Membership"/>
     </config>
     <entry key="suppress_time" type="xint" value="0"/>
 </config>

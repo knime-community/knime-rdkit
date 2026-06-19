@@ -76,7 +76,6 @@ import org.knime.node.parameters.widget.choices.RowIDChoice;
 import org.knime.node.parameters.widget.choices.StringOrEnum;
 import org.knime.node.parameters.widget.choices.util.ColumnSelectionUtil;
 import org.knime.node.parameters.widget.choices.util.CompatibleColumnsProvider;
-import org.knime.node.parameters.widget.choices.util.CompatibleColumnsProvider.StringColumnsProvider;
 import org.knime.node.parameters.widget.file.FileWriterWidget;
 import org.rdkit.knime.util.RDKitAdapterCellSupport;
 import org.rdkit.knime.util.RDKitLegacyPersistors.LegacyColumnNamePersistor;
