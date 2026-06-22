@@ -235,8 +235,8 @@ public class RDKitSaltStripperNodeModel extends AbstractRDKitCalculatorNodeModel
 		// For optional salt input column
 		if (hasSaltInputTable(inSpecs)) {
 
-			// Reset salt table column name, if the table has changed, so that we can auto guess again
-			if (m_bHadSaltInputTable == false && !SettingsUtils.checkColumnExistence(inSpecs[1],
+			// Reset salt column name whenever it no longer exists in the current spec so auto-guess can re-run
+			if (!SettingsUtils.checkColumnExistence(inSpecs[1],
 					m_modelOptionalSaltColumnName, RDKitMolValue.class, null, null)) {
 				m_modelOptionalSaltColumnName.setStringValue(null);
 			}

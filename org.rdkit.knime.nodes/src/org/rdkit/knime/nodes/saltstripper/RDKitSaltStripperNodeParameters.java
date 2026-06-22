@@ -46,8 +46,13 @@
 
 package org.rdkit.knime.nodes.saltstripper;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.DataType;
+import org.knime.core.data.DataValue;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
@@ -59,6 +64,7 @@ import org.knime.node.parameters.updates.Effect.EffectType;
 import org.knime.node.parameters.updates.EffectPredicate;
 import org.knime.node.parameters.updates.EffectPredicateProvider;
 import org.knime.node.parameters.widget.choices.ChoicesProvider;
+import org.knime.node.parameters.widget.choices.ColumnChoicesProvider;
 import org.knime.node.parameters.widget.message.TextMessage;
 import org.knime.node.parameters.widget.message.TextMessage.MessageType;
 import org.knime.node.parameters.widget.message.TextMessage.SimpleTextMessageProvider;
@@ -66,6 +72,8 @@ import org.knime.node.parameters.updates.ParameterReference;
 import org.knime.node.parameters.updates.ValueProvider;
 import org.knime.node.parameters.updates.ValueReference;
 import org.knime.node.parameters.updates.util.BooleanReference;
+import org.rdkit.knime.types.RDKitMolValue;
+import org.rdkit.knime.util.RDKitAdapterCellSupport;
 import org.rdkit.knime.util.RDKitMoleculeColumnAutoGuessProvider;
 import org.rdkit.knime.util.RDKitMoleculeColumnChoicesProvider;
 import org.rdkit.knime.util.RDKitResultColumnNameAutoGuessProvider;
@@ -181,12 +189,37 @@ final class RDKitSaltStripperNodeParameters implements NodeParameters {
         SaltColumnAutoGuesser() {
             super(SaltColumnRef.class, 1, 0);
         }
+
+        @Override
+        protected Optional<DataColumnSpec> autoGuessColumn(final NodeParametersInput parametersInput) {
+            return parametersInput.getInTableSpec(1)
+                .flatMap(spec -> spec.stream()
+                    .filter(RDKitMolColumnsPort1Provider::isRdkitMolCompatible)
+                    .findFirst());
+        }
     }
 
-    static final class RDKitMolColumnsPort1Provider extends RDKitMoleculeColumnChoicesProvider {
+    static final class RDKitMolColumnsPort1Provider implements ColumnChoicesProvider {
 
-        RDKitMolColumnsPort1Provider() {
-            super(1);
+        @Override
+        public List<DataColumnSpec> columnChoices(final NodeParametersInput context) {
+            return context.getInTableSpec(1)
+                .map(spec -> spec.stream()
+                    .filter(RDKitMolColumnsPort1Provider::isRdkitMolCompatible)
+                    .toList())
+                .orElse(List.of());
+        }
+
+        @SuppressWarnings("unchecked")
+        static boolean isRdkitMolCompatible(final DataColumnSpec colSpec) {
+            DataType colType = colSpec.getType();
+            for (Class<? extends DataValue> clazz : RDKitAdapterCellSupport
+                    .expandByAdaptableTypes(new Class[]{RDKitMolValue.class})) {
+                if (colType.isCompatible(clazz) || colType.isAdaptable(clazz)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
