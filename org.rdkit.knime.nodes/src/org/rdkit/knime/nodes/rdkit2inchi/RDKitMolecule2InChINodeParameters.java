@@ -83,7 +83,7 @@ final class RDKitMolecule2InChINodeParameters implements NodeParameters {
     interface ExtraInfoSection {
     }
     
-    @Section(title = "Advanced")
+    @Section(title = "")
     @Advanced
     @After(ExtraInfoSection.class)
     interface AdvancedSection {
@@ -233,7 +233,6 @@ final class RDKitMolecule2InChINodeParameters implements NodeParameters {
             + "possible switches can be found here: "
             + "<a href=\"https://www.inchi-trust.org/technical-faq-2/#15.14\">"
             + "https://www.inchi-trust.org/technical-faq-2/#15.14</a>.")
-    @Advanced
     @Layout(AdvancedSection.class)
     @Persist(configKey = RDKitMolecule2InChINodeModel.CFG_ADVANCED_OPTIONS)
     @TextAreaWidget(rows = 5)
