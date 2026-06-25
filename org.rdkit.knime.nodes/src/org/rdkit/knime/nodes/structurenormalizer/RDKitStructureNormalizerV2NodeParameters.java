@@ -51,10 +51,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import org.knime.chem.types.SdfValue;
 import org.knime.chem.types.SmilesValue;
 import org.knime.core.data.DataColumnSpec;
+import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.node.parameters.Advanced;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
@@ -70,6 +74,7 @@ import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
 import org.knime.node.parameters.migration.Migration;
 import org.knime.node.parameters.modification.Modification;
 import org.knime.node.parameters.modification.Modification.WidgetGroupModifier;
+import org.knime.node.parameters.persistence.NodeParametersPersistor;
 import org.knime.node.parameters.persistence.Persist;
 import org.knime.node.parameters.persistence.Persistor;
 import org.knime.node.parameters.updates.Effect;
@@ -77,6 +82,8 @@ import org.knime.node.parameters.updates.Effect.EffectType;
 import org.knime.node.parameters.updates.EffectPredicate;
 import org.knime.node.parameters.updates.EffectPredicateProvider;
 import org.knime.node.parameters.updates.ParameterReference;
+import org.knime.node.parameters.updates.StateComputationAbortException;
+import org.knime.node.parameters.updates.StateProvider;
 import org.knime.node.parameters.updates.ValueProvider;
 import org.knime.node.parameters.updates.ValueReference;
 import org.knime.node.parameters.widget.choices.ChoicesProvider;
@@ -93,7 +100,7 @@ import org.knime.node.parameters.widget.file.FileWriterWidget;
 import org.knime.node.parameters.widget.text.TextAreaWidget;
 import org.rdkit.knime.util.RDKitAdapterCellSupport;
 import org.rdkit.knime.util.RDKitLegacyPersistors.DefaultFileSwitchMigration;
-import org.rdkit.knime.util.RDKitResultColumnNameAutoGuessProvider;
+import org.rdkit.knime.util.SettingsUtils;
 
 /**
  * Node parameters for RDKit Structure Normalizer.
@@ -132,6 +139,14 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     static final class InputColumnRef implements ParameterReference<String> {
     }
 
+    @Persistor(DoNotPersistString.class)
+    @ValueProvider(PrevInputColumnStateProvider.class)
+    @ValueReference(PrevInputColumnRef.class)
+    String m_prevInputColumnString;
+
+    static final class PrevInputColumnRef implements ParameterReference<String> {
+    }
+
     @Layout(PassedOutputSection.class)
     @Widget(title = "Corrected structure column name", description = """
             The name of the column that will contain the original or corrected structure, in case that any \
@@ -145,10 +160,11 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     static final class PassedCorrectedStructureColumnRef implements ParameterReference<String> {
     }
 
-    static final class PassedCorrectedStructureColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
+    static final class PassedCorrectedStructureColumnAutoGuessProvider
+            extends StructureNormalizerOutputColumnAutoGuessProvider {
 
         protected PassedCorrectedStructureColumnAutoGuessProvider() {
-            super(InputColumnRef.class, PassedCorrectedStructureColumnRef.class,
+            super(PassedCorrectedStructureColumnRef.class,
                     "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_CORRECTED);
         }
 
@@ -167,13 +183,12 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     static final class PassedFlagsColumnRef implements ParameterReference<String> {
     }
 
-    static final class PassedFlagsColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
+    static final class PassedFlagsColumnAutoGuessProvider extends StructureNormalizerOutputColumnAutoGuessProvider {
 
         private Supplier<String> m_passedCorrectedStructureColumnNameSupplier;
 
         protected PassedFlagsColumnAutoGuessProvider() {
-            super(InputColumnRef.class, PassedFlagsColumnRef.class,
-                    "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_FLAGS);
+            super(PassedFlagsColumnRef.class, "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_FLAGS);
         }
 
         @Override
@@ -204,14 +219,15 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     static final class PassedWarningMessagesColumnRef implements ParameterReference<String> {
     }
 
-    static final class PassedWarningMessagesColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
+    static final class PassedWarningMessagesColumnAutoGuessProvider
+            extends StructureNormalizerOutputColumnAutoGuessProvider {
 
         private Supplier<String> m_passedCorrectedStructureColumnNameSupplier;
 
         private Supplier<String> m_passedFlagsColumnNameSupplier;
 
         protected PassedWarningMessagesColumnAutoGuessProvider() {
-            super(InputColumnRef.class, PassedWarningMessagesColumnRef.class,
+            super(PassedWarningMessagesColumnRef.class,
                     "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_WARNINGS);
         }
 
@@ -245,11 +261,10 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     static final class FailedFlagsColumnRef implements ParameterReference<String> {
     }
 
-    static final class FailedFlagsColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
+    static final class FailedFlagsColumnAutoGuessProvider extends StructureNormalizerOutputColumnAutoGuessProvider {
 
         protected FailedFlagsColumnAutoGuessProvider() {
-            super(InputColumnRef.class, FailedFlagsColumnRef.class,
-                    "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_FAILED_FLAGS);
+            super(FailedFlagsColumnRef.class, "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_FAILED_FLAGS);
         }
 
     }
@@ -267,12 +282,13 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     static final class FailedErrorMessagesColumnRef implements ParameterReference<String> {
     }
 
-    static final class FailedErrorMessagesColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
+    static final class FailedErrorMessagesColumnAutoGuessProvider
+            extends StructureNormalizerOutputColumnAutoGuessProvider {
 
         private Supplier<String> m_failedFlagsColumnNameSupplier;
 
         protected FailedErrorMessagesColumnAutoGuessProvider() {
-            super(InputColumnRef.class, FailedErrorMessagesColumnRef.class,
+            super(FailedErrorMessagesColumnRef.class,
                     "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_FAILED_ERRORS);
         }
 
@@ -566,6 +582,149 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
         DEFAULT_CONFIGURATION, //
         @Label(value = "File selection", description = "Specify a configuration file.")
         FILE_SELECTION;
+
+    }
+
+    record PrevAndCurrentInputColumn(String prevInputColumn, String currInputColumn) {
+    }
+
+    static final class PrevAndCurrentInputColumnStateProvider implements StateProvider<PrevAndCurrentInputColumn> {
+
+        private Supplier<String> m_currInputColumn;
+        private Supplier<String> m_prevInputColumn;
+
+        @Override
+        public void init(StateProviderInitializer initializer) {
+            m_currInputColumn = initializer.computeFromValueSupplier(InputColumnRef.class);
+            m_prevInputColumn = initializer.getValueSupplier(PrevInputColumnRef.class);
+        }
+
+        @Override
+        public PrevAndCurrentInputColumn computeState(NodeParametersInput parametersInput)
+                throws StateComputationAbortException {
+            return new PrevAndCurrentInputColumn(m_prevInputColumn.get(), m_currInputColumn.get());
+        }
+
+    }
+
+    static final class PrevInputColumnStateProvider implements StateProvider<String> {
+
+        private Supplier<PrevAndCurrentInputColumn> m_prevAndCurrInputColumn;
+
+        @Override
+        public void init(StateProviderInitializer initializer) {
+            initializer.computeBeforeOpenDialog();
+            m_prevAndCurrInputColumn = initializer
+                    .computeFromProvidedState(PrevAndCurrentInputColumnStateProvider.class);
+        }
+
+        @Override
+        public String computeState(NodeParametersInput parametersInput) throws StateComputationAbortException {
+            return m_prevAndCurrInputColumn.get().currInputColumn();
+        }
+
+    }
+
+    /**
+     * Abstract base for output column name auto-guess providers in this node.
+     * Subscribes to {@link PrevAndCurrentInputColumnStateProvider} to obtain both
+     * the previous and current input column name, then decides whether to suggest a
+     * fresh name or preserve the existing one.
+     *
+     * <p>
+     * A fresh name is suggested when the existing output column name is empty, or
+     * when it exactly matches the name that would have been auto-generated for the
+     * previous input column (meaning the user has not manually customized it).
+     */
+    static abstract class StructureNormalizerOutputColumnAutoGuessProvider implements StateProvider<String> {
+
+        private final String m_suffix;
+
+        private final Class<? extends ParameterReference<String>> m_resultColumnRef;
+
+        private Supplier<PrevAndCurrentInputColumn> m_prevAndCurrInputColumn;
+
+        private Supplier<String> m_resultColumnNameSupplier;
+
+        protected StructureNormalizerOutputColumnAutoGuessProvider(
+                final Class<? extends ParameterReference<String>> resultColumnRef, final String suffix) {
+            m_resultColumnRef = resultColumnRef;
+            m_suffix = suffix;
+        }
+
+        @Override
+        public void init(final StateProviderInitializer initializer) {
+            m_prevAndCurrInputColumn = initializer
+                    .computeFromProvidedState(PrevAndCurrentInputColumnStateProvider.class);
+            m_resultColumnNameSupplier = initializer.getValueSupplier(m_resultColumnRef);
+        }
+
+        @Override
+        public String computeState(final NodeParametersInput parametersInput) throws StateComputationAbortException {
+            final PrevAndCurrentInputColumn prevAndCurr = m_prevAndCurrInputColumn.get();
+            final String currInputCol = prevAndCurr.currInputColumn();
+            final String prevInputCol = prevAndCurr.prevInputColumn();
+
+            if (currInputCol == null || currInputCol.isEmpty()) {
+                throw new StateComputationAbortException();
+            }
+
+            if (prevInputCol == null || prevInputCol.isEmpty()) {
+                throw new IllegalStateException(
+                        "Previous input column name should not be null or empty if the current is not null or empty.");
+            }
+
+            final String currentOutputName = m_resultColumnNameSupplier.get();
+            final String expectedOutputName = prevInputCol + " " + m_suffix;
+
+            final var shouldAutoGuess = currentOutputName == null || currentOutputName.isEmpty()
+                    || currentOutputName.equals(expectedOutputName)
+                    || currentOutputName.matches(Pattern.quote(expectedOutputName) + " \\(#\\d+\\)");
+
+            if (!shouldAutoGuess) {
+                throw new StateComputationAbortException();
+            }
+
+            final var inSpec = parametersInput.getInTableSpec(0).orElse(null);
+            if (inSpec == null) {
+                throw new StateComputationAbortException();
+            }
+
+            final List<String> existingNames = SettingsUtils.createMergedColumnNameList(inSpec,
+                    getAdditionalColumnNames(parametersInput, currInputCol), null);
+
+            final String suggestedOutputName = currInputCol + " " + m_suffix;
+            String result = suggestedOutputName;
+            int uniquifier = 1;
+            while (existingNames.contains(result)) {
+                result = suggestedOutputName + " (#" + uniquifier + ")";
+                uniquifier++;
+            }
+            return result;
+        }
+
+        protected String[] getAdditionalColumnNames(final NodeParametersInput parametersInput,
+                final String currentInputColumnName) {
+            return null;
+        }
+
+    }
+
+    static final class DoNotPersistString implements NodeParametersPersistor<String> {
+
+        @Override
+        public String load(NodeSettingsRO settings) throws InvalidSettingsException {
+            return "";
+        }
+
+        @Override
+        public void save(String param, NodeSettingsWO settings) {
+        }
+
+        @Override
+        public String[][] getConfigPaths() {
+            return null;
+        }
 
     }
 
