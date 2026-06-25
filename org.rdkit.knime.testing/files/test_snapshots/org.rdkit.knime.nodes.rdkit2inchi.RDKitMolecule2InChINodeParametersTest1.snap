@@ -118,14 +118,6 @@
         }
       }
     }, {
-      "type" : "Control",
-      "scope" : "#/properties/model/properties/advancedOptions",
-      "options" : {
-        "rows" : 5,
-        "format" : "textArea",
-        "isAdvanced" : true
-      }
-    }, {
       "label" : "Extra InChI Generation Information",
       "type" : "Section",
       "elements" : [ {
@@ -156,6 +148,14 @@
           "format" : "checkbox"
         }
       } ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/advancedOptions",
+      "options" : {
+        "rows" : 5,
+        "format" : "textArea",
+        "isAdvanced" : true
+      }
     } ]
   },
   "persist" : {

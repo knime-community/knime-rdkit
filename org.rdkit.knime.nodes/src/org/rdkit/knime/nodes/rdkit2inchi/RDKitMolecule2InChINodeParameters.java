@@ -83,10 +83,8 @@ final class RDKitMolecule2InChINodeParameters implements NodeParameters {
     interface ExtraInfoSection {
     }
     
-    @Section(title = "")
-    @Advanced
     @After(ExtraInfoSection.class)
-    interface AdvancedSection {
+    interface SectionAfterExtraInfo {
     }
 
     @Widget(title = "RDKit mol column", description = "The input column with RDKit Molecules.")
@@ -233,7 +231,8 @@ final class RDKitMolecule2InChINodeParameters implements NodeParameters {
             + "possible switches can be found here: "
             + "<a href=\"https://www.inchi-trust.org/technical-faq-2/#15.14\">"
             + "https://www.inchi-trust.org/technical-faq-2/#15.14</a>.")
-    @Layout(AdvancedSection.class)
+    @Advanced
+    @Layout(SectionAfterExtraInfo.class)
     @Persist(configKey = RDKitMolecule2InChINodeModel.CFG_ADVANCED_OPTIONS)
     @TextAreaWidget(rows = 5)
     String m_advancedOptions = "";
