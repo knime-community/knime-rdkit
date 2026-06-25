@@ -53,6 +53,7 @@ import org.knime.node.parameters.Advanced;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
+import org.knime.node.parameters.layout.After;
 import org.knime.node.parameters.layout.Layout;
 import org.knime.node.parameters.layout.Section;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
@@ -80,6 +81,10 @@ final class RDKitMolecule2InChINodeParameters implements NodeParameters {
 
     @Section(title = "Extra InChI Generation Information")
     interface ExtraInfoSection {
+    }
+    
+    @After(ExtraInfoSection.class)
+    interface SectionAfterExtraInfo {
     }
 
     @Widget(title = "RDKit mol column", description = "The input column with RDKit Molecules.")
@@ -227,6 +232,7 @@ final class RDKitMolecule2InChINodeParameters implements NodeParameters {
             + "<a href=\"https://www.inchi-trust.org/technical-faq-2/#15.14\">"
             + "https://www.inchi-trust.org/technical-faq-2/#15.14</a>.")
     @Advanced
+    @Layout(SectionAfterExtraInfo.class)
     @Persist(configKey = RDKitMolecule2InChINodeModel.CFG_ADVANCED_OPTIONS)
     @TextAreaWidget(rows = 5)
     String m_advancedOptions = "";
