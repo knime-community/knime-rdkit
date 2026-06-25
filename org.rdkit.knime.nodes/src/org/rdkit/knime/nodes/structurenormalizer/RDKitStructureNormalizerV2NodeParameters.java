@@ -62,6 +62,10 @@ import org.knime.node.parameters.Widget;
 import org.knime.node.parameters.layout.After;
 import org.knime.node.parameters.layout.Layout;
 import org.knime.node.parameters.layout.Section;
+import org.knime.node.parameters.legacy.updates.ColumnNameAutoGuessValueProvider;
+import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions;
+import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicy;
+import org.knime.node.parameters.legacy.widget.file.LegacyReaderFileSelectionPersistor;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
 import org.knime.node.parameters.migration.Migration;
 import org.knime.node.parameters.modification.Modification;
@@ -69,16 +73,12 @@ import org.knime.node.parameters.modification.Modification.WidgetGroupModifier;
 import org.knime.node.parameters.persistence.Persist;
 import org.knime.node.parameters.persistence.Persistor;
 import org.knime.node.parameters.updates.Effect;
+import org.knime.node.parameters.updates.Effect.EffectType;
 import org.knime.node.parameters.updates.EffectPredicate;
 import org.knime.node.parameters.updates.EffectPredicateProvider;
 import org.knime.node.parameters.updates.ParameterReference;
 import org.knime.node.parameters.updates.ValueProvider;
 import org.knime.node.parameters.updates.ValueReference;
-import org.knime.node.parameters.updates.Effect.EffectType;
-import org.knime.node.parameters.legacy.updates.ColumnNameAutoGuessValueProvider;
-import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions;
-import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicy;
-import org.knime.node.parameters.legacy.widget.file.LegacyReaderFileSelectionPersistor;
 import org.knime.node.parameters.widget.choices.ChoicesProvider;
 import org.knime.node.parameters.widget.choices.Label;
 import org.knime.node.parameters.widget.choices.StringChoice;
@@ -92,8 +92,8 @@ import org.knime.node.parameters.widget.file.FileSelection;
 import org.knime.node.parameters.widget.file.FileWriterWidget;
 import org.knime.node.parameters.widget.text.TextAreaWidget;
 import org.rdkit.knime.util.RDKitAdapterCellSupport;
-import org.rdkit.knime.util.RDKitResultColumnNameAutoGuessProvider;
 import org.rdkit.knime.util.RDKitLegacyPersistors.DefaultFileSwitchMigration;
+import org.rdkit.knime.util.RDKitResultColumnNameAutoGuessProvider;
 
 /**
  * Node parameters for RDKit Structure Normalizer.
@@ -117,10 +117,9 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     @Section(title = "Advanced")
     @Advanced
     interface AdvancedSection {
-	}
+    }
 
-    @Widget(title = "Mol column",
-        description = """
+    @Widget(title = "Mol column", description = """
             The input column with SDF, SMILES or RDKit Molecules. The latter ones are treated as SDF values. \
             SMILES input will be converted internally into mol blocks before the normalization is done.
             """)
@@ -134,8 +133,7 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     }
 
     @Layout(PassedOutputSection.class)
-    @Widget(title = "Corrected structure column name",
-        description = """
+    @Widget(title = "Corrected structure column name", description = """
             The name of the column that will contain the original or corrected structure, in case that any \
             normalization has been applied.
             """)
@@ -143,22 +141,21 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     @ValueProvider(PassedCorrectedStructureColumnAutoGuessProvider.class)
     @ValueReference(PassedCorrectedStructureColumnRef.class)
     String m_passedCorrectedStructureColumn;
-    
+
     static final class PassedCorrectedStructureColumnRef implements ParameterReference<String> {
-	}
-    
+    }
+
     static final class PassedCorrectedStructureColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
 
-		protected PassedCorrectedStructureColumnAutoGuessProvider() {
-			super(InputColumnRef.class, PassedCorrectedStructureColumnRef.class, 
-				  "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_CORRECTED);
-		}
-    	
+        protected PassedCorrectedStructureColumnAutoGuessProvider() {
+            super(InputColumnRef.class, PassedCorrectedStructureColumnRef.class,
+                    "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_CORRECTED);
+        }
+
     }
 
     @Layout(PassedOutputSection.class)
-    @Widget(title = "Flags column name",
-        description = """
+    @Widget(title = "Flags column name", description = """
             The name of the column that will contain the warning flags. This is a bit mask where each bit has a \
             certain meaning as described in the node description.
             """)
@@ -166,37 +163,36 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     @ValueProvider(PassedFlagsColumnAutoGuessProvider.class)
     @ValueReference(PassedFlagsColumnRef.class)
     String m_passedFlagsColumn;
-    
+
     static final class PassedFlagsColumnRef implements ParameterReference<String> {
     }
-    
-	static final class PassedFlagsColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
 
-		private Supplier<String> m_passedCorrectedStructureColumnNameSupplier;
-		
-		protected PassedFlagsColumnAutoGuessProvider() {
-			super(InputColumnRef.class, PassedFlagsColumnRef.class,
-					"- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_FLAGS);
-		}
-		
-		@Override
-		public void init(StateProviderInitializer initializer) {
-			super.init(initializer);
-			m_passedCorrectedStructureColumnNameSupplier = 
-					initializer.getValueSupplier(PassedCorrectedStructureColumnRef.class);
-		}
+    static final class PassedFlagsColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
 
-		@Override
-		protected String[] getAdditionalColumnNames(NodeParametersInput parametersInput,
-				String currentInputColumnName) {
-			return new String[] { m_passedCorrectedStructureColumnNameSupplier.get() };
-		}
-		
-	}
+        private Supplier<String> m_passedCorrectedStructureColumnNameSupplier;
+
+        protected PassedFlagsColumnAutoGuessProvider() {
+            super(InputColumnRef.class, PassedFlagsColumnRef.class,
+                    "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_FLAGS);
+        }
+
+        @Override
+        public void init(final StateProviderInitializer initializer) {
+            super.init(initializer);
+            m_passedCorrectedStructureColumnNameSupplier = initializer
+                    .getValueSupplier(PassedCorrectedStructureColumnRef.class);
+        }
+
+        @Override
+        protected String[] getAdditionalColumnNames(final NodeParametersInput parametersInput,
+                final String currentInputColumnName) {
+            return new String[] { m_passedCorrectedStructureColumnNameSupplier.get() };
+        }
+
+    }
 
     @Layout(PassedOutputSection.class)
-    @Widget(title = "Warning messages column name",
-        description = """
+    @Widget(title = "Warning messages column name", description = """
             The name of the column that will contain the warning messages associated with the flags. \
             The "Passed Molecules" table contains only warnings, which are not classified as errors.
             """)
@@ -204,41 +200,40 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     @ValueProvider(PassedWarningMessagesColumnAutoGuessProvider.class)
     @ValueReference(PassedWarningMessagesColumnRef.class)
     String m_passedWarningMessagesColumn;
-    
+
     static final class PassedWarningMessagesColumnRef implements ParameterReference<String> {
-	}
-    
-	static final class PassedWarningMessagesColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
+    }
 
-		private Supplier<String> m_passedCorrectedStructureColumnNameSupplier;
-		
-		private Supplier<String> m_passedFlagsColumnNameSupplier;
-		
-		protected PassedWarningMessagesColumnAutoGuessProvider() {
-			super(InputColumnRef.class, PassedWarningMessagesColumnRef.class,
-					"- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_WARNINGS);
-		}
+    static final class PassedWarningMessagesColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
 
-		@Override
-		public void init(StateProviderInitializer initializer) {
-			super.init(initializer);
-			m_passedCorrectedStructureColumnNameSupplier = 
-					initializer.getValueSupplier(PassedCorrectedStructureColumnRef.class);
-			m_passedFlagsColumnNameSupplier = initializer.getValueSupplier(PassedFlagsColumnRef.class);
-		}
+        private Supplier<String> m_passedCorrectedStructureColumnNameSupplier;
 
-		@Override
-		protected String[] getAdditionalColumnNames(NodeParametersInput parametersInput,
-				String currentInputColumnName) {
-			return new String[] { m_passedCorrectedStructureColumnNameSupplier.get(), 
-					m_passedFlagsColumnNameSupplier.get() };
-		}
+        private Supplier<String> m_passedFlagsColumnNameSupplier;
 
-	}
+        protected PassedWarningMessagesColumnAutoGuessProvider() {
+            super(InputColumnRef.class, PassedWarningMessagesColumnRef.class,
+                    "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_PASSED_WARNINGS);
+        }
+
+        @Override
+        public void init(final StateProviderInitializer initializer) {
+            super.init(initializer);
+            m_passedCorrectedStructureColumnNameSupplier = initializer
+                    .getValueSupplier(PassedCorrectedStructureColumnRef.class);
+            m_passedFlagsColumnNameSupplier = initializer.getValueSupplier(PassedFlagsColumnRef.class);
+        }
+
+        @Override
+        protected String[] getAdditionalColumnNames(final NodeParametersInput parametersInput,
+                final String currentInputColumnName) {
+            return new String[] { m_passedCorrectedStructureColumnNameSupplier.get(),
+                    m_passedFlagsColumnNameSupplier.get() };
+        }
+
+    }
 
     @Layout(FailedOutputSection.class)
-    @Widget(title = "Flags column name",
-        description = """
+    @Widget(title = "Flags column name", description = """
             The name of the column that will contain the error flags. This is a bit mask where each bit has a \
             certain meaning as described in the node description.
             """)
@@ -246,121 +241,119 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     @ValueProvider(FailedFlagsColumnAutoGuessProvider.class)
     @ValueReference(FailedFlagsColumnRef.class)
     String m_failedFlagsColumn;
-    
+
     static final class FailedFlagsColumnRef implements ParameterReference<String> {
     }
-    
+
     static final class FailedFlagsColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
 
-		protected FailedFlagsColumnAutoGuessProvider() {
-			super(InputColumnRef.class, FailedFlagsColumnRef.class, 
-				  "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_FAILED_FLAGS);
-		}
-    	
+        protected FailedFlagsColumnAutoGuessProvider() {
+            super(InputColumnRef.class, FailedFlagsColumnRef.class,
+                    "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_FAILED_FLAGS);
+        }
+
     }
 
     @Layout(FailedOutputSection.class)
-    @Widget(title = "Error messages column name",
-        description = """
+    @Widget(title = "Error messages column name", description = """
             The name of the column that will contain the error messages associated with the flags. \
             The "Failed Molecules" table contains only errors that prevented successful normalization.
             """)
     @Persist(configKey = "failed_error_messages_column")
     @ValueProvider(FailedErrorMessagesColumnAutoGuessProvider.class)
     @ValueReference(FailedErrorMessagesColumnRef.class)
-	String m_failedErrorMessagesColumn;
-    
+    String m_failedErrorMessagesColumn;
+
     static final class FailedErrorMessagesColumnRef implements ParameterReference<String> {
     }
-    
-	static final class FailedErrorMessagesColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
 
-		private Supplier<String> m_failedFlagsColumnNameSupplier;
-		
-		protected FailedErrorMessagesColumnAutoGuessProvider() {
-			super(InputColumnRef.class, FailedErrorMessagesColumnRef.class,
-					"- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_FAILED_ERRORS);
-		}
-		
-		@Override
-		public void init(StateProviderInitializer initializer) {
-			super.init(initializer);
-			m_failedFlagsColumnNameSupplier = initializer.getValueSupplier(FailedFlagsColumnRef.class);
-		}
-		
-		@Override
-		protected String[] getAdditionalColumnNames(NodeParametersInput parametersInput,
-				String currentInputColumnName) {
-			return new String[] { m_failedFlagsColumnNameSupplier.get() };
-		}
-		
-	}
+    static final class FailedErrorMessagesColumnAutoGuessProvider extends RDKitResultColumnNameAutoGuessProvider {
 
-	@Layout(FailedOutputSection.class)
-	@Widget(title = "Logfile output (optional)", description = """
-			A logfile can be specified here which logs additional output in case of normalizations of \
-			   structures. It can be used for informal purposes only. There is no need to define a logfile \
-			   for the node to work correctly. Leave this field empty to disable logging.
-			""")
-	@ValueSwitchWidget
-	@ValueReference(LogFileSwitchRef.class)
-	@Migration(LogFileSwitchMigration.class)
-	LogFileSwitch m_logFileSwitch = LogFileSwitch.DISABLE_LOGGING;
+        private Supplier<String> m_failedFlagsColumnNameSupplier;
 
-	static final class LogFileSwitchRef implements ParameterReference<LogFileSwitch> {
-	}
-	
-	static final class LogFileSwitchMigration extends DefaultFileSwitchMigration<LogFileSwitch> {
+        protected FailedErrorMessagesColumnAutoGuessProvider() {
+            super(InputColumnRef.class, FailedErrorMessagesColumnRef.class,
+                    "- " + RDKitStructureNormalizerV2NodeModel.DEFAULT_POSTFIX_FAILED_ERRORS);
+        }
 
-		protected LogFileSwitchMigration() {
-			super("logFileSwitch", "log_file", LogFileSwitch.DISABLE_LOGGING, LogFileSwitch.ENABLE_LOGGING);
-		}
-		
-	}
+        @Override
+        public void init(final StateProviderInitializer initializer) {
+            super.init(initializer);
+            m_failedFlagsColumnNameSupplier = initializer.getValueSupplier(FailedFlagsColumnRef.class);
+        }
 
-	@Layout(FailedOutputSection.class)
-	@Persist(configKey = "log_file")
-	@Effect(predicate = IsLoggingEnabled.class, type = EffectType.SHOW)
-	@Modification(LogFileModifier.class)
-	LegacyFileWriterWithOverwritePolicyOptions m_logFile = new LegacyFileWriterWithOverwritePolicyOptions();
+        @Override
+        protected String[] getAdditionalColumnNames(final NodeParametersInput parametersInput,
+                final String currentInputColumnName) {
+            return new String[] { m_failedFlagsColumnNameSupplier.get() };
+        }
 
-	static final class LogFileRef implements ParameterReference<LegacyFileWriterWithOverwritePolicyOptions> {
-	}
-
-	static final class LogFileModifier implements LegacyFileWriterWithOverwritePolicyOptions.Modifier {
-
-		@Override
-		public void modify(final WidgetGroupModifier group) {
-			findFileSelection(group).modifyAnnotation(Widget.class).withProperty("title", "Selected log file")
-					.withProperty("description", """
-							Select the file to which the log output of the node will be written. If the file already
-							exists, the behavior depends on the selected overwrite policy. If no file is selected, no
-							log output will be produced.
-							""").modify();
-			findFileSelection(group).modifyAnnotation(FileWriterWidget.class).withProperty("fileExtension", "log")
-					.modify();
-			findCreateMissingFolders(group).modifyAnnotation(Widget.class).withProperty("description", """
-					Select if the folders of the selected output location should be created if they do not already \
-					exist. If this option is unchecked, the node will fail if a folder does not exist.
-					""").modify();
-			restrictOverwritePolicyOptions(group, LogFileOverwritePolicyProvider.class);
-		}
-
-	}
-
-	static final class LogFileOverwritePolicyProvider
-			extends LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicyChoicesProvider {
-
-		@Override
-		protected List<OverwritePolicy> getChoices() {
-			return List.of(OverwritePolicy.fail, OverwritePolicy.overwrite);
-		}
-
-	}
+    }
 
     @Layout(FailedOutputSection.class)
-    @Widget(title = "Warning codes to treat as failures",
-        description = """
+    @Widget(title = "Logfile output (optional)", description = """
+            A logfile can be specified here which logs additional output in case of normalizations of \
+               structures. It can be used for informal purposes only. There is no need to define a logfile \
+               for the node to work correctly. Leave this field empty to disable logging.
+            """)
+    @ValueSwitchWidget
+    @ValueReference(LogFileSwitchRef.class)
+    @Migration(LogFileSwitchMigration.class)
+    LogFileSwitch m_logFileSwitch = LogFileSwitch.DISABLE_LOGGING;
+
+    static final class LogFileSwitchRef implements ParameterReference<LogFileSwitch> {
+    }
+
+    static final class LogFileSwitchMigration extends DefaultFileSwitchMigration<LogFileSwitch> {
+
+        protected LogFileSwitchMigration() {
+            super("logFileSwitch", "log_file", LogFileSwitch.DISABLE_LOGGING, LogFileSwitch.ENABLE_LOGGING);
+        }
+
+    }
+
+    @Layout(FailedOutputSection.class)
+    @Persist(configKey = "log_file")
+    @Effect(predicate = IsLoggingEnabled.class, type = EffectType.SHOW)
+    @Modification(LogFileModifier.class)
+    LegacyFileWriterWithOverwritePolicyOptions m_logFile = new LegacyFileWriterWithOverwritePolicyOptions();
+
+    static final class LogFileRef implements ParameterReference<LegacyFileWriterWithOverwritePolicyOptions> {
+    }
+
+    static final class LogFileModifier implements LegacyFileWriterWithOverwritePolicyOptions.Modifier {
+
+        @Override
+        public void modify(final WidgetGroupModifier group) {
+            findFileSelection(group).modifyAnnotation(Widget.class).withProperty("title", "Selected log file")
+                    .withProperty("description", """
+                            Select the file to which the log output of the node will be written. If the file already
+                            exists, the behavior depends on the selected overwrite policy. If no file is selected, no
+                            log output will be produced.
+                            """).modify();
+            findFileSelection(group).modifyAnnotation(FileWriterWidget.class).withProperty("fileExtension", "log")
+                    .modify();
+            findCreateMissingFolders(group).modifyAnnotation(Widget.class).withProperty("description", """
+                    Select if the folders of the selected output location should be created if they do not already \
+                    exist. If this option is unchecked, the node will fail if a folder does not exist.
+                    """).modify();
+            restrictOverwritePolicyOptions(group, LogFileOverwritePolicyProvider.class);
+        }
+
+    }
+
+    static final class LogFileOverwritePolicyProvider
+            extends LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicyChoicesProvider {
+
+        @Override
+        protected List<OverwritePolicy> getChoices() {
+            return List.of(OverwritePolicy.fail, OverwritePolicy.overwrite);
+        }
+
+    }
+
+    @Layout(FailedOutputSection.class)
+    @Widget(title = "Warning codes to treat as failures", description = """
             Define here which warning flags should be treated as errors. If defined as an error, the rows will appear \
             in the second output table ("Failed Molecules" table). Hover over a code to see its description and value.
             """)
@@ -371,81 +364,80 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
 
     @Layout(AdvancedSection.class)
     @Widget(title = "Transformation configuration file (.trn) (optional)", description = """
-			Lets the user define a customized transformation configuration file. The default built-in 
-			<a href="https://github.com/rdkit/rdkit/blob/master/Data/struchk/checkfgs.trn">configuration file</a> will 
-			be used when no file is specified. The file must have the .trn extension.
-			""", advanced = true)
+            Lets the user define a customized transformation configuration file. The default built-in
+            <a href="https://github.com/rdkit/rdkit/blob/master/Data/struchk/checkfgs.trn">configuration file</a> will
+            be used when no file is specified. The file must have the .trn extension.
+            """, advanced = true)
     @ValueSwitchWidget
-	@ValueReference(TransformationConfigFileSwitchRef.class)
+    @ValueReference(TransformationConfigFileSwitchRef.class)
     @Migration(TransformationConfigFileSwitchMigration.class)
-	FileSwitch m_transformationConfigFileSwitch = FileSwitch.DEFAULT_CONFIGURATION;
-    
-    static final class TransformationConfigFileSwitchRef implements ParameterReference<FileSwitch> {
-	}
-    
-	static final class TransformationConfigFileSwitchMigration extends DefaultFileSwitchMigration<FileSwitch> {
+    FileSwitch m_transformationConfigFileSwitch = FileSwitch.DEFAULT_CONFIGURATION;
 
-		protected TransformationConfigFileSwitchMigration() {
-			super("transformationConfigFileSwitch", "transformation_configuration_file", 
-					FileSwitch.DEFAULT_CONFIGURATION, FileSwitch.FILE_SELECTION);
-		}
-	}
-    
+    static final class TransformationConfigFileSwitchRef implements ParameterReference<FileSwitch> {
+    }
+
+    static final class TransformationConfigFileSwitchMigration extends DefaultFileSwitchMigration<FileSwitch> {
+
+        protected TransformationConfigFileSwitchMigration() {
+            super("transformationConfigFileSwitch", "transformation_configuration_file",
+                    FileSwitch.DEFAULT_CONFIGURATION, FileSwitch.FILE_SELECTION);
+        }
+    }
+
     @Layout(AdvancedSection.class)
     @Advanced
     @Persistor(TransformationConfigFilePersistor.class)
     @Widget(title = "Selected transformation config file", description = """
-			Specify a custom transformation configuration file to use. The file must have the 
-			.trn extension.
-			""")
-    @FileReaderWidget(fileExtensions = {"trn"})
+            Specify a custom transformation configuration file to use. The file must have the
+            .trn extension.
+            """)
+    @FileReaderWidget(fileExtensions = { "trn" })
     @Effect(predicate = IsTransformationConfigFileSelectionEnabled.class, type = EffectType.SHOW)
     @ValueReference(TransformationConfigFileRef.class)
-	FileSelection m_transformationConfigFile = new FileSelection();
-    
+    FileSelection m_transformationConfigFile = new FileSelection();
+
     static final class TransformationConfigFileRef implements ParameterReference<FileSelection> {
     }
-    
+
     @Layout(AdvancedSection.class)
     @Widget(title = "Augmented atoms configuration file (.chk) (optional)", description = """
-			Lets the user define a customized augmented atoms configuration file. The default built-in 
-			<a href="https://github.com/rdkit/rdkit/blob/master/Data/struchk/checkfgs.chk">configuration file</a> will 
-			be used when no file is specified. The file must have the .chk extension.
-			""", advanced = true)
+            Lets the user define a customized augmented atoms configuration file. The default built-in
+            <a href="https://github.com/rdkit/rdkit/blob/master/Data/struchk/checkfgs.chk">configuration file</a> will
+            be used when no file is specified. The file must have the .chk extension.
+            """, advanced = true)
     @ValueSwitchWidget
-	@ValueReference(AugmentedAtomsConfigFileSwitchRef.class)
+    @ValueReference(AugmentedAtomsConfigFileSwitchRef.class)
     @Migration(AugmentedAtomsConfigFileSwitchMigration.class)
-	FileSwitch m_augmentedAtomsConfigFileSwitch = FileSwitch.DEFAULT_CONFIGURATION;
-    
+    FileSwitch m_augmentedAtomsConfigFileSwitch = FileSwitch.DEFAULT_CONFIGURATION;
+
     static final class AugmentedAtomsConfigFileSwitchRef implements ParameterReference<FileSwitch> {
-	}
-    
-	static final class AugmentedAtomsConfigFileSwitchMigration extends DefaultFileSwitchMigration<FileSwitch> {
+    }
 
-		protected AugmentedAtomsConfigFileSwitchMigration() {
-			super("augmentedAtomsConfigFileSwitch", "augmented_atoms_configuration_file", 
-					FileSwitch.DEFAULT_CONFIGURATION, FileSwitch.FILE_SELECTION);
-		}
+    static final class AugmentedAtomsConfigFileSwitchMigration extends DefaultFileSwitchMigration<FileSwitch> {
 
-	}
+        protected AugmentedAtomsConfigFileSwitchMigration() {
+            super("augmentedAtomsConfigFileSwitch", "augmented_atoms_configuration_file",
+                    FileSwitch.DEFAULT_CONFIGURATION, FileSwitch.FILE_SELECTION);
+        }
+
+    }
 
     @Layout(AdvancedSection.class)
     @Advanced
     @Persistor(AugmentedAtomsConfigFilePersistor.class)
     @Widget(title = "Selected augmented atoms config file", description = """
-    		Specify a custom augmented atoms configuration file to use. The file must have the .chk extension.
-			""")
-    @FileReaderWidget(fileExtensions = {"chk"})
+             		Specify a custom augmented atoms configuration file to use. The file must have the .chk extension.
+            """)
+    @FileReaderWidget(fileExtensions = { "chk" })
     @Effect(predicate = IsAugmentedAtomicConfigFileSelectionEnabled.class, type = EffectType.SHOW)
     @ValueReference(AugmentedAtomsConfigFileRef.class)
     FileSelection m_augmentedAtomsConfigFile = new FileSelection();
-    
+
     static final class AugmentedAtomsConfigFileRef implements ParameterReference<FileSelection> {
     }
 
     @Layout(AdvancedSection.class)
-    @Widget(title = "Advanced switches (optional)",
-        description = """
+    @Widget(title = "Advanced switches (optional)", description = """
             Configure here certain switches that influence how the Structure Normalizer performs its work:
             """, advanced = true)
     @Persist(configKey = "switches")
@@ -454,8 +446,7 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     String[] m_switches = new String[0];
 
     @Layout(AdvancedSection.class)
-    @Widget(title = "Additional options",
-        description = """
+    @Widget(title = "Additional options", description = """
             Normally, there is no need to change these settings. However, if you are familiar with the underlying \
             StruChk tool, you may define here manually options to be passed to it. These options come in addition \
             to the switches defined above.
@@ -463,120 +454,119 @@ final class RDKitStructureNormalizerV2NodeParameters implements NodeParameters {
     @Persist(configKey = "advanced_options")
     @TextAreaWidget(rows = 5)
     String m_advancedOptions = RDKitStructureNormalizerV2NodeModel.DEFAULT_ADVANCED_OPTIONS;
-    
-	static final class IsLoggingEnabled implements EffectPredicateProvider {
 
-		@Override
-		public EffectPredicate init(PredicateInitializer i) {
-			return i.getEnum(LogFileSwitchRef.class).isOneOf(LogFileSwitch.ENABLE_LOGGING);
-		}
+    static final class IsLoggingEnabled implements EffectPredicateProvider {
 
-	}
-    
+        @Override
+        public EffectPredicate init(PredicateInitializer i) {
+            return i.getEnum(LogFileSwitchRef.class).isOneOf(LogFileSwitch.ENABLE_LOGGING);
+        }
+
+    }
+
     static final class IsTransformationConfigFileSelectionEnabled implements EffectPredicateProvider {
 
-		@Override
-		public EffectPredicate init(PredicateInitializer i) {
-			return i.getEnum(TransformationConfigFileSwitchRef.class).isOneOf(FileSwitch.FILE_SELECTION);
-		}
-		
-	}
-    
-	static final class IsAugmentedAtomicConfigFileSelectionEnabled implements EffectPredicateProvider {
+        @Override
+        public EffectPredicate init(PredicateInitializer i) {
+            return i.getEnum(TransformationConfigFileSwitchRef.class).isOneOf(FileSwitch.FILE_SELECTION);
+        }
 
-		@Override
-		public EffectPredicate init(PredicateInitializer i) {
-			return i.getEnum(AugmentedAtomsConfigFileSwitchRef.class).isOneOf(FileSwitch.FILE_SELECTION);
-		}
-		
-	}
-    
+    }
+
+    static final class IsAugmentedAtomicConfigFileSelectionEnabled implements EffectPredicateProvider {
+
+        @Override
+        public EffectPredicate init(PredicateInitializer i) {
+            return i.getEnum(AugmentedAtomsConfigFileSwitchRef.class).isOneOf(FileSwitch.FILE_SELECTION);
+        }
+
+    }
+
     static final class InputColumnAutoGuessProvider extends ColumnNameAutoGuessValueProvider {
-    	
+
         protected InputColumnAutoGuessProvider() {
             super(InputColumnRef.class);
         }
 
         @SuppressWarnings("unchecked")
-		@Override
+        @Override
         protected Optional<DataColumnSpec> autoGuessColumn(final NodeParametersInput parametersInput) {
-            return ColumnSelectionUtil.getFirstCompatibleColumnOfFirstPort(parametersInput, 
-            		RDKitAdapterCellSupport.expandByAdaptableTypes(new Class[]{SdfValue.class, SmilesValue.class}));
+            return ColumnSelectionUtil.getFirstCompatibleColumnOfFirstPort(parametersInput,
+                    RDKitAdapterCellSupport.expandByAdaptableTypes(new Class[] { SdfValue.class, SmilesValue.class }));
         }
-        
+
     }
 
     static final class InputColumnChoicesProvider extends CompatibleColumnsProvider {
-    	
+
         @SuppressWarnings("unchecked")
-		protected InputColumnChoicesProvider() {
+        protected InputColumnChoicesProvider() {
             super(Arrays.asList(
-            		RDKitAdapterCellSupport.expandByAdaptableTypes(new Class[]{SdfValue.class, SmilesValue.class})));
+                    RDKitAdapterCellSupport.expandByAdaptableTypes(new Class[] { SdfValue.class, SmilesValue.class })));
         }
-        
+
     }
-	
+
     static final class StruCheckCodeChoicesProvider implements StringChoicesProvider {
 
-		@Override
-		public List<StringChoice> computeState(NodeParametersInput context) {
-			List<StringChoice> listDefaultNonErrorCodes = new ArrayList<>();
-    		for (final StruCheckCode code : StruCheckCode.values()) {
-    			if (!code.isError()) {
-    				listDefaultNonErrorCodes.add(
-    						new StringChoice(code.name(), "%s (%s)".formatted(code.name(), code.getValue())));
-    			}
-    		}
-    		return listDefaultNonErrorCodes;
-		}
-        
-    }
-    
-    static final class StruCheckSwitchChoicesProvider implements StringChoicesProvider {
-    	
         @Override
-		public List<StringChoice> computeState(NodeParametersInput context) {
-			return Arrays.stream(StruCheckSwitch.values()).map(swtch -> 
-				new StringChoice(swtch.name(), "%s - %s".formatted(swtch.name(), swtch.getShortDescription())))
-					.toList();
-		}
-        
+        public List<StringChoice> computeState(NodeParametersInput context) {
+            List<StringChoice> listDefaultNonErrorCodes = new ArrayList<>();
+            for (final StruCheckCode code : StruCheckCode.values()) {
+                if (!code.isError()) {
+                    listDefaultNonErrorCodes
+                            .add(new StringChoice(code.name(), "%s (%s)".formatted(code.name(), code.getValue())));
+                }
+            }
+            return listDefaultNonErrorCodes;
+        }
+
     }
-    
+
+    static final class StruCheckSwitchChoicesProvider implements StringChoicesProvider {
+
+        @Override
+        public List<StringChoice> computeState(NodeParametersInput context) {
+            return Arrays.stream(StruCheckSwitch.values()).map(swtch -> new StringChoice(swtch.name(),
+                    "%s - %s".formatted(swtch.name(), swtch.getShortDescription()))).toList();
+        }
+
+    }
+
     static final class TransformationConfigFilePersistor extends LegacyReaderFileSelectionPersistor {
 
-		protected TransformationConfigFilePersistor() {
-			super("transformation_configuration_file");
-		}
-    	
+        protected TransformationConfigFilePersistor() {
+            super("transformation_configuration_file");
+        }
+
     }
-    
-	static final class AugmentedAtomsConfigFilePersistor extends LegacyReaderFileSelectionPersistor {
 
-		protected AugmentedAtomsConfigFilePersistor() {
-			super("augmented_atoms_configuration_file");
-		}
+    static final class AugmentedAtomsConfigFilePersistor extends LegacyReaderFileSelectionPersistor {
 
-	}
-    
-	enum LogFileSwitch {
+        protected AugmentedAtomsConfigFilePersistor() {
+            super("augmented_atoms_configuration_file");
+        }
 
-		@Label(value = "Disable logging", description = "No log file will be created and no log output will be produced.")
-		DISABLE_LOGGING, //
-		@Label(value = "Enable logging", description = """
-				A log file will be created and log output will be produced according to the selected options.
-				""")
-		ENABLE_LOGGING;
+    }
 
-	}
-	
-	enum FileSwitch {
+    enum LogFileSwitch {
 
-		@Label(value = "Default configuration", description = "Loads the default configuration file.")
-		DEFAULT_CONFIGURATION, //
-		@Label(value = "File selection", description = "Specify a configuration file.")
-		FILE_SELECTION;
+        @Label(value = "Disable logging", description = "No log file will be created and no log output will be produced.")
+        DISABLE_LOGGING, //
+        @Label(value = "Enable logging", description = """
+                A log file will be created and log output will be produced according to the selected options.
+                """)
+        ENABLE_LOGGING;
 
-	}
-    
+    }
+
+    enum FileSwitch {
+
+        @Label(value = "Default configuration", description = "Loads the default configuration file.")
+        DEFAULT_CONFIGURATION, //
+        @Label(value = "File selection", description = "Specify a configuration file.")
+        FILE_SELECTION;
+
+    }
+
 }
