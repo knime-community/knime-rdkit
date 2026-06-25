@@ -64,8 +64,8 @@
       "scope" : "#/properties/model/properties/filterCatalogs",
       "options" : {
         "format" : "twinList",
-        "includedLabel" : " Apply ",
-        "excludedLabel" : " Do not apply "
+        "includedLabel" : "Apply",
+        "excludedLabel" : "Do not apply"
       },
       "providedOptions" : [ "possibleValues" ]
     }, {
