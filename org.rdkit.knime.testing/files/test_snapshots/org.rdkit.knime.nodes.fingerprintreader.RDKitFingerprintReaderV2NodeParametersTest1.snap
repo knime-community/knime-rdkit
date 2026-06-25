@@ -36,7 +36,7 @@
               }
             },
             "title" : "Input file",
-            "description" : "The location of the FPS file containing fingerprint records to be read into KNIME. Supports both uncompressed <tt>.fps</tt> and gzip-compressed <tt>.fps.gz</tt> files. If a File System Connection port is connected, the file will be read from that file system.",
+            "description" : "The location of the FPS file containing fingerprint records.",
             "default" : {
               "path" : {
                 "fsCategory" : "LOCAL",
@@ -51,7 +51,7 @@
           "useIdsFromFileAsRowIds" : {
             "type" : "boolean",
             "title" : "Use IDs from file as row IDs (Requires unique IDs!)",
-            "description" : "If checked, the IDs read from each fingerprint record in the FPS file are used as row IDs. This will fail if the FPS file does not contain unique fingerprint IDs. If unchecked, auto-generated row IDs (<i>Row0</i>, <i>Row1</i>, &hellip;) are used instead.",
+            "description" : "If checked, the IDs read from each fingerprint record in the FPS file are used as row IDs. This will fail if the FPS file does not contain unique fingerprint IDs.",
             "default" : false
           }
         }
