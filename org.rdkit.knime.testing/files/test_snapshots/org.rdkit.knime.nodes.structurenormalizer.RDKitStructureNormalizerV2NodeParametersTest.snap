@@ -217,6 +217,9 @@
             "title" : "Warning messages column name",
             "description" : "The name of the column that will contain the warning messages associated with the flags. The \"Passed Molecules\" table contains only warnings, which are not classified as errors.\n"
           },
+          "prevInputColumnString" : {
+            "type" : "string"
+          },
           "switches" : {
             "type" : "array",
             "items" : {
@@ -470,6 +473,7 @@
           "inputColumn" : {
             "configKey" : "input_column"
           },
+          "prevInputColumnString" : { },
           "passedCorrectedStructureColumn" : {
             "configKey" : "passed_corrected_structure_column"
           },
@@ -590,6 +594,12 @@
       } ]
     } ]
   }, {
+    "scope" : "#/properties/model/properties/prevInputColumnString",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : "Molecule"
+    } ]
+  }, {
     "scope" : "#/properties/model/properties/switches",
     "providedOptionName" : "possibleValues",
     "values" : [ {
@@ -625,6 +635,6 @@
     "trigger" : {
       "scope" : "#/properties/model/properties/inputColumn"
     },
-    "dependencies" : [ "#/properties/model/properties/failedErrorMessagesColumn", "#/properties/model/properties/failedFlagsColumn", "#/properties/model/properties/inputColumn", "#/properties/model/properties/passedCorrectedStructureColumn", "#/properties/model/properties/passedFlagsColumn", "#/properties/model/properties/passedWarningMessagesColumn" ]
+    "dependencies" : [ "#/properties/model/properties/failedErrorMessagesColumn", "#/properties/model/properties/failedFlagsColumn", "#/properties/model/properties/inputColumn", "#/properties/model/properties/passedCorrectedStructureColumn", "#/properties/model/properties/passedFlagsColumn", "#/properties/model/properties/passedWarningMessagesColumn", "#/properties/model/properties/prevInputColumnString" ]
   } ]
 }
