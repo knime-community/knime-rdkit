@@ -52,6 +52,7 @@ import org.knime.node.parameters.Advanced;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
+import org.knime.node.parameters.layout.After;
 import org.knime.node.parameters.layout.Layout;
 import org.knime.node.parameters.layout.Section;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
@@ -78,6 +79,10 @@ final class RDKitOptimizeGeometryNodeParameters implements NodeParameters {
 
     @Section(title = "Output")
     interface OutputSection {
+    }
+    
+    @After(OutputSection.class)
+    interface AfterOutputSection {
     }
 
     @Widget(title = "RDKit mol column",
@@ -237,6 +242,7 @@ final class RDKitOptimizeGeometryNodeParameters implements NodeParameters {
         description = "Number of iterations to use for optimization. If the number is set too small, molecules will "
             + "not be fully converged. Set it to 0 iterations to skip optimizing and only calculate the energy value.")
     @Advanced
+    @Layout(AfterOutputSection.class)
     @NumberInputWidget(minValidation = IsPositiveIntegerValidation.class)
     @Persist(configKey = RDKitOptimizeGeometryNodeModel.CFG_ITERATIONS)
     int m_iterations = RDKitOptimizeGeometryNodeDialog.DEFAULT_ITERATIONS;
@@ -245,6 +251,7 @@ final class RDKitOptimizeGeometryNodeParameters implements NodeParameters {
         description = "Set to true to remove coordinates before starting the optimization process. This may affect "
             + "the results in a positive way.")
     @Advanced
+    @Layout(AfterOutputSection.class)
     @Persist(configKey = RDKitOptimizeGeometryNodeModel.CFG_REMOVE_STARTING_COORDINATES)
     boolean m_removeStartingCoordinates;
 }
