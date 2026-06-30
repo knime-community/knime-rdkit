@@ -83,6 +83,25 @@
       "type" : "Control",
       "scope" : "#/properties/model/properties/forceField"
     }, {
+      "label" : "Output",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/newMoleculeColumnName"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/removeSourceColumns",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/newConvergeColumnName"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/newEnergyColumnName"
+      } ]
+    }, {
       "type" : "Control",
       "scope" : "#/properties/model/properties/iterations",
       "options" : {
@@ -111,25 +130,6 @@
         "format" : "checkbox",
         "isAdvanced" : true
       }
-    }, {
-      "label" : "Output",
-      "type" : "Section",
-      "elements" : [ {
-        "type" : "Control",
-        "scope" : "#/properties/model/properties/newMoleculeColumnName"
-      }, {
-        "type" : "Control",
-        "scope" : "#/properties/model/properties/removeSourceColumns",
-        "options" : {
-          "format" : "checkbox"
-        }
-      }, {
-        "type" : "Control",
-        "scope" : "#/properties/model/properties/newConvergeColumnName"
-      }, {
-        "type" : "Control",
-        "scope" : "#/properties/model/properties/newEnergyColumnName"
-      } ]
     } ]
   },
   "persist" : {
