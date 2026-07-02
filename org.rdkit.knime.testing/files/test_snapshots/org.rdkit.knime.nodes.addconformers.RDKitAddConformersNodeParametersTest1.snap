@@ -187,29 +187,37 @@
   },
   "ui_schema" : {
     "elements" : [ {
-      "type" : "Control",
-      "scope" : "#/properties/model/properties/moleculeInputColumnName",
-      "options" : {
-        "format" : "dropDown"
-      },
-      "providedOptions" : [ "possibleValues" ]
+      "label" : "Input",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/moleculeInputColumnName",
+        "options" : {
+          "format" : "dropDown"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/referenceInputColumnName",
+        "options" : {
+          "format" : "singleSelection",
+          "specialChoices" : [ {
+            "id" : "ROW_ID",
+            "text" : "RowID"
+          } ]
+        },
+        "providedOptions" : [ "possibleValues" ]
+      } ]
     }, {
-      "type" : "Control",
-      "scope" : "#/properties/model/properties/referenceInputColumnName",
-      "options" : {
-        "format" : "singleSelection",
-        "specialChoices" : [ {
-          "id" : "ROW_ID",
-          "text" : "RowID"
-        } ]
-      },
-      "providedOptions" : [ "possibleValues" ]
-    }, {
-      "type" : "Control",
-      "scope" : "#/properties/model/properties/moleculeOutputColumnName"
-    }, {
-      "type" : "Control",
-      "scope" : "#/properties/model/properties/referenceOutputColumnName"
+      "label" : "Output",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/moleculeOutputColumnName"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/referenceOutputColumnName"
+      } ]
     }, {
       "label" : "Conformer Calculation",
       "type" : "Section",

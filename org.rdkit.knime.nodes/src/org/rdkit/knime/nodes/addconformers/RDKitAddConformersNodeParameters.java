@@ -55,6 +55,7 @@ import org.knime.core.data.StringValue;
 import org.knime.node.parameters.Advanced;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.Widget;
+import org.knime.node.parameters.layout.After;
 import org.knime.node.parameters.layout.Layout;
 import org.knime.node.parameters.layout.Section;
 import org.knime.node.parameters.legacy.persistence.PersistWithin;
@@ -90,10 +91,21 @@ final class RDKitAddConformersNodeParameters implements NodeParameters {
     /** Default RDKit ETKDGv3 parameters. */
     private static final EmbedParameters RDKIT_DEFAULTS = RDKFuncs.getETKDGv3();
 
+    @Section(title = "Input")
+    interface InputSection {
+    }
+
+    @After(InputSection.class)
+    @Section(title = "Output")
+    interface OutputSection {
+    }
+
+    @After(OutputSection.class)
     @Section(title = "Conformer Calculation")
     interface ConformerCalcSection {
     }
 
+    @Layout(InputSection.class)
     @Widget(title = "RDKit mol column", description = "The input column with RDKit molecules.")
     @Persist(configKey = "input_mol_column")
     @ChoicesProvider(RDKitMoleculeColumnChoicesProvider.class)
@@ -104,13 +116,15 @@ final class RDKitAddConformersNodeParameters implements NodeParameters {
     static final class MoleculeColumnRef implements ParameterReference<String> {
     }
 
-    @Widget(title = "Reference column (e.g. an ID)", 
+    @Layout(InputSection.class)
+    @Widget(title = "Reference column (e.g. an ID)",
     	description = "The input column with reference data to be assigned to conformer rows.")
     @PersistWithin("input_ref_column")
     @Persistor(ReferenceColumnPersistor.class)
     @ChoicesProvider(ReferenceInputColumnChoicesProvider.class)
     StringOrEnum<RowIDChoice> m_referenceInputColumnName = new StringOrEnum<>(RowIDChoice.ROW_ID);
 
+    @Layout(OutputSection.class)
     @Widget(title = "Column name for molecules with conformers", description = "The output column with the generated conformers.")
     @Persist(configKey = "output_mol_name")
     @ValueProvider(MoleculeOutputColumnNameProvider.class)
@@ -120,6 +134,7 @@ final class RDKitAddConformersNodeParameters implements NodeParameters {
     static final class MoleculeOutputColumnNameRef implements ParameterReference<String> {
     }
 
+    @Layout(OutputSection.class)
     @Widget(title = "Column name for copied reference data", description = "The output column with reference data taken from the input table.")
     @Persist(configKey = "output_ref_name")
     @ValueProvider(ReferenceOutputColumnNameProvider.class)
