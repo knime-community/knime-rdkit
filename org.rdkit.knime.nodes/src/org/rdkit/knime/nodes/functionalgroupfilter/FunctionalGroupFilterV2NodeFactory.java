@@ -53,9 +53,21 @@ import org.knime.core.node.ConfigurableNodeFactory;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeView;
 import org.knime.core.node.context.NodeCreationConfiguration;
+import org.knime.core.node.context.ports.PortsConfiguration;
 import org.knime.filehandling.core.port.FileSystemPortObject;
 
 import java.util.Optional;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
+import static org.knime.node.impl.description.PortDescription.dynamicPort;
 
 /**
  * {@code NodeFactory} for the RDKit based "RDKitFunctionalGroupFilter" Node.
@@ -63,12 +75,11 @@ import java.util.Optional;
  * @author Dillip K Mohanty
  * @author Manuel Schwarze
  * @author Roman Balabanov
+ * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
+ * @author AI Migration Pipeline v1.2
  */
-public class FunctionalGroupFilterV2NodeFactory extends ConfigurableNodeFactory<FunctionalGroupFilterV2NodeModel> {
-
-	//
-	// Constants
-	//
+public class FunctionalGroupFilterV2NodeFactory extends ConfigurableNodeFactory<FunctionalGroupFilterV2NodeModel> 
+	implements NodeDialogFactory {
 
 	/**
 	 * The file system ports group id.
@@ -90,10 +101,39 @@ public class FunctionalGroupFilterV2NodeFactory extends ConfigurableNodeFactory<
 	 */
 	protected static final String OUTPUT_PORT_GRP_ID_MOLECULES_FAILED = "Molecules failing the filter";
 
-	//
-	// Public methods
-	//
-
+	private static final String NODE_NAME = "RDKit Functional Group Filter";
+	
+    private static final String NODE_ICON = "default.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            Node for filtering set of molecules containing functional groups specified by the user.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            This node can be used for filtering sets of molecules based on named substructures (functional
+            groups based on SMARTS). Note that the default definitions are constructed to try and define
+            functional groups relevant for reactivity; consequently groups like -CF3 do not match the halogen
+            pattern.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            dynamicPort(INPUT_PORT_GRP_ID_FS_CONNECTION, "File system connection", """
+                The file system connection.
+                """),
+            fixedPort("RDKit molecules", """
+                Table containing a set of RDKit molecules.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("Molecules passing the filter", """
+                Table containing molecules that pass the filter.
+                """),
+            fixedPort("Molecules failing the filter", """
+                Table containing molecules that do not pass the filter.
+                """)
+    );
+	
 	/**
 	 * This node does not have any views.
 	 *
@@ -105,10 +145,6 @@ public class FunctionalGroupFilterV2NodeFactory extends ConfigurableNodeFactory<
 			final FunctionalGroupFilterV2NodeModel nodeModel) {
 		return null;
 	}
-
-	//
-	// Protected methods
-	//
 
 	@Override
 	protected Optional<PortsConfigurationBuilder> createPortsConfigBuilder() {
@@ -156,8 +192,42 @@ public class FunctionalGroupFilterV2NodeFactory extends ConfigurableNodeFactory<
 	}
 
 	@Override
-	protected NodeDialogPane createNodeDialogPane(NodeCreationConfiguration creationConfig) {
-		return new FunctionalGroupFilterV2NodeDialog(creationConfig);
-	}
+    public NodeDialogPane createNodeDialogPane(NodeCreationConfiguration creationConfig) {
+        return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, FunctionalGroupFilterV2NodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            FunctionalGroupFilterV2NodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+    
+    /**
+     * Retrieves the ports configuration from the given node creation configuration.
+     *
+     * @param creationConfig the node creation configuration
+     * @return ports configuration
+     */
+    public static PortsConfiguration getPortsConfig(final NodeCreationConfiguration creationConfig) {
+        return creationConfig.getPortConfig().orElseThrow(IllegalStateException::new);
+    }
+
 }
 

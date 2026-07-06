@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.RDKit.Match_Vect_Vect;
 import org.RDKit.ROMol;
@@ -69,6 +70,8 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.context.NodeCreationConfiguration;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
@@ -77,6 +80,7 @@ import org.knime.filehandling.core.defaultnodesettings.filechooser.reader.Settin
 import org.knime.filehandling.core.defaultnodesettings.status.StatusMessage;
 import org.rdkit.knime.nodes.AbstractRDKitCellFactory;
 import org.rdkit.knime.nodes.AbstractRDKitNodeModel;
+import org.rdkit.knime.nodes.functionalgroupfilter.FunctionalGroupFilterV2NodeParameters.FileSwitch;
 import org.rdkit.knime.nodes.functionalgroupfilter.SettingsModelFunctionalGroupConditions.FunctionalGroupCondition;
 import org.rdkit.knime.nodes.functionalgroupfilter.SettingsModelFunctionalGroupConditions.Qualifier;
 import org.rdkit.knime.types.RDKitMolValue;
@@ -191,6 +195,8 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
 	 * only one thread is accessing at a time.
 	 */
 	private final Map<RowKey, String> m_mapNonMatches = new HashMap<>(50);
+	
+	private FileSwitch m_definitionFileSwitch = FileSwitch.DEFAULT_CONFIGURATION;
 
 	//
 	// Constructor
@@ -234,6 +240,35 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
             }
         }
     }
+	
+	@Override
+	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
+		super.loadValidatedSettingsFrom(settings);
+		m_definitionFileSwitch = loadConfigFileSwitches(settings, "group_definition_file", 
+				FileSwitch.DEFAULT_CONFIGURATION, FileSwitch.FILE_SELECTION);
+	}
+	
+	private <E extends Enum<E>> E loadConfigFileSwitches(final NodeSettingsRO settings, final String fileIOConfigKey, 
+		final E defaultValue, final E customValue) {
+		String path;
+		try {
+			final var logFileSettings = settings.getNodeSettings(fileIOConfigKey);
+			final var pathSettings = logFileSettings.getNodeSettings("path");
+			path = pathSettings.getString("path");
+			return path == null || path.isEmpty() ? 
+					defaultValue : customValue;
+		} catch (InvalidSettingsException e) {
+			return defaultValue;
+		}
+	}
+	
+	@Override
+	protected void saveSettingsTo(NodeSettingsWO settings) {
+		super.saveSettingsTo(settings);
+		final var modelLogPath = m_modelInputPath.getLocation().getPath();
+		settings.addString("definitionFileSwitch",  modelLogPath == null || modelLogPath.isEmpty() ? 
+				FileSwitch.DEFAULT_CONFIGURATION.name() : FileSwitch.FILE_SELECTION.name());
+	}
 
 	@Override
 	protected PortObjectSpec[] configure(final PortObjectSpec[] inSpecs)
@@ -267,7 +302,8 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
 				"Input column %COLUMN_NAME% does not exist. Has the input table changed?");
 
 		// Check if the functional group definitions can be read and update the conditions
-		final FunctionalGroupDefinitions definitions = createDefinitionsFromFile(m_modelInputPath);
+		final FunctionalGroupDefinitions definitions = createDefinitionsFromFile(m_modelInputPath, 
+			path -> m_definitionFileSwitch == FileSwitch.DEFAULT_CONFIGURATION);
 		m_modelFunctionGroupConditions.updateConditions(definitions);
 		getWarningConsolidator().saveWarnings(definitions.getWarningConsolidator());
 
@@ -489,7 +525,8 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
 	protected void preProcessing(final BufferedDataTable[] inData, final InputDataInfo[][] arrInputDataInfo,
 			final ExecutionContext exec) throws Exception {
 		// Load the file and update the condition list
-		m_definitions = createDefinitionsFromFile(m_modelInputPath);
+		m_definitions = createDefinitionsFromFile(m_modelInputPath, 
+				path -> m_definitionFileSwitch == FileSwitch.DEFAULT_CONFIGURATION);
 		m_modelFunctionGroupConditions.updateConditions(m_definitions);
 
 		// Create RDKit Molecules for all SMARTS for every single activated condition
@@ -639,27 +676,30 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
 	 *
 	 * @param modelInputPath {@code SettingsModelReaderFileChooser} instance representing source file path.
 	 *                       Can be null.
-	 * @param funcReader     {@code ReaderFunction} implementation to used to read/convert file data to resulting representation desired.
-	 *                       Mustn't be null unless {@code model} is null or represents default Functional Groups file path.
-	 * @param logger         {@code NodeLogger} instance to be used among IO operations.
-	 *                       Mustn't be null unless {@code model} is null or represents default Functional Groups file path.
+	 * @param isDefaultFile  Function to determine if the default file should be used based on the file path specified 
+	 * 						 in the model. Must not be null.
+	 * @param funcReader     {@code ReaderFunction} implementation to used to read/convert file data to resulting 
+	 * 						 representation desired. Mustn't be null unless {@code model} is null or represents default 
+	 *                       Functional Groups file path.
+	 * @param logger         {@code NodeLogger} instance to be used among IO operations. Mustn't be null unless 
+	 * 						 {@code model} is null or represents default Functional Groups file path.
 	 * @param <T>            Type of the resulting instance. Inflicted by {@code funcReader} parameter.
 	 * @return Functional Group Definitions object. The type is inflicted by {@code funcReader} parameter.
 	 * @throws InvalidSettingsException Thrown if settings are incorrect or the file
 	 *                                  could not be found (also an incorrect setting).
 	 * @throws IOException              Thrown if an exception occurred during file reading.
-	 * @throws IllegalArgumentException Thrown if {@code function} or {@code logger} parameters required but provided as null.
+	 * @throws IllegalArgumentException Thrown if {@code function} or {@code logger} parameters required but provided 
+	 * 		    						as null.
 	 * @see org.rdkit.knime.util.FileSystemsUtils.ReaderFunction
 	 */
-	static <T> T readDefinitionsFile(final SettingsModelReaderFileChooser modelInputPath,
-									 final FileSystemsUtils.ReaderFunction<T> funcReader,
-									 final NodeLogger logger)
-			throws IOException, InvalidSettingsException
-	{
+	static <T> T readDefinitionsFile(final SettingsModelReaderFileChooser modelInputPath, 
+			final Function<String, Boolean> isDefaultDefinitionFile, final FileSystemsUtils.ReaderFunction<T> funcReader, 
+			final NodeLogger logger) throws IOException, InvalidSettingsException {
 		final T result;
 
-        if (modelInputPath == null || modelInputPath.getPath().isBlank()) {
-            try (final InputStream inputStream = FunctionalGroupDefinitions.class.getClassLoader().getResourceAsStream(DEFAULT_DEFINITION_FILE)) {
+        if (modelInputPath == null || isDefaultDefinitionFile.apply(modelInputPath.getPath())) {
+            try (final InputStream inputStream = 
+            	FunctionalGroupDefinitions.class.getClassLoader().getResourceAsStream(DEFAULT_DEFINITION_FILE)) {
                 result = funcReader.read(inputStream);
             }
         }
@@ -676,6 +716,8 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
 	 *
 	 * @param modelInputPath {@code SettingsModelReaderFileChooser} instance.
 	 *                       Can be null.
+	 * @param isDefaultFile  Function to determine if the default file should be used based on the file path specified 
+	 * 						 in the model. Must not be null.
 	 * @return Functional Group Definitions object.
 	 *
 	 * @throws InvalidSettingsException Thrown, if settings are incorrect or the file
@@ -683,11 +725,12 @@ public class FunctionalGroupFilterV2NodeModel extends AbstractRDKitNodeModel {
 	 * 		of the file fails, although it is there. In this case the file could be corrupted.
 	 */
 	public static FunctionalGroupDefinitions createDefinitionsFromFile(
-			final SettingsModelReaderFileChooser modelInputPath) throws InvalidSettingsException
-	{
+			final SettingsModelReaderFileChooser modelInputPath, 
+			final Function<String, Boolean> isDefaultDefinitionFile) throws InvalidSettingsException {
 		// Load the functional group definitions file and return the result
 		try {
-			return readDefinitionsFile(modelInputPath, FunctionalGroupDefinitions::new, LOGGER);
+			return readDefinitionsFile(
+				modelInputPath, isDefaultDefinitionFile, FunctionalGroupDefinitions::new, LOGGER);
 		}
 		catch (final IOException exc) {
 			throw new InvalidSettingsException(
