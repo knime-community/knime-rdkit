@@ -72,6 +72,7 @@ import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.config.Config;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.core.node.port.PortObjectSpec;
+import org.knime.node.parameters.widget.choices.Label;
 import org.rdkit.knime.util.SettingsUtils;
 
 /**
@@ -96,6 +97,7 @@ public class SettingsModelFunctionalGroupConditions extends SettingsModel implem
 	 * @author Manuel Schwarze
 	 */
 	public enum Qualifier {
+		@Label(value = "Less than")
 		LessThan {
 			@Override
 			public boolean test(final int iNum1, final int iNum2) {
@@ -103,6 +105,7 @@ public class SettingsModelFunctionalGroupConditions extends SettingsModel implem
 			}
 		},
 
+		@Label(value = "Less than or equal")
 		AtMost {
 			@Override
 			public boolean test(final int iNum1, final int iNum2) {
@@ -110,6 +113,7 @@ public class SettingsModelFunctionalGroupConditions extends SettingsModel implem
 			}
 		},
 
+		@Label(value = "Equals")
 		Exactly {
 			@Override
 			public boolean test(final int iNum1, final int iNum2) {
@@ -117,6 +121,7 @@ public class SettingsModelFunctionalGroupConditions extends SettingsModel implem
 			}
 		},
 
+		@Label(value = "Greater than or equal")
 		AtLeast {
 			@Override
 			public boolean test(final int iNum1, final int iNum2) {
@@ -124,6 +129,7 @@ public class SettingsModelFunctionalGroupConditions extends SettingsModel implem
 			}
 		},
 
+		@Label(value = "Greater than")
 		MoreThan {
 			@Override
 			public boolean test(final int iNum1, final int iNum2) {

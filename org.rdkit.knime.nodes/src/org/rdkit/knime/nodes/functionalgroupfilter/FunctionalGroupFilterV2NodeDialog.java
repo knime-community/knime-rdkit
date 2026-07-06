@@ -169,8 +169,8 @@ public class FunctionalGroupFilterV2NodeDialog extends DefaultNodeSettingsPane {
 		m_compGroupConfigPath = new DialogComponentConfigFileSelection(
 				compFileChooser,
 				"Functional Group Definition",
-				modelFileChooser -> FunctionalGroupFilterV2NodeModel.readDefinitionsFile(
-						m_modelGroupConfigPath, FileUtils::getContentFromResource, LOGGER)
+				modelFileChooser -> FunctionalGroupFilterV2NodeModel.readDefinitionsFile(m_modelGroupConfigPath, 
+						path -> path == null || path.isBlank(), FileUtils::getContentFromResource, LOGGER)
 		);
 		super.addDialogComponent(m_compGroupConfigPath);
 
@@ -268,8 +268,8 @@ public class FunctionalGroupFilterV2NodeDialog extends DefaultNodeSettingsPane {
 	 */
 	protected void refreshFunctionalGroupDefinitions() {
 		try {
-			m_modelConditions.updateConditions(
-					FunctionalGroupFilterV2NodeModel.createDefinitionsFromFile(m_modelGroupConfigPath));
+			m_modelConditions.updateConditions(FunctionalGroupFilterV2NodeModel.createDefinitionsFromFile(
+				m_modelGroupConfigPath, path -> path == null || path.isBlank()));
 			m_compGroupConfigPath.setFileError(false);
 		}
 		catch (final InvalidSettingsException exc) {

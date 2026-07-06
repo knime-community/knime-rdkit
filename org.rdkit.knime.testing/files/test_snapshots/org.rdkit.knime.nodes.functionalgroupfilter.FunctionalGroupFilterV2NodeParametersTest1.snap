@@ -1,0 +1,654 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumn" : "Molecule",
+      "definitionFileSwitch" : "FILE_SELECTION",
+      "definitionFile" : {
+        "path" : {
+          "fsCategory" : "LOCAL",
+          "path" : "/home/magnus/Downloads/test.txt",
+          "timeout" : 10000,
+          "context" : {
+            "fsToString" : "(LOCAL, /home/magnus/Downloads/test.txt)"
+          }
+        }
+      },
+      "recordPattern" : true,
+      "failedPatternColumnName" : "wr6jw4",
+      "conditions" : [ {
+        "active" : "ACTIVE",
+        "groupNameParameters" : {
+          "name" : "AcidChloride"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "AcidChloride.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "AcidChloride.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "CarboxylicAcid"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "ACTIVE",
+        "groupNameParameters" : {
+          "name" : "CarboxylicAcid.Aromatic"
+        },
+        "qualifier" : "AtMost",
+        "count" : 3
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "CarboxylicAcid.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "CarboxylicAcid.AlphaAmino"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "SulfonylChloride"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "SulfonylChloride.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "SulfonylChloride.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "ACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Primary"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Primary.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Primary.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Secondary"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Secondary.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Secondary.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 3
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Amine.Cyclic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "BoronicAcid"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "BoronicAcid.Aromatic"
+        },
+        "qualifier" : "LessThan",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "BoronicAcid.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Isocyanate"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Isocyanate.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Isocyanate.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Alcohol"
+        },
+        "qualifier" : "AtMost",
+        "count" : 3
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Alcohol.Aromatic"
+        },
+        "qualifier" : "AtMost",
+        "count" : 0
+      }, {
+        "active" : "ACTIVE",
+        "groupNameParameters" : {
+          "name" : "Alcohol.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Aldehyde"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Aldehyde.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 1
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Aldehyde.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 1
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.NotFluorine"
+        },
+        "qualifier" : "AtMost",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.NotFluorine.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.NotFluorine.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.Bromine"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.Bromine.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Halogen.Bromine.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Azide"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Azide.Aromatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      }, {
+        "active" : "INACTIVE",
+        "groupNameParameters" : {
+          "name" : "Azide.Aliphatic"
+        },
+        "qualifier" : "Exactly",
+        "count" : 0
+      } ]
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "conditions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "active" : {
+                  "oneOf" : [ {
+                    "const" : "INACTIVE",
+                    "title" : "Inactive"
+                  }, {
+                    "const" : "ACTIVE",
+                    "title" : "Active"
+                  } ],
+                  "title" : "Group condition",
+                  "description" : "Whether this functional group condition is active and shall be applied during filtering.\n",
+                  "default" : "INACTIVE"
+                },
+                "count" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "title" : "Count",
+                  "description" : "The number of occurrences to compare against using the qualifier.",
+                  "default" : 0
+                },
+                "groupNameParameters" : {
+                  "type" : "object",
+                  "properties" : {
+                    "displayName" : {
+                      "type" : "string",
+                      "title" : "Group name",
+                      "description" : "The unique name of the functional group (populated from the definition file).\n",
+                      "default" : ""
+                    },
+                    "name" : {
+                      "type" : "string",
+                      "default" : ""
+                    }
+                  },
+                  "default" : {
+                    "displayName" : "",
+                    "name" : ""
+                  }
+                },
+                "qualifier" : {
+                  "oneOf" : [ {
+                    "const" : "LessThan",
+                    "title" : "Less than"
+                  }, {
+                    "const" : "AtMost",
+                    "title" : "Less than or equal"
+                  }, {
+                    "const" : "Exactly",
+                    "title" : "Equals"
+                  }, {
+                    "const" : "AtLeast",
+                    "title" : "Greater than or equal"
+                  }, {
+                    "const" : "MoreThan",
+                    "title" : "Greater than"
+                  } ],
+                  "title" : "Qualifier",
+                  "description" : "The comparison qualifier to apply when counting occurrences of this functional group.\n",
+                  "default" : "Exactly"
+                }
+              }
+            },
+            "title" : "Functional group filter conditions",
+            "description" : "Defines the conditions for filtering molecules. Select the ones that need to be applied on the molecules. If no filter pattern is selected, molecules will not be filtered at all. Each condition has a qualifier (e.g. \"Less than or equal\", \"Equals\") and a count for comparison.\n",
+            "default" : [ ]
+          },
+          "definitionFile" : {
+            "type" : "object",
+            "properties" : {
+              "path" : {
+                "type" : "object",
+                "default" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              }
+            },
+            "title" : "Selected definition file",
+            "description" : "Specify a custom functional group definition file to use.",
+            "default" : {
+              "path" : {
+                "fsCategory" : "LOCAL",
+                "path" : "",
+                "timeout" : 10000,
+                "context" : {
+                  "fsToString" : "(LOCAL, )"
+                }
+              }
+            }
+          },
+          "definitionFileSwitch" : {
+            "oneOf" : [ {
+              "const" : "DEFAULT_CONFIGURATION",
+              "title" : "Default"
+            }, {
+              "const" : "FILE_SELECTION",
+              "title" : "Custom"
+            } ],
+            "title" : "Functional group definition configuration",
+            "description" : "Lets the user define a customized functional group definition file. The default built-in <a href=\"https://github.com/rdkit/knime-rdkit/blob/master/org.rdkit.knime.nodes/src/org/rdkit/knime/nodes/functionalgroupfilter/Functional_Group_Hierarchy.txt\">definitions</a>\n will be used when no file is specified.\n\n<ul>\n<li><b>Default</b>: Loads the default configuration file.</li>\n<li><b>Custom</b>: Specify a configuration file.</li>\n</ul>",
+            "default" : "DEFAULT_CONFIGURATION"
+          },
+          "failedPatternColumnName" : {
+            "type" : "string",
+            "title" : "Column name for first non-matching pattern",
+            "description" : "Name of the new column in the failed molecules table that will contain the first non-matching pattern.\n"
+          },
+          "inputColumn" : {
+            "type" : "string",
+            "title" : "RDKit mol column",
+            "description" : "It specifies which column contains the set of RDKit molecules."
+          },
+          "recordPattern" : {
+            "type" : "boolean",
+            "title" : "Enable recording in the following new column",
+            "description" : "If checked, an additional column (the name can be specified) containing the first non-matching pattern is added to the table of failing molecules.\n",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/definitionFileSwitch",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/definitionFile",
+      "options" : {
+        "isLocal" : true,
+        "spaceFSOptions" : {
+          "mountId" : "Local space"
+        },
+        "format" : "fileChooser"
+      },
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/definitionFileSwitch",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "FILE_SELECTION"
+            } ]
+          }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/recordPattern",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/failedPatternColumnName",
+      "rule" : {
+        "effect" : "SHOW",
+        "condition" : {
+          "scope" : "#/properties/model/properties/recordPattern",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "label" : "Functional Group Conditions",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/conditions",
+        "options" : {
+          "detail" : [ {
+            "type" : "HorizontalLayout",
+            "elements" : [ {
+              "type" : "Control",
+              "scope" : "#/properties/active",
+              "options" : {
+                "format" : "valueSwitch"
+              }
+            }, {
+              "type" : "Control",
+              "scope" : "#/properties/groupNameParameters/properties/displayName",
+              "rule" : {
+                "effect" : "DISABLE",
+                "condition" : {
+                  "schema" : { }
+                }
+              }
+            } ]
+          }, {
+            "type" : "HorizontalLayout",
+            "elements" : [ {
+              "type" : "Control",
+              "scope" : "#/properties/qualifier"
+            }, {
+              "type" : "Control",
+              "scope" : "#/properties/count",
+              "options" : {
+                "validation" : {
+                  "max" : {
+                    "errorMessage" : "The value must not exceed 2147483647.",
+                    "parameters" : {
+                      "isExclusive" : false,
+                      "max" : 2.147483647E9
+                    }
+                  },
+                  "min" : {
+                    "errorMessage" : "The value must be at least 0.",
+                    "parameters" : {
+                      "isExclusive" : false,
+                      "min" : 0.0
+                    }
+                  }
+                }
+              }
+            } ]
+          } ],
+          "arrayElementTitle" : "Condition",
+          "hasFixedSize" : true
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn" : {
+            "configPaths" : [ [ "input_column" ] ]
+          },
+          "definitionFileSwitch" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "definitionFile" : {
+            "configPaths" : [ [ "group_definition_file", "path" ] ]
+          },
+          "recordPattern" : {
+            "configKey" : "record_pattern"
+          },
+          "failedPatternColumnName" : {
+            "configKey" : "failed_pattern_column_name"
+          },
+          "conditions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "active" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "conditions", "select_${array_index}" ] ]
+                },
+                "groupNameParameters" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "conditions", "name_${array_index}" ] ]
+                },
+                "qualifier" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "conditions", "qualifier_${array_index}" ] ]
+                },
+                "count" : {
+                  "route" : [ "..", ".." ],
+                  "configPaths" : [ [ "conditions", "count_${array_index}" ] ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Molecule",
+        "text" : "Molecule",
+        "type" : {
+          "id" : "org.rdkit.knime.types.RDKitMolValue",
+          "text" : "RDKit Molecule"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/definitionFile"
+    },
+    "dependencies" : [ "#/properties/model/properties/conditions", "#/properties/model/properties/definitionFile", "#/properties/model/properties/definitionFileSwitch" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/definitionFileSwitch"
+    },
+    "dependencies" : [ "#/properties/model/properties/conditions", "#/properties/model/properties/definitionFile", "#/properties/model/properties/definitionFileSwitch" ]
+  } ]
+}
