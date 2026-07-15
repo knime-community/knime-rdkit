@@ -442,7 +442,7 @@ final class FunctionalGroupFilterV2NodeParameters implements NodeParameters {
 			}
 
 			final FunctionalGroupConditionEntry[] existingEntries = m_existingConditionsSupplier.get();
-			final Map<String, FunctionalGroupConditionEntry> existingMap = new HashMap<>();
+			Map<String, FunctionalGroupConditionEntry> existingMap = new HashMap<>();
 			if (existingEntries != null) {
 				for (final FunctionalGroupConditionEntry entry : existingEntries) {
 					if (entry.m_groupNameParameters.m_name != null && !entry.m_groupNameParameters.m_name.isBlank()) {
@@ -459,6 +459,7 @@ final class FunctionalGroupFilterV2NodeParameters implements NodeParameters {
 				if (existingMap.containsKey(name)) {
 					newEntry = existingMap.get(name);
 					newEntry.m_groupNameParameters.m_displayName = group.getLabel();
+					existingMap.put(name, newEntry);
 				} else {
 					newEntry = new FunctionalGroupConditionEntry();
 					newEntry.m_groupNameParameters.m_name = group.getName();
@@ -521,7 +522,7 @@ final class FunctionalGroupFilterV2NodeParameters implements NodeParameters {
 			final FunctionalGroupConditionEntry[] existingEntries) throws StateComputationAbortException {
 			final var newEntryArray = newEntryList.toArray(FunctionalGroupConditionEntry[]::new);
 			if (newEntryArray == null) {
-				throw new StateComputationAbortException();
+				return existingEntries;
 			}
 			if (existingEntries == null) {
 				return newEntryArray;
@@ -535,7 +536,7 @@ final class FunctionalGroupFilterV2NodeParameters implements NodeParameters {
 					}
 				}
 				if (allEqual) {
-					throw new StateComputationAbortException();
+					return existingEntries;
 				}
 			}
 			return newEntryArray;
