@@ -108,7 +108,7 @@
               }
             },
             "title" : "Selected definition file",
-            "description" : "Specify a custom functional group definition file to use.",
+            "description" : "Specify a custom functional group definition file to use. Use the <a href=\"https://github.com/rdkit/knime-rdkit/blob/master/org.rdkit.knime.nodes/src/org/rdkit/knime/nodes/functionalgroupfilter/Functional_Group_Hierarchy.txt\">default file</a>\nas template.\n",
             "default" : {
               "path" : {
                 "fsCategory" : "LOCAL",

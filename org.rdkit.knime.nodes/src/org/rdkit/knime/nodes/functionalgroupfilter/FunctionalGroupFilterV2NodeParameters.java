@@ -165,8 +165,11 @@ final class FunctionalGroupFilterV2NodeParameters implements NodeParameters {
     }
 
     @Persistor(DefinitionFilePersistor.class)
-    @Widget(title = "Selected definition file", 
-    	description = "Specify a custom functional group definition file to use.")
+    @Widget(title = "Selected definition file",  description = """
+    		Specify a custom functional group definition file to use. Use the \
+    		<a href="https://github.com/rdkit/knime-rdkit/blob/master/org.rdkit.knime.nodes/src/org/rdkit/knime/nodes/functionalgroupfilter/Functional_Group_Hierarchy.txt">default file</a>
+    		as template.
+    		""")
     @FileReaderWidget
     @Effect(predicate = IsDefinitionFileSelectionEnabled.class, type = EffectType.SHOW)
     @ValueReference(DefinitionFileRef.class)
