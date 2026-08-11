@@ -55,6 +55,7 @@ import javax.swing.JPanel;
 import org.knime.core.data.StringValue;
 import org.knime.core.data.vector.bitvector.BitVectorValue;
 import org.knime.core.node.context.NodeCreationConfiguration;
+import org.knime.core.node.context.ports.PortsConfiguration;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.knime.core.node.defaultnodesettings.SettingsModelInteger;
@@ -66,6 +67,7 @@ import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.Dialog
 import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.FileOverwritePolicy;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.SettingsModelWriterFileChooser;
 import org.knime.filehandling.core.defaultnodesettings.filtermode.SettingsModelFilterMode;
+import org.knime.node.parameters.widget.file.FileSelectionUtil;
 import org.rdkit.knime.util.DialogComponentColumnNameSelection;
 import org.rdkit.knime.util.HiddenSettingComponent;
 
@@ -141,9 +143,11 @@ public class RDKitFingerprintWriterV2NodeDialog extends DefaultNodeSettingsPane 
 			throw new IllegalArgumentException("Node Creation Configuration parameter must not be null.");
 		}
 
+		final PortsConfiguration portsConfig = nodeCreationConfig.getPortConfig().orElseThrow(IllegalStateException::new);
+
 		final SettingsModelWriterFileChooser modelResult = new SettingsModelWriterFileChooser(
 				"output_file",
-				nodeCreationConfig.getPortConfig().orElseThrow(IllegalStateException::new),
+				portsConfig,
 				RDKitFingerprintWriterV2NodeFactory.INPUT_PORT_GRP_ID_FS_CONNECTION,
 				EnumConfig.create(
 						SettingsModelFilterMode.FilterMode.FILE
@@ -153,6 +157,10 @@ public class RDKitFingerprintWriterV2NodeDialog extends DefaultNodeSettingsPane 
 						FileOverwritePolicy.OVERWRITE
 				),
                 ".fps", ".fps.gz");
+
+		modelResult.setLocation(FileSelectionUtil.getDefaultWriterFSLocation(
+				FileSelectionUtil.hasFSPort(portsConfig, RDKitFingerprintWriterV2NodeFactory.INPUT_PORT_GRP_ID_FS_CONNECTION),
+				"table.fps"));
 
 		nodeCreationConfig.getURLConfig().ifPresent(urlConfiguration ->
 				modelResult.setLocation(FSLocationUtil.createFromURL(urlConfiguration.getUrl().toString()))
