@@ -60,14 +60,16 @@ import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.knime.core.node.defaultnodesettings.SettingsModelInteger;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.filehandling.core.connections.FSCategory;
+import org.knime.filehandling.core.connections.FSLocation;
 import org.knime.filehandling.core.connections.FSLocationUtil;
+import org.knime.filehandling.core.connections.RelativeTo;
 import org.knime.filehandling.core.data.location.variable.FSLocationVariableType;
 import org.knime.filehandling.core.defaultnodesettings.EnumConfig;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.DialogComponentWriterFileChooser;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.FileOverwritePolicy;
 import org.knime.filehandling.core.defaultnodesettings.filechooser.writer.SettingsModelWriterFileChooser;
 import org.knime.filehandling.core.defaultnodesettings.filtermode.SettingsModelFilterMode;
-import org.knime.node.parameters.widget.file.FileSelectionUtil;
 import org.rdkit.knime.util.DialogComponentColumnNameSelection;
 import org.rdkit.knime.util.HiddenSettingComponent;
 
@@ -158,15 +160,28 @@ public class RDKitFingerprintWriterV2NodeDialog extends DefaultNodeSettingsPane 
 				),
                 ".fps", ".fps.gz");
 
-		modelResult.setLocation(FileSelectionUtil.getDefaultWriterFSLocation(
-				FileSelectionUtil.hasFSPort(portsConfig, RDKitFingerprintWriterV2NodeFactory.INPUT_PORT_GRP_ID_FS_CONNECTION),
-				"table.fps"));
+		modelResult.setLocation(hasFSPort(portsConfig, RDKitFingerprintWriterV2NodeFactory.INPUT_PORT_GRP_ID_FS_CONNECTION) ?
+				new FSLocation(FSCategory.CONNECTED, "", "table.fps") :
+				new FSLocation(FSCategory.RELATIVE, RelativeTo.SPACE.getSettingsValue(), "table.fps"));
 
 		nodeCreationConfig.getURLConfig().ifPresent(urlConfiguration ->
 				modelResult.setLocation(FSLocationUtil.createFromURL(urlConfiguration.getUrl().toString()))
 		);
 
 		return modelResult;
+	}
+
+	/**
+	 * Determines whether the passed in ports configuration has a connected file system input port
+	 * for the given port group.
+	 *
+	 * @param portsConfig Node Ports Configuration instance. Mustn't be null.
+	 * @param portGrpId Identifier of the file system connection port group to check.
+	 * @return True, if the port group has an input port; false otherwise.
+	 */
+	private static boolean hasFSPort(PortsConfiguration portsConfig, String portGrpId) {
+		final int[] arrPortIndexes = portsConfig.getInputPortLocation().get(portGrpId);
+		return arrPortIndexes != null && arrPortIndexes.length > 0;
 	}
 
 	/**
