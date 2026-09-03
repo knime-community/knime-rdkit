@@ -17,7 +17,7 @@
 		<tycho.version>4.0.13</tycho.version>
 		<tycho.extras.version>${tycho.version}</tycho.extras.version>
 		<qualifier.prefix>v</qualifier.prefix>
-		<update.site>https://update.knime.com/analytics-platform/${knime.version}</update.site>
+		<update.site>https://jenkins.devops.knime.com/p2/knime/analytics-platform/stable-nightly-update-site</update.site>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
