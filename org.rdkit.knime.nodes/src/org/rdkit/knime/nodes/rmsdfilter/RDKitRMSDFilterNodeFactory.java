@@ -94,10 +94,10 @@ public class RDKitRMSDFilterNodeFactory extends NodeFactory<RDKitRMSDFilterNodeM
     );
     
     private static final List<PortDescription> OUTPUT_PORTS = List.of(
-            fixedPort("Conformers with RMSD &gt;= Threshold", """
+            fixedPort("Conformers with RMSD >= Threshold", """
                 Conformers with RMSD &gt;= Threshold.
                 """),
-            fixedPort("Conformers with RMSD &lt; Threshold", """
+            fixedPort("Conformers with RMSD < Threshold", """
                 Conformers with RMSD &lt; Threshold.
                 """)
     );
