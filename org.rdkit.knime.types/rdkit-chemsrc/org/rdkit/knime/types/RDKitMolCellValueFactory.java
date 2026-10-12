@@ -51,7 +51,10 @@ package org.rdkit.knime.types;
 import java.io.IOException;
 
 import org.RDKit.ROMol;
+import org.knime.chem.types.SdfValue;
+import org.knime.chem.types.SmilesValue;
 import org.knime.core.data.DataCell;
+import org.knime.core.data.StringValue;
 import org.knime.core.data.v2.ReadValue;
 import org.knime.core.data.v2.ValueFactory;
 import org.knime.core.data.v2.WriteValue;
@@ -102,7 +105,8 @@ public class RDKitMolCellValueFactory implements ValueFactory<VarBinaryReadAcces
 		}
 	}
 
-	private static final class RDKitMolCellReadValue implements ReadValue, RDKitMolValue {
+	private static final class RDKitMolCellReadValue
+			implements ReadValue, RDKitMolValue, SmilesValue, SdfValue, StringValue {
 		private final VarBinaryReadAccess m_access;
 
 		private RDKitMolCellReadValue(final VarBinaryReadAccess access) {
@@ -139,6 +143,16 @@ public class RDKitMolCellValueFactory implements ValueFactory<VarBinaryReadAcces
 		@Override
 		public boolean isSmilesCanonical() {
 			return ((RDKitMolValue) getDataCell()).isSmilesCanonical();
+		}
+
+		@Override
+		public String getSdfValue() {
+			return ((SdfValue) getDataCell()).getSdfValue();
+		}
+
+		@Override
+		public String getStringValue() {
+			return ((StringValue) getDataCell()).getStringValue();
 		}
 	}
 

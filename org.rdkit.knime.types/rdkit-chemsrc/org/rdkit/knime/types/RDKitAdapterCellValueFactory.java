@@ -50,8 +50,12 @@ package org.rdkit.knime.types;
 
 import java.io.IOException;
 
+import org.RDKit.ROMol;
+import org.knime.chem.types.SdfValue;
+import org.knime.chem.types.SmilesValue;
 import org.knime.core.data.AdapterCell;
 import org.knime.core.data.IDataRepository;
+import org.knime.core.data.StringValue;
 import org.knime.core.data.filestore.internal.IWriteFileStoreHandler;
 import org.knime.core.data.v2.ReadValue;
 import org.knime.core.data.v2.ValueFactory;
@@ -107,7 +111,8 @@ public class RDKitAdapterCellValueFactory extends AbstractAdapterCellValueFactor
 		}
 	}
 
-	private static final class RDKitAdapterCellReadValue extends AbstractAdapterCellReadValue {
+	private static final class RDKitAdapterCellReadValue extends AbstractAdapterCellReadValue
+			implements RDKitMolValue, SdfValue, SmilesValue, StringValue {
 		private RDKitAdapterCellReadValue(final StructReadAccess access, final IDataRepository dataRepository) {
 			super(access, dataRepository);
 		}
@@ -121,6 +126,31 @@ public class RDKitAdapterCellValueFactory extends AbstractAdapterCellValueFactor
 				LOGGER.error("Error when deserializing RDKitMolValue", e);
 				return null;
 			}
+		}
+
+		@Override
+		public ROMol readMoleculeValue() {
+			return ((RDKitMolValue) getDataCell()).readMoleculeValue();
+		}
+
+		@Override
+		public String getSmilesValue() {
+			return ((SmilesValue) getDataCell()).getSmilesValue();
+		}
+
+		@Override
+		public boolean isSmilesCanonical() {
+			return ((RDKitMolValue) getDataCell()).isSmilesCanonical();
+		}
+
+		@Override
+		public String getSdfValue() {
+			return ((SdfValue) getDataCell()).getSdfValue();
+		}
+
+		@Override
+		public String getStringValue() {
+			return ((StringValue) getDataCell()).getStringValue();
 		}
 	}
 }
