@@ -56,7 +56,6 @@ import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
@@ -72,7 +71,6 @@ import org.rdkit.knime.types.RDKitMolCellFactory;
 import org.rdkit.knime.types.RDKitMolValue;
 import org.rdkit.knime.util.InputDataInfo;
 import org.rdkit.knime.util.SettingsUtils;
-import org.rdkit.knime.util.WarningConsolidator;
 
 /**
  * This class implements the node model of the RDKitAromatize node
@@ -216,7 +214,6 @@ public class RDKitAromatizeNodeModel extends AbstractRDKitCalculatorNodeModel {
 			throws InvalidSettingsException {
 
 		AbstractRDKitCellFactory[] arrOutputFactories = null;
-		final WarningConsolidator warnings = getWarningConsolidator();
 
 		// Specify output of table 1
 		if (outPort == 0) {
@@ -242,21 +239,15 @@ public class RDKitAromatizeNodeModel extends AbstractRDKitCalculatorNodeModel {
 				 * {@inheritDoc}
 				 */
 				public DataCell[] process(final InputDataInfo[] arrInputDataInfo, final DataRow row, final long lUniqueWaveId) throws Exception {
-					DataCell outputCell = null;
-
 					// Calculate the new cells
 					final ROMol mol = markForCleanup(arrInputDataInfo[INPUT_COLUMN_MOL].getROMol(row), lUniqueWaveId);
 					final RWMol temp = markForCleanup(new RWMol(mol), lUniqueWaveId);
 
-					if (RDKFuncs.setAromaticity(temp) != 0) { // Success
-						RDKFuncs.adjustHs(temp);
-						final String strSmiles = temp.MolToSmiles(true);
-						outputCell = RDKitMolCellFactory.createRDKitAdapterCell(temp, strSmiles);
-					}
-					else {
-						warnings.saveWarning(WarningConsolidator.ROW_CONTEXT.getId(), "Unable to aromatize molecule. Producing empty cell.");
-						outputCell = DataType.getMissingCell();
-					}
+					// Returns the number of aromatic rings, so 0 is a valid result; failures are thrown as exceptions
+					RDKFuncs.setAromaticity(temp);
+					RDKFuncs.adjustHs(temp);
+					final String strSmiles = temp.MolToSmiles(true);
+					final DataCell outputCell = RDKitMolCellFactory.createRDKitAdapterCell(temp, strSmiles);
 
 					return new DataCell[] { outputCell };
 				}
