@@ -70,13 +70,16 @@ try:
     )
     from rdkit.DataStructs import CreateFromBinaryText, BitVectToBinaryText
 
+    RDKIT_AVAILABLE = True
+
 except ImportError as e:
     LOGGER.info(
         "RDKit type support not available because 'rdkit' could not be imported", e
     )
+    RDKIT_AVAILABLE = False
 
-    # we define a dummy type Chem.Mol to be used instead.
-    # Any attempt to work with this data will fail.
+    # we define dummy types so the value factories can still be registered.
+    # Without rdkit, decode() returns the raw storage instead of RDKit objects.
     class Chem:
         class Mol:
             pass
@@ -105,8 +108,8 @@ class RDKitMolAdapterValueFactory(kt.PythonValueFactory):
         kt.PythonValueFactory.__init__(self, Chem.Mol)
 
     def decode(self, storage):
-        if storage is None:
-            return None
+        if storage is None or not RDKIT_AVAILABLE:
+            return storage
 
         value = Chem.Mol(storage["0"])
         return value
@@ -122,8 +125,8 @@ class RDKitMolValueFactory(kt.PythonValueFactory):
         kt.PythonValueFactory.__init__(self, Chem.Mol)
 
     def decode(self, storage):
-        if storage is None:
-            return None
+        if storage is None or not RDKIT_AVAILABLE:
+            return storage
         return Chem.Mol(storage)
 
     def encode(self, value):
@@ -137,8 +140,8 @@ class RDKitReactionValueFactory(kt.PythonValueFactory):
         kt.PythonValueFactory.__init__(self, ChemicalReaction)
 
     def decode(self, storage):
-        if storage is None:
-            return None
+        if storage is None or not RDKIT_AVAILABLE:
+            return storage
         return ChemicalReaction(storage)
 
     def encode(self, value):
@@ -152,8 +155,8 @@ class RDKitFingerprintValueFactory(kt.PythonValueFactory):
         kt.PythonValueFactory.__init__(self, ExplicitBitVect)
 
     def decode(self, storage):
-        if storage is None:
-            return None
+        if storage is None or not RDKIT_AVAILABLE:
+            return storage
 
         fp = CreateFromBinaryText(storage[8:])
         return fp
@@ -172,8 +175,8 @@ class AbstractRDKitCountFingerprintValueFactory(kt.PythonValueFactory):
         kt.PythonValueFactory.__init__(self, dtype)
 
     def decode(self, storage):
-        if storage is None:
-            return None
+        if storage is None or not RDKIT_AVAILABLE:
+            return storage
 
         # construct a new count fingerprint of type _dtype and fill it
         sparse_vec = self._dtype(len(storage))
